@@ -4,7 +4,7 @@ export default defineConfig({
   fixturesFolder: 'cypress/fixtures',
   screenshotsFolder: 'cypress/mochawesome-report/screenshots',
   downloadsFolder: 'cypress/downloads',
-  viewportWidth: 1280,
+  viewportWidth: 1200,
   viewportHeight: 800,
   video: false,
   chromeWebSecurity: false,
