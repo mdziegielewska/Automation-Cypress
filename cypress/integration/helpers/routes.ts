@@ -18,6 +18,7 @@ class Routes {
     private getRoute(key:string) {
         switch (key) {
             case 'LoadPage': return ['GET', '/'];
+            case 'ResetPassword' : return ['POST, /customer/account/forgotpasswordpost/'];
 
             default: throw Error(`Unknown route key: ${key}`)
         }

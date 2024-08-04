@@ -1,14 +1,16 @@
 /// <reference types="cypress"/>
 
 class Authorization {
-    fillInlogInData(username: string, password: string) {
+    fillInlogInData(email: string, password: string) {
         cy.log('filling in user data');
 
         cy.get('input[title="Email"]')
-            .type(username);
+            .should('have.attr', 'aria-required', 'true')
+            .type(email);
 
         cy.get('input[title="Password"]')
-            .type(password);
+            .should('have.attr', 'aria-required', 'true')
+            .type(password);     
     }
 }
 

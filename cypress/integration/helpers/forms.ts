@@ -1,15 +1,21 @@
 /// <reference types="cypress"/>
 
-import { routes } from "./routes";
-
 class Forms {
-    submit() {
+    submit(action: string) {
         cy.log('submitting form');
 
-        cy.get('button[name="send"]')
-            .first()
+        cy.get('button[type="submit"]')
+            .filter(`.${action}`)
             .should('be.visible')
             .click();
+    }
+
+    fillField(field: string, value: string) {
+        cy.log('filling form field');
+
+        cy.get(field)
+            .should('be.visible')
+            .type(value);
     }
 }
 

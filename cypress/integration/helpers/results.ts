@@ -2,7 +2,7 @@
 
 class Results {
     shouldVerifyTextInSection(locator: string, text: string) {
-        cy.log('should verify text in section');
+        cy.log('verifying text in section');
         
         cy.get(locator)
             .should('be.visible')
@@ -10,7 +10,7 @@ class Results {
     }
 
     shouldVerifyAlert(text: string) {
-        cy.log('should verify page messages');
+        cy.log('verifying page messages');
         
         cy.get('.page.messages')
             .should('be.visible')
