@@ -1,2 +1,5 @@
 node_modules/
 luma-ecommerce-tests/mochawesome-report/
+cypress/videos
+cypress/screenshots
+cypress.env.json

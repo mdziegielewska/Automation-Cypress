@@ -50,9 +50,3 @@ Cypress.Commands.add("formRequest", (url: string, formData: string) => {
         })
         .wait('@formRequest');
 });
-
-Cypress.Commands.add("preserveCookies", () => {
-    Cypress.Cookies.preserveOnce(
-        "sessionid"
-    );
-});

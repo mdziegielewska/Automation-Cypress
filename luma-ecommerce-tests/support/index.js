@@ -37,7 +37,7 @@ Cypress.on('test:after:run', (test, runnable) => {
         const fullTestName = nameParts
             .filter(Boolean)
             .join(' -- ')
-        addContext({ test }, `cypress/screenshots/${Cypress.spec.name}/${fullTestName} (failed).png`);
+        addContext({ test }, `luma-ecommerce-tests/screenshots/${Cypress.spec.name}/${fullTestName} (failed).png`);
     }
 })
 
