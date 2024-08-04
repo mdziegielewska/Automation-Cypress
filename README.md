@@ -1,6 +1,7 @@
 # Cypress Automation Tests for Magento Sample Store
 
 **Project Overview**
+
 This repository contains Cypress automation tests written in TypeScript to automate functionalities on the Magento Sample Store (https://magento.softwaretestingboard.com/). 
 
 **Getting Started**
