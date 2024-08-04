@@ -7,8 +7,8 @@ import { results } from '../../helpers/results';
 
 describe('Log in', () => {
     beforeEach(() => {
-        cy.visit('/');
         cy.clearAllCookies();
+        cy.visit('/');
     })
 
     let headerPanelLinks = 'li.authorization-link a';
