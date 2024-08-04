@@ -1,5 +1,5 @@
 // ***********************************************
-// This example commands.js shows you how to
+// This example commands.ts shows you how to
 // create various custom commands and overwrite
 // existing commands.
 //
@@ -23,10 +23,10 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
 /// <reference types="cypress"/>
 
 export {};
+
 
 declare global {
     namespace Cypress {
@@ -37,7 +37,7 @@ declare global {
     }
 }
 
-Cypress.Commands.add("formRequest", (url: string, formData: string) => {
+Cypress.Commands.add('formRequest', (url: string, formData: string) => {
     return cy
         .intercept("POST", url)
         .as("formRequest")
@@ -49,4 +49,10 @@ Cypress.Commands.add("formRequest", (url: string, formData: string) => {
             xhr.send(formData);
         })
         .wait('@formRequest');
+});
+
+Cypress.Commands.add('preserveCookies', () => {
+    cy.session('preserveCookiesSession', () => {
+      // No actions needed here, just create the session
+    });
 });
