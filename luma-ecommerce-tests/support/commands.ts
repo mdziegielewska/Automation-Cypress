@@ -33,7 +33,6 @@ declare global {
         interface Chainable {
             formRequest(url: string, formData: string): Chainable;
             preserveCookies(): Chainable;
-            loginAdmin(path: string): Chainable;
         }
     }
 }

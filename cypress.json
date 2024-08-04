@@ -13,5 +13,5 @@
     "pageLoadTimeout": 60000,
     "requestTimeout": 60000,
     "failOnStatusCode": false,
-    "supportFile": "luma-ecommerce-tests//support"
+    "supportFile": "luma-ecommerce-tests/support"
 }
