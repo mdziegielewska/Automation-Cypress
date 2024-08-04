@@ -1,0 +1,17 @@
+{
+    "integrationFolder": "luma-ecommerce-tests/integration",
+    "fixturesFolder": "luma-ecommerce-tests/fixtures",
+    "screenshotsFolder": "luma-ecommerce-tests/mochawesome-report/screenshots",
+    "baseUrl": "https://magento.softwaretestingboard.com/",
+    "viewportWidth": 1280,
+    "viewportHeight": 800,
+    "video": false,
+    "chromeWebSecurity": false,
+    "defaultCommandTimeout": 60000,
+    "execTimeout": 60000,
+    "taskTimeout": 25000,
+    "pageLoadTimeout": 60000,
+    "requestTimeout": 60000,
+    "failOnStatusCode": false,
+    "supportFile": "luma-ecommerce-tests//support"
+}
