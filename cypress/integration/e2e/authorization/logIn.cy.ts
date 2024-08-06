@@ -31,7 +31,8 @@ describe('Log in', () => {
 
         routes.expect('LoadPage');
 
-        results.shouldVerifyTextInSection('li.greet.welcome', `Welcome, ${Cypress.env("TEST_FULL_NAME")}!`);
+        results.shouldVerifyTextInSection('li.greet.welcome', 
+            `Welcome, ${Cypress.env("TEST_FIRST_NAME")} ${Cypress.env("TEST_LAST_NAME")}!`);
     })
 
     it('Should log in incorrectly', () => {
@@ -56,7 +57,7 @@ describe('Log in', () => {
 
         routes.expect('ResetPassword');
 
-        forms.fillField('#email_address', `${Cypress.env("TEST_USER_EMAIL")}`);
+        forms.fillField('email_address', `${Cypress.env("TEST_USER_EMAIL")}`);
         forms.submit('submit');
 
         results.shouldVerifyAlert(RESET_PASSWORD_MESSAGE);

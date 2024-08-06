@@ -13,8 +13,8 @@ class Forms {
     fillField(field: string, value: string) {
         cy.log('filling form field');
 
-        cy.get(field)
-            .should('be.visible')
+        cy.get(`#${field}`)
+            .should('have.attr', 'aria-required', 'true')
             .type(value);
     }
 }

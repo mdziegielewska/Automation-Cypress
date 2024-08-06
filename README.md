@@ -50,4 +50,4 @@ This repository contains Cypress automation tests written in TypeScript to autom
 
 **To add**
 
-...
+- Extend test coverage with new scenarios

@@ -16,6 +16,12 @@ class Results {
             .should('be.visible')
             .should('contain.text', text);
     }
+
+    shouldVerifyMageErrorMessage(text: string) {
+        cy.get('.mage-error')
+            .should('be.visible')
+            .should('contain.text', text);
+    }
 }
 
 export const results = new Results();
