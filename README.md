@@ -16,10 +16,12 @@ This repository contains Cypress automation tests written in TypeScript to autom
     ```npx cypress run```
 
 **Technologies Used**
+
 - Cypress
 - TypeScript
 
 **Test Coverages**
+
 - Main Page
     - Menu
     - Search
@@ -48,6 +50,6 @@ This repository contains Cypress automation tests written in TypeScript to autom
     - Reviews
 
 
-**To add**
+**Future work**
 
 - Extend test coverage with new scenarios
