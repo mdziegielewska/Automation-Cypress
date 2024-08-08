@@ -58,7 +58,7 @@ describe('Menu', () => {
     })
 
     actionLinks.forEach(({action, url}) => {
-        it.only(`Should redirect to navigation link - ${action}`, () => {
+        it(`Should redirect to navigation link - ${action}`, () => {
             navigation.shouldVerifyNavigationLinks(action, url);
         })
     })
