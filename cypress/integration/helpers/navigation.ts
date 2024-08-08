@@ -1,7 +1,5 @@
 /// <reference types="cypress"/>
 
-import { StringLiteral } from "typescript";
-
 
 class Navigation {
     private getTab(tab: string) {
@@ -28,16 +26,29 @@ class Navigation {
             .should('exist');
     }
 
-    shouldContainSubtab(tab: string, subtab: string) {
+    shouldContainSubtabLevel1(tab: string, subtab: string) {
         cy.log('verifying subtabs in tabs');
 
         this.getExpandableIcon(tab)
-            .first()
             .should('be.visible')
+            .should('exist')
             .trigger('mouseover').as('submenu');
         
         cy.get('@submenu')
-            .get('ul.submenu')
+            .get(`ul.submenu`)
+            .should('be.visible')
+            .and('contain', subtab).as('subsubmenu');
+
+        return '@submenu';
+    }
+
+    shouldContainSubtabLevel2(tablevel0: string, tab: string, subtab: string) {
+        cy.log('verifying level2 subtabs in tabs');
+
+        this.shouldContainSubtabLevel1(tablevel0, tab);
+   
+        cy.get('@subsubmenu')
+            .get(`ul.submenu`)
             .should('be.visible')
             .and('contain', subtab);
     }
@@ -53,6 +64,15 @@ class Navigation {
 
         cy.get('#page-title-heading')
             .should('contain.text', tab);
+    }
+
+    shouldVerifyNavigationLinks(navigationLink: string, url: string) {
+        cy.get('ul.header.links a')
+            .contains(navigationLink)
+            .should('be.visible')
+            .click();
+
+        cy.url().should('contain', url);
     }
 }
 

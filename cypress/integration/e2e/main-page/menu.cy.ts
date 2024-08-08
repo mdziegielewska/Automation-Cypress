@@ -13,8 +13,13 @@ const menu = [
 ]
 
 const subMenu = [
-    { tab: 'Tops', url: `/tops-women.html`, submenu: ['Jackets', 'Hoodies & Sweatshirts', 'Tees', 'Tanks'] },
-    { tab: 'Bottoms', url: `` , submenu: ['Pants', 'Shorts'] }
+    { tab: 'Tops', submenu: ['Jackets', 'Hoodies & Sweatshirts', 'Tees', 'Bras & Tanks'] },
+    { tab: 'Bottoms', submenu: ['Pants', 'Shorts'] }
+];
+
+const actionLinks = [
+    { action: 'Sign In', url: '/account/login/' },
+    { action: 'Create an Account', url: '/customer/account/create/' }
 ];
 
 
@@ -25,7 +30,7 @@ describe('Menu', () => {
     })
 
     menu.forEach(({tab, url, submenu}) => {
-        it(`Should contain ${tab} in menu`, () => {
+        it(`Should contain ${tab} in Menu`, () => {
             
             navigation.shouldContainTab(tab);
         
@@ -34,11 +39,27 @@ describe('Menu', () => {
                 navigation.shouldBeExpandable(tab);
 
                 submenu.forEach(subtab => {
-                    navigation.shouldContainSubtab(tab, subtab);
+                    const subSubMenuData = subMenu.find(item => item.tab === subtab)?.submenu;
+
+                    if (subSubMenuData)  {
+                        navigation.shouldBeExpandable(subtab);
+
+                        subSubMenuData.forEach(subsubmenu => {
+                            navigation.shouldContainSubtabLevel2(tab, subtab, subsubmenu);
+                        })
+                    } else {
+                        navigation.shouldContainSubtabLevel1(tab, subtab);
+                    }
                 })
             }
 
             navigation.shouldVerifyRedirection(tab, url);
+        })
+    })
+
+    actionLinks.forEach(({action, url}) => {
+        it.only(`Should redirect to navigation link - ${action}`, () => {
+            navigation.shouldVerifyNavigationLinks(action, url);
         })
     })
 })

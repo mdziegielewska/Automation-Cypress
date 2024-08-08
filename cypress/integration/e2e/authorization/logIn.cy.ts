@@ -12,18 +12,15 @@ const RESET_PASSWORD_MESSAGE = `If there is an account associated with ${Cypress
 describe('Log in', () => {
     beforeEach(() => {
         cy.clearAllCookies();
-        cy.visit('/');
+        cy.visit('/customer/account/login/');
     })
 
-    const headerPanelLinks = 'li.authorization-link a';
+
     const loginPanel = '[data-ui-id="page-title-wrapper"]';
     const resetPanel = '.action.remind';
 
-    it('Should log in correctly', () => {
-        cy.get(headerPanelLinks)
-            .first()
-            .click();
-            
+    it('Should log in correctly', () => { 
+
         results.shouldVerifyTextInSection(loginPanel, 'Customer Login');
 
         authorization.fillInlogInData(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_USER_PASSWORD"));
@@ -36,10 +33,7 @@ describe('Log in', () => {
     })
 
     it('Should log in incorrectly', () => {
-        cy.get(headerPanelLinks)
-            .first()
-            .click();
-        
+
         results.shouldVerifyTextInSection(loginPanel, 'Customer Login');
         
         authorization.fillInlogInData(Cypress.env("TEST_USER_EMAIL"), "123456789");
@@ -49,7 +43,6 @@ describe('Log in', () => {
     })
 
     it('Should remind password', () => {
-        cy.visit('/customer/account/login/');
 
         cy.get(resetPanel)
             .should('contain.text', 'Forgot Your Password?')
