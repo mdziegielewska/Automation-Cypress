@@ -53,7 +53,7 @@ class Navigation {
             .and('contain', subtab);
     }
 
-    shouldVerifyRedirection(tab: string, url: string) {
+    shouldVerifyTabRedirection(tab: string, url: string) {
         cy.log('verifying redirection url');
 
         this.getTab(tab)
@@ -67,6 +67,8 @@ class Navigation {
     }
 
     shouldVerifyNavigationLinks(navigationLink: string, url: string) {
+        cy.log('verifying navigation links'); 
+
         cy.get('ul.header.links a')
             .contains(navigationLink)
             .should('be.visible')

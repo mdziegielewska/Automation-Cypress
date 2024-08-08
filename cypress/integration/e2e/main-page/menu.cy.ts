@@ -53,7 +53,7 @@ describe('Menu', () => {
                 })
             }
 
-            navigation.shouldVerifyRedirection(tab, url);
+            navigation.shouldVerifyTabRedirection(tab, url);
         })
     })
 

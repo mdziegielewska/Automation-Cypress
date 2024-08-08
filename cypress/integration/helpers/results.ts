@@ -18,6 +18,8 @@ class Results {
     }
 
     shouldVerifyMageErrorMessage(text: string) {
+        cy.log('verifying mage error message');
+
         cy.get('.mage-error')
             .should('be.visible')
             .should('contain.text', text);
