@@ -17,6 +17,15 @@ const actionElements = [
 
 
 class Product {
+    private getItem() {
+        return cy.get('.product-item-details').first();
+    }
+
+    private getAttribute(attribute: string) {
+        return this.getItem()
+            .find(`.swatch-attribute.${attribute}`);
+    }
+
     shouldVerifyProductCellElements() {
         cy.log('verifying product info elements');
 
@@ -30,15 +39,71 @@ class Product {
         for(const productAction of actionElements) {
             cy.log(`verifying hidden product action element - ${productAction.name}`);
 
-            cy.get('.product-item-details')
+            this.getItem()
                 .should('be.visible')
-                .invoke('show').as('actions');
+                .trigger('mouseover')
+                .wait(500).as('actions');
 
             cy.get('@actions')   
                 .get('.actions-secondary')
                 .find(productAction.locator).first()
                 .should('exist');
         }
+    }
+
+    selectSize(value: string) {
+        cy.log(`selecting size`);
+
+        this.getAttribute('size').as('attribute');
+
+        cy.get('@attribute')
+            .find('[role="option"]')
+            .contains(value)
+            .click();
+    }
+
+    selectColor(value: string) {
+        cy.log(`selecting color`);
+
+        this.getAttribute('color').as('attribute');
+
+        cy.get('@attribute')
+            .find(`[option-label="${value}"]`)
+            .click();
+    }
+
+    addToCart() {
+        cy.log('adding to cart');
+
+        this.getItem()
+            .trigger('mouseover')
+            .wait(500).as('item');
+     
+        cy.get('@item')
+            .find('.action.tocart')
+            .click({force: true} );
+    }
+
+    addToWishlist() {
+        this.getItem()
+            .trigger('mouseover')
+            .wait(500).as('item');
+         
+        cy.get('@item')
+            .get('[data-role="add-to-links"]')
+            .find('a.action.towishlist').first()
+            .click({force: true} );
+    }
+    
+    addToComparision() {
+        this.getItem()
+            .trigger('mouseover')
+            .wait(500).as('item');
+        
+        cy.get('@item')
+            .get('[data-role="add-to-links"]')
+            .find('a.action.tocompare').first()
+            .click({force: true} );
     }
 }
 
