@@ -59,6 +59,7 @@ describe('Main Page - Menu', () => {
 
     actionLinks.forEach(({action, url}) => {
         it(`Should redirect to navigation link - ${action}`, () => {
+            
             navigation.shouldVerifyNavigationLinks(action, url);
         })
     })

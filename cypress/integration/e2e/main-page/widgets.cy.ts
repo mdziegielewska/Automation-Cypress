@@ -11,13 +11,14 @@ const widget = [
     { name: 'Eco Friendly', info: 'Find conscientious, comfy clothing in our eco-friendly collection', url: '/eco-friendly.html' }, 
 ];
 
-const widgetBlocks = '.block-promo'; 
 
 describe('Main page - Widgets', () => {
 
     beforeEach(() => {
         cy.visit('/');
     })
+
+    const widgetBlocks = '.block-promo'; 
 
     widget.forEach(({ name, info, url }, index) => {
         it(`Should contain widget - ${name}`, () => {

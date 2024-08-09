@@ -6,6 +6,7 @@ import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
 import { widgets } from '../../helpers/widgets';
 
+
 const footer = [
     { footer: 'Search Terms', url: '/search/term/popular/' }, 
     { footer: 'Privacy and Cookie Policy', url: '/privacy-policy-cookie-restriction-mode'}, 
@@ -19,11 +20,11 @@ const oar = [
     { id: 'oar_email', value: `${Cypress.env("TEST_USER_EMAIL")}` }
 ];
 
-const footerPanel = '.footer.links li';
-const title = '.page-title';
-
 
 describe('Footer', () => {
+
+    const footerPanel = '.footer.links li';
+    const title = '.page-title';
 
     footer.forEach(({footer, url}) => {
         it(`Should verify footer links - ${footer}`, () => {

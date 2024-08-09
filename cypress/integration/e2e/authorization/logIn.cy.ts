@@ -5,16 +5,17 @@ import { forms } from '../../helpers/forms';
 import { results } from '../../helpers/results';
 import { routes } from '../../helpers/routes';
 
+
 const LOGIN_ERROR_MESSAGE = "The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.";
 const RESET_PASSWORD_MESSAGE = `If there is an account associated with ${Cypress.env("TEST_USER_EMAIL")} you will receive an email with a link to reset your password.`;
 
 
 describe('Log in', () => {
+
     beforeEach(() => {
         cy.clearAllCookies();
         cy.visit('/customer/account/login/');
     })
-
 
     const loginPanel = '[data-ui-id="page-title-wrapper"]';
     const resetPanel = '.action.remind';
