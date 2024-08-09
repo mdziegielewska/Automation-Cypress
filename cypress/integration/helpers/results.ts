@@ -9,10 +9,18 @@ class Results {
             .should('contain.text', text);
     }
 
+    shouldVerifyPageTitle(title: string) {
+        cy.log('verifying page title');
+        
+        cy.get('.page-title')
+            .should('be.visible')
+            .should('contain.text', title);
+    }
+
     shouldVerifyAlert(text: string) {
         cy.log('verifying page messages');
         
-        cy.get('.page.messages')
+        cy.get('.message')
             .should('be.visible')
             .should('contain.text', text);
     }
@@ -24,6 +32,6 @@ class Results {
             .should('be.visible')
             .should('contain.text', text);
     }
-}
+} 
 
 export const results = new Results();

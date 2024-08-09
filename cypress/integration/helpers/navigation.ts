@@ -19,7 +19,7 @@ class Navigation {
             .should('contain', tab);
     }
 
-    shouldBeExpandable(tab: string) {
+    shouldBeExpandable(tab: string) { 
         cy.log('verifying expandable tabs');
 
         this.getExpandableIcon(tab)
@@ -75,6 +75,22 @@ class Navigation {
             .click();
 
         cy.url().should('contain', url);
+    }
+
+    shouldVerifyFooter(footer: string, url: string) {
+        cy.log('verifying navigation links'); 
+
+        cy.get('ul.footer.links a')
+            .contains(footer)
+            .should('be.visible')
+            .click();
+
+        cy.url().should('contain', url);
+    }
+
+    shouldContainNavPanel(nav: string) {
+        cy.get(nav)
+            .should('be.visible');
     }
 }
 

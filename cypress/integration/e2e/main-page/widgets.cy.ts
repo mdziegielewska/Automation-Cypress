@@ -11,9 +11,9 @@ const widget = [
     { name: 'Eco Friendly', info: 'Find conscientious, comfy clothing in our eco-friendly collection', url: '/eco-friendly.html' }, 
 ];
 
-const widgetBlocks = '.block-promo';
+const widgetBlocks = '.block-promo'; 
 
-describe('Main page', () => {
+describe('Main page - Widgets', () => {
 
     beforeEach(() => {
         cy.visit('/');

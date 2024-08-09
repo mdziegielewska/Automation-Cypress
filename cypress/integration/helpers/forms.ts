@@ -10,11 +10,17 @@ class Forms {
             .click();
     }
 
+    search() {
+        cy.get('.actions-toolbar')
+            .find(`.search`)
+            .should('be.visible')
+            .click();
+    }
+
     fillField(field: string, value: string) {
         cy.log('filling form field');
 
         cy.get(`#${field}`)
-            .should('have.attr', 'aria-required', 'true')
             .type(value);
     }
 }

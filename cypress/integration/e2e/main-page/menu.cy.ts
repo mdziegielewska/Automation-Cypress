@@ -23,12 +23,12 @@ const actionLinks = [
 ];
 
 
-describe('Menu', () => {
+describe('Main Page - Menu', () => {
 
     beforeEach(() => {
         cy.visit('/');
     })
-
+ 
     menu.forEach(({tab, url, submenu}) => {
         it(`Should contain ${tab} in Menu`, () => {
             
