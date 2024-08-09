@@ -20,6 +20,7 @@ class Routes {
             case 'LoadPage': return ['GET', '/'];
             case 'SignUpPage': return ['GET', '/customer/account/create/'];
             case 'ResetPassword' : return ['POST, /customer/account/forgotpasswordpost/'];
+            case 'SearchResults': return ['GET', '/catalogsearch/result/'];
 
             default: throw Error(`Unknown route key: ${key}`)
         }

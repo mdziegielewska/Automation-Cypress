@@ -85,6 +85,8 @@ class Product {
     }
 
     addToWishlist() {
+        cy.log('adding to wishlist');
+
         this.getItem()
             .trigger('mouseover')
             .wait(500).as('item');
@@ -96,6 +98,8 @@ class Product {
     }
     
     addToComparision() {
+        cy.log('adding to comparision');
+
         this.getItem()
             .trigger('mouseover')
             .wait(500).as('item');
