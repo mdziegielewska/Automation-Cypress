@@ -44,7 +44,7 @@ describe('Sign Up', () => {
 
         forms.submit('submit');
 
-        results.shouldVerifyAlert(REGISTER_MESSAGE);
+        results.shouldVerifyPageMessage(REGISTER_MESSAGE);
         results.shouldVerifyTextInSection('.block-dashboard-info', `${generateEmail}`);
     })
 
@@ -64,7 +64,7 @@ describe('Sign Up', () => {
 
         forms.submit('submit');
 
-        results.shouldVerifyAlert(EXISTING_EMAIL_MESSAGE);
+        results.shouldVerifyPageMessage(EXISTING_EMAIL_MESSAGE);
     })
 
     it('Should sign up with incorrect password', () => {

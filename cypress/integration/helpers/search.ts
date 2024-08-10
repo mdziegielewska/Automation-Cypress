@@ -3,6 +3,13 @@
 import { routes } from "./routes";
 
 class Search {
+    advancedSearch() {
+        cy.get('.actions-toolbar')
+            .find(`.search`)
+            .should('be.visible')
+            .click();
+    }
+
     shouldShowAutocomplete(){
         cy.log('verifying autocomplete search');
 
@@ -17,11 +24,26 @@ class Search {
             .should('be.visible');
     }
 
-    shouldClickInRelatedSearch() {
-        cy.log('verifying related search');
+    getSearchTerms(type: string) {
+        cy.log('getting search terms');
 
-        cy.get('.block')
-            .find('dd.item')
+        switch(type) {
+            case 'related': 
+                return cy.get('.block')
+                        .find('dd.item');
+            case 'popular': 
+                return cy.get('.search-terms')
+                        .find('li.item');
+
+            default: throw Error(`Unknown search terms type: ${type}`)
+        }
+    }
+
+    shouldClickInSearchTerms(type: string) {
+        cy.log('clicking on search terms');
+
+        this.getSearchTerms(type)
+            .should('be.visible')
             .first()
             .click();
 

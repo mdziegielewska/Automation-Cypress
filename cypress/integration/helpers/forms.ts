@@ -1,6 +1,13 @@
 /// <reference types="cypress"/>
 
 class Forms {
+    fillField(field: string, value: string) {
+        cy.log('filling form field');
+
+        cy.get(`#${field}`)
+            .type(value);
+    }
+
     submit(action: string) {
         cy.log('submitting form');
 
@@ -8,20 +15,6 @@ class Forms {
             .filter(`.${action}`)
             .should('be.visible')
             .click();
-    }
-
-    search() {
-        cy.get('.actions-toolbar')
-            .find(`.search`)
-            .should('be.visible')
-            .click();
-    }
-
-    fillField(field: string, value: string) {
-        cy.log('filling form field');
-
-        cy.get(`#${field}`)
-            .type(value);
     }
 }
 

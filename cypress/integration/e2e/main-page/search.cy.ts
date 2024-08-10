@@ -5,24 +5,14 @@ import { forms } from "../../helpers/forms";
 import { results } from "../../helpers/results";
 import { routes } from "../../helpers/routes";
 import { listing } from "../../helpers/listings";
-import { search } from "../../helpers/search";
+import { search } from '../../helpers/search';
 import { widgets } from "../../helpers/widgets";
-
-
-const searchResultsElements = [
-    { name: 'Title', locator: '.page-title'  },
-    { name: 'Toolbar', locator: '.toolbar-products' },
-    { name: 'Related search', locator: '.block' },
-    { name: 'Results', locator: '.product-items' },
-    { name: 'Filters', locator: '#layered-filter-block' },
-    { name: 'Compare section', locator: '#block-compare-heading' },
-    { name: 'Wishlist section', locator: '.block-wishlist' }
-];
 
 
 describe('Main page - Search', () => {
 
     it('Should search', () => {
+
         cy.visit('/');
 
         forms.fillField('search', 'jacket');
@@ -34,27 +24,17 @@ describe('Main page - Search', () => {
 
         search.shouldDisplaySearchResults();
         results.shouldVerifyTextInSection('.page-title', 'Search results');
+        listing.shouldVerifyListingElements();
     })
 
-    beforeEach(() => {
+    it('Should verify Related Search', () => {
+
         cy.visit('/catalogsearch/result/?q=+Jacket');
-    })
 
-    searchResultsElements.forEach(({name, locator}) => {
-        it(`Should result should contain - ${name}`, () => {
-
-            listing.shouldVerifyListingElements(locator);
-        })
-    })
-
-    it('Should verify Related Search Terms', () => {
-
-        cy.get('.block')
-            .find('dd.item').as('related');
-
+        search.getSearchTerms('related').as('related');
         widgets.shouldVerifyNumberOfElements('@related', 5);
 
-        search.shouldClickInRelatedSearch();
+        search.shouldClickInSearchTerms('related');
 
         results.shouldVerifyTextInSection('.page-title', 'Search results');
     })

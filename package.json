@@ -2,7 +2,7 @@
   "name": "automationcypress",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": { "e2e:chrome": "cypress run --browser chrome --spec ./cypress/integration/e2e/**/*.cy.ts" },
   "author": "",
   "license": "ISC",
   "description": "",

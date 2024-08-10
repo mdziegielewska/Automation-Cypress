@@ -1,6 +1,14 @@
 /// <reference types="cypress"/>
 
 class Widgets {
+    getHotSellers() {
+        cy.log('getting hot sellers widget'); 
+
+        return cy.get('.widget-product-grid')
+            .should('be.visible')
+            .find('li.product-item');
+    }
+
     shouldVerifyNumberOfElements(section: string, number: number) {
         cy.log('verifying number of element'); 
 

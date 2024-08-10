@@ -27,13 +27,13 @@ class Product {
     }
 
     shouldVerifyProductCellElements() {
-        cy.log('verifying product info elements');
-
         for(const productInfo of productCell) {
+            cy.log(`verifying product info elements - ${productInfo.name}`);
+
             cy.get(productInfo.locator)
                 .should('be.visible');
         } 
-    }
+    } 
 
     shouldVerifyHiddenElements() {
         for(const productAction of actionElements) {

@@ -1,7 +1,7 @@
 /// <reference types="cypress"/>
 
 class Authorization {
-    fillInlogInData(email: string, password: string) {
+    fillInLogInData(email: string, password: string) {
         cy.log('filling in user data');
 
         cy.get('input[title="Email"]')

@@ -9,12 +9,6 @@ class Routes {
         cy.intercept(method, pattern).as(key);
     }
 
-    waitFor(key: string) {
-        cy.log('waiting for route');
-
-        cy.wait(`@${key}`)
-    }
-
     private getRoute(key:string) {
         switch (key) {
             case 'LoadPage': return ['GET', '/'];

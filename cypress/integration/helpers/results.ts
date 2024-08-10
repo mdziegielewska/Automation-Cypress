@@ -17,13 +17,13 @@ class Results {
             .should('contain.text', title);
     }
 
-    shouldVerifyAlert(text: string) {
-        cy.log('verifying page messages');
+    shouldVerifyPageMessage(text: string) {
+        cy.log('verifying page message');
         
         cy.get('.message')
             .should('be.visible')
             .should('contain.text', text);
-    }
+    } 
 
     shouldVerifyMageErrorMessage(text: string) {
         cy.log('verifying mage error message');

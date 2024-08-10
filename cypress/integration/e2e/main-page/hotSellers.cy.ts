@@ -23,17 +23,13 @@ describe('Main page - Hot Sellers', () => {
         
         results.shouldVerifyTextInSection(hotSellers, 'Hot Sellers');
 
-        cy.get('.widget-product-grid')
-            .should('be.visible')
-            .find('li.product-item').as('products');
-
+        widgets.getHotSellers().as('products');
         widgets.shouldVerifyNumberOfElements('@products', 6);
     })
 
     it('Product Item should contain elements', () => {
 
         product.shouldVerifyProductCellElements();
-
         product.shouldVerifyHiddenElements();
     }) 
 
@@ -43,13 +39,13 @@ describe('Main page - Hot Sellers', () => {
         product.selectColor('Purple');
 
         product.addToCart();
-        results.shouldVerifyAlert(ADD_TO_CART_MESSAGE);
+        results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
     })
 
     it('Should add to Wishlist', () => {
 
         product.addToWishlist();
-        results.shouldVerifyAlert(ADD_TO_WISHLIST_MESSAGE);
+        results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
 
         cy.url()
             .should('contain', '/customer/account/login/');
@@ -58,6 +54,6 @@ describe('Main page - Hot Sellers', () => {
     it('Should add to Comparision', () => {
 
         product.addToComparision();
-        results.shouldVerifyAlert(ADD_TO_COMPARISION_MESSAGE);
+        results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
     })
 })

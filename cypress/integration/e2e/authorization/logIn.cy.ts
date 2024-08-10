@@ -24,7 +24,7 @@ describe('Log in', () => {
 
         results.shouldVerifyTextInSection(loginPanel, 'Customer Login');
 
-        authorization.fillInlogInData(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_USER_PASSWORD"));
+        authorization.fillInLogInData(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_USER_PASSWORD"));
         forms.submit('login');
 
         routes.expect('LoadPage');
@@ -37,10 +37,10 @@ describe('Log in', () => {
 
         results.shouldVerifyTextInSection(loginPanel, 'Customer Login');
         
-        authorization.fillInlogInData(Cypress.env("TEST_USER_EMAIL"), "123456789");
+        authorization.fillInLogInData(Cypress.env("TEST_USER_EMAIL"), "123456789");
         forms.submit('login');
 
-        results.shouldVerifyAlert(LOGIN_ERROR_MESSAGE);
+        results.shouldVerifyPageMessage(LOGIN_ERROR_MESSAGE);
     })
 
     it('Should remind password', () => {
@@ -54,6 +54,6 @@ describe('Log in', () => {
         forms.fillField('email_address', `${Cypress.env("TEST_USER_EMAIL")}`);
         forms.submit('submit');
 
-        results.shouldVerifyAlert(RESET_PASSWORD_MESSAGE);
+        results.shouldVerifyPageMessage(RESET_PASSWORD_MESSAGE);
     })
 })

@@ -4,6 +4,7 @@ import { forms } from "../../helpers/forms";
 import { navigation } from "../../helpers/navigation";
 import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
+import { search } from "../../helpers/search";
 import { widgets } from '../../helpers/widgets';
 
 
@@ -19,6 +20,8 @@ const oar = [
     { id: 'oar-billing-lastname', value: `${Cypress.env("TEST_LAST_NAME")}` },
     { id: 'oar_email', value: `${Cypress.env("TEST_USER_EMAIL")}` }
 ];
+
+const SEARCH_RESULT_MESSAGE = 'Don\'t see what you\'re looking for?';
 
 
 describe('Footer', () => {
@@ -42,10 +45,7 @@ describe('Footer', () => {
 
         results.shouldVerifyPageTitle('Popular Search Terms');
 
-        cy.get('.search-terms li.item')
-            .should('be.visible')
-            .first()
-            .click();
+        search.shouldClickInSearchTerms('popular');
 
         results.shouldVerifyPageTitle('Search results');
         product.shouldVerifyProductCellElements();
@@ -68,11 +68,11 @@ describe('Footer', () => {
         results.shouldVerifyTextInSection(title, 'Advanced Search');
 
         forms.fillField('sku', 'WT09');
-        forms.search();
+        search.advancedSearch();
 
         results.shouldVerifyTextInSection(title, 'Catalog Advanced Search');
         product.shouldVerifyProductCellElements();
-        results.shouldVerifyAlert('Don\'t see what you\'re looking for?');
+        results.shouldVerifyPageMessage(SEARCH_RESULT_MESSAGE);
     })
 
     it('Should verify Orders and Returns', () => {
