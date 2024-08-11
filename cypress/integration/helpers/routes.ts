@@ -9,12 +9,21 @@ class Routes {
         cy.intercept(method, pattern).as(key);
     }
 
+    waitFor(key: string) {
+        cy.log('waiting for route');
+
+        cy.wait(`@${key}`);
+    }
+
     private getRoute(key:string) {
         switch (key) {
             case 'LoadPage': return ['GET', '/'];
             case 'SignUpPage': return ['GET', '/customer/account/create/'];
             case 'ResetPassword' : return ['POST, /customer/account/forgotpasswordpost/'];
             case 'SearchResults': return ['GET', '/catalogsearch/result/'];
+            case 'Limiter': return ['GET', '/women/tops-women.html?product_list_limit='];
+            case 'Sorter': return ['GET', '/women/tops-women.html?product_list_order='];
+            case 'Mode': return ['GET', '/women/tops-women.html?product_list_mode='];
 
             default: throw Error(`Unknown route key: ${key}`)
         }

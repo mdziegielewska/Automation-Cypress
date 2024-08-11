@@ -9,6 +9,7 @@ const ADD_TO_CART_MESSAGE = "You added Radiant Tee to your shopping cart.";
 const ADD_TO_WISHLIST_MESSAGE = "You must login or register to add items to your wishlist.";
 const ADD_TO_COMPARISION_MESSAGE = "You added product Radiant Tee to the comparison list.";
 
+const isEquipment = false;
 
 describe('Main page - Hot Sellers', () => {
 
@@ -29,7 +30,7 @@ describe('Main page - Hot Sellers', () => {
 
     it('Product Item should contain elements', () => {
 
-        product.shouldVerifyProductCellElements();
+        product.shouldVerifyProductCellElements(isEquipment);
         product.shouldVerifyActionElements();
     }) 
 
@@ -38,7 +39,7 @@ describe('Main page - Hot Sellers', () => {
         product.selectSize('M');
         product.selectColor('Purple');
 
-        product.addToCart();
+        product.addToCart(false);
         results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
     })
 

@@ -49,7 +49,7 @@ const sale = [
 ];
 
 const categories = [
-    { category: 'What\' New', url: '/what-is-new.html', widget: whatsNew, grid: 'Luma\'s Latest' },
+    { category: 'What\'s New', url: '/what-is-new.html', widget: whatsNew, grid: 'Luma\'s Latest' },
     { category: 'Women', url: '/women.html', widget: women, grid: 'Hot Sellers'  },
     { category: 'Men', url: '/men.html', widget: men, grid: 'Hot Sellers'  },
     { category: 'Gear', url: '/gear.html', widget: gear, grid: 'Hot Sellers' },

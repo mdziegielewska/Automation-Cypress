@@ -1,12 +1,20 @@
 /// <reference types="cypress"/>
 
-const productCell = [
+const productClothCell = [
     { name: 'image', locator: '.product-image-photo' },
-    { name: '.title',  locator: '.product-item-name' },
+    { name: 'title',  locator: '.product-item-name' },
     { name: 'reviews', locator: '.rating-result' },
     { name: 'price',  locator: '.normal-price' },
     { name: 'size',  locator: '.swatch-attribute.size' },
     { name: 'colors',  locator: '.swatch-attribute.color' },
+    { name: 'add to cart',  locator: '.action.tocart' }
+]; 
+
+const productEquipmentCell = [
+    { name: 'image', locator: '.product-image-photo' },
+    { name: '.title',  locator: '.product-item-name' },
+    { name: 'reviews', locator: '.rating-result' },
+    { name: 'price',  locator: '.price' },
     { name: 'add to cart',  locator: '.action.tocart' }
 ]; 
 
@@ -26,13 +34,29 @@ class Product {
             .find(`.swatch-attribute.${attribute}`);
     }
 
-    shouldVerifyProductCellElements() {
-        for(const productInfo of productCell) {
-            cy.log(`verifying product info elements - ${productInfo.name}`);
+    getProductName() {
+        return this.getItem()
+            .should('be.visible')
+            .find('.product-item-name a')
+            .invoke('text');
+    }
 
-            cy.get(productInfo.locator)
-                .should('be.visible');
-        } 
+    shouldVerifyProductCellElements(isEquipment: boolean) {
+        if (isEquipment) {
+            for(const productInfo of productEquipmentCell) {
+                cy.log(`verifying product info elements - ${productInfo.name}`);
+    
+                cy.get(productInfo.locator)
+                    .should('be.visible');
+            };
+        } else {
+            for(const productInfo of productClothCell) {
+                cy.log(`verifying product info elements - ${productInfo.name}`);
+    
+                cy.get(productInfo.locator)
+                    .should('be.visible');
+            };
+        }
     } 
 
     shouldVerifyActionElements() {
@@ -51,29 +75,51 @@ class Product {
         }
     }
 
-    selectSize(value: string) {
+    selectSize(value?: string) {
         cy.log(`selecting size`);
 
         this.getAttribute('size').as('attribute');
 
-        cy.get('@attribute')
-            .find('[role="option"]')
-            .contains(value)
-            .click();
+        if(value) {
+            cy.get('@attribute')
+                .find('[role="option"]')
+                .contains(value)
+                .click();
+        } else {
+            cy.log(`Size option not found. Selecting first...`);
+            cy.get('@attribute')
+                .find('.swatch-option.text')
+                .first()
+                .click();
+        }        
     }
 
-    selectColor(value: string) {
+    selectColor(value?: string) {
         cy.log(`selecting color`);
 
         this.getAttribute('color').as('attribute');
 
-        cy.get('@attribute')
+        if(value) {
+            cy.get('@attribute')
             .find(`[option-label="${value}"]`)
+            .should('be.visible')
             .click();
+        } else {
+            cy.log(`Color option not found. Selecting first...`);
+            cy.get('@attribute')
+                .find('.swatch-option.color')
+                .first()
+                .click();
+        }
     }
 
-    addToCart() {
+    addToCart(isEquipment: boolean) {
         cy.log('adding to cart');
+
+        if(!isEquipment) {
+            this.selectSize();
+            this.selectColor();
+        }
 
         this.getItem()
             .trigger('mouseover')

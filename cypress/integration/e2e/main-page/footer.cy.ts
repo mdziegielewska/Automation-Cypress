@@ -22,6 +22,7 @@ const oar = [
 ];
 
 const SEARCH_RESULT_MESSAGE = 'Don\'t see what you\'re looking for?';
+const isEquipment = false;
 
 
 describe('Footer', () => {
@@ -48,7 +49,7 @@ describe('Footer', () => {
         search.shouldClickInSearchTerms('popular');
 
         results.shouldVerifyPageTitle('Search results');
-        product.shouldVerifyProductCellElements();
+        product.shouldVerifyProductCellElements(isEquipment);
     })
 
     it('Should verify Privacy Policy', () => {
@@ -71,7 +72,7 @@ describe('Footer', () => {
         search.advancedSearch();
 
         results.shouldVerifyTextInSection(title, 'Catalog Advanced Search');
-        product.shouldVerifyProductCellElements();
+        product.shouldVerifyProductCellElements(isEquipment);
         results.shouldVerifyPageMessage(SEARCH_RESULT_MESSAGE);
     })
 
