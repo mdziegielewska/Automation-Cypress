@@ -35,7 +35,7 @@ class Product {
         } 
     } 
 
-    shouldVerifyHiddenElements() {
+    shouldVerifyActionElements() {
         for(const productAction of actionElements) {
             cy.log(`verifying hidden product action element - ${productAction.name}`);
 

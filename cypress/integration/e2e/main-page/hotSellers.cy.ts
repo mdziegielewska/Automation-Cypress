@@ -23,14 +23,14 @@ describe('Main page - Hot Sellers', () => {
         
         results.shouldVerifyTextInSection(hotSellers, 'Hot Sellers');
 
-        widgets.getHotSellers().as('products');
+        widgets.getGridWidget().as('products');
         widgets.shouldVerifyNumberOfElements('@products', 6);
     })
 
     it('Product Item should contain elements', () => {
 
         product.shouldVerifyProductCellElements();
-        product.shouldVerifyHiddenElements();
+        product.shouldVerifyActionElements();
     }) 
 
     it('Should add to Cart', () => {

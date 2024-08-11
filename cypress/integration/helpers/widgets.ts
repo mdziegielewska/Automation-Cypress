@@ -1,7 +1,7 @@
 /// <reference types="cypress"/>
 
 class Widgets {
-    getHotSellers() {
+    getGridWidget() {
         cy.log('getting hot sellers widget'); 
 
         return cy.get('.widget-product-grid')

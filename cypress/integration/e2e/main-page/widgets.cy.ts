@@ -23,7 +23,7 @@ describe('Main page - Widgets', () => {
     widget.forEach(({ name, info, url }, index) => {
         it(`Should contain widget - ${name}`, () => {
             
-            widgets.shouldVerifyNumberOfElements(widgetBlocks, Cypress.env("WIDGETS_NUMBER"));
+            widgets.shouldVerifyNumberOfElements(widgetBlocks, widget.length);
             
             widgets.shouldVerifyWidgetInfo(index, info);
             widgets.shouldVerifyUrl(widgetBlocks, index, url);
