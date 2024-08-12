@@ -41,6 +41,11 @@ class Product {
             .invoke('text');
     }
 
+    getPrice() {
+        return this.getItem()
+            .find('.price');
+    }
+
     shouldVerifyProductCellElements(isEquipment: boolean) {
         if (isEquipment) {
             for(const productInfo of productEquipmentCell) {

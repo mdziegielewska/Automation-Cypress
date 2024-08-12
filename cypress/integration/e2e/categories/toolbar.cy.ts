@@ -20,7 +20,7 @@ describe('Listings - Toolbar', () => {
     
             listing.shouldChangeLimiter(limiter);
 
-            routes.waitFor('Limiter');
+            routes.expect('Limiter');
             listing.shouldVerifyProductsNumber(limiter);
         })
     })
@@ -29,12 +29,14 @@ describe('Listings - Toolbar', () => {
         it(`Should verify sorting options - ${sortType}`, () => {
 
             listing.shouldSortBy(sortType);
-            routes.waitFor('Sorter');
+
+            routes.expect('Sorter');
+            listing.shouldVerifySorting(sortType);
         })
     })
 
     mode.forEach((mode) => {
-        it.only(`Should verify display mode - ${mode}`, () => {
+        it(`Should verify display mode - ${mode}`, () => {
 
             listing.shouldChangeModes(mode);
             

@@ -1,5 +1,7 @@
 /// <reference types="cypress"/>
 
+import { product } from "./product";
+
 const listingElements = [
     { name: 'Title', locator: '.page-title'  },
     { name: 'Toolbar', locator: '.toolbar-products' },
@@ -81,6 +83,23 @@ class Listing {
 
         cy.get(`.products.wrapper.${mode}.products-${mode}`)
             .should('be.visible');
+    }
+
+    shouldVerifySorting(sortBy: string) {
+        cy.log(`verifying sorting by ${sortBy}`);
+
+        if(sortBy == 'Product Name') {
+            product.getProductName()
+                .then(text => {
+                    expect(text.trim().startsWith('A')).to.be.true; 
+            })
+        } else if(sortBy == 'Price') {
+            product.getPrice()
+                .should('contain', '$22.00');
+        } else if(sortBy == 'Position') {
+            product.getProductName()
+                .should('contain', 'Breathe-Easy Tank');
+        }
     }
 } 
 
