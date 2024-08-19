@@ -15,6 +15,12 @@ const additionalSidebar = ['Compare Products', 'My Wish List'];
 
 
 class Listing {
+    private getFilter(filter: string) {
+        return cy.get('.filter-options')
+            .find('[data-role="collapsible"]')
+            .contains(filter);
+    }
+
     shouldContainFilterBlock() {
         cy.log('verifying filter block');
 
@@ -100,6 +106,78 @@ class Listing {
             product.getProductName()
                 .should('contain', 'Breathe-Easy Tank');
         }
+    }
+
+    shouldVerifyFilterList(filter: string){
+        cy.log('verifying filter');
+
+        this.getFilter(filter)
+            .should('be.visible');
+
+        this.getFilter(filter)
+            .get('.filter-options-content')
+            .find('ol li')
+            .should('have.class', 'item');
+    }
+
+    shouldVerifyFilterBlocks(filter: string, index: number){
+        cy.log('verifying filter block');
+
+        this.getFilter(filter)
+            .should('be.visible');
+
+        this.getFilter(filter)
+            .get('.swatch-attribute')
+            .eq(index)
+            .find('.swatch-option')
+            .should('have.attr', 'option-label');
+    }
+
+    shouldBeCollapsible(filter: string) {
+        cy.log('verifying filter collapsing')
+
+        this.getFilter(filter)
+            .should('have.attr', 'aria-expanded', 'false')
+            .click()
+            .wait(500)
+            .should('have.attr', 'aria-expanded', 'true');
+    }
+
+    shouldFilter(filter: string){
+        cy.log('verifying filtering by list');
+
+        cy.get('.filter-options-item.allow.active')
+            .find('ol li a')
+            .eq(1)
+            .click()
+            .wait(500); 
+    }
+
+    shouldFilterByAttributes(filter: string, type: string, index: number) {
+        cy.log('verifying filtering by attributes');
+
+        cy.get('.filter-options-content')
+            .find('.swatch-attribute')
+            .eq(index)
+            .find(`.swatch-option.${type}`)
+            .first()
+            .click()
+            .wait(500);
+    }
+
+    shouldVerifyFilterValue() {
+        cy.log('verifying filter value');
+            
+        cy.get('.filter-value')
+            .should('be.visible');
+    }
+
+    shouldClearFilters() {
+        cy.log('clearing filters');
+
+        cy.get('.filter-clear')
+            .should('be.visible')
+            .click();
     }
 } 
 
