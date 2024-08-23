@@ -34,7 +34,7 @@ describe('Product comparision', () => {
         });
     })
     
-    it.only('Should open compare page', () => {
+    it('Should open compare page', () => {
 
         product.addToComparision();
 
