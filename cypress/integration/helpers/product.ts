@@ -46,6 +46,11 @@ class Product {
             .find('.price');
     }
 
+    getRelated() {
+        return cy.get('.products-related')
+            .find('.product-item-info');
+    }
+
     shouldVerifyProductCellElements(isEquipment: boolean) {
         if (isEquipment) {
             for(const productInfo of productEquipmentCell) {
