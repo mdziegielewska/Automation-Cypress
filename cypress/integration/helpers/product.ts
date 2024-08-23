@@ -160,6 +160,23 @@ class Product {
             .find('a.action.tocompare').first()
             .click({force: true} );
     }
+
+    getCompareTable() {
+        cy.log('getting compare table');
+
+        return cy.get('#product-comparison tr')
+            .should('be.visible');
+    }
+
+    compareProducts() {
+        cy.log('comparing products');
+
+        cy.get('.actions-toolbar')
+            .find('a.action.compare')
+            .click();
+
+        cy.url().should('contain', '/catalog/product_compare/');
+    }
 }
 
 export const product = new Product(); 
