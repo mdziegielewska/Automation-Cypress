@@ -6,7 +6,7 @@ import { widgets } from "../../helpers/widgets";
 
 
 const ADD_TO_WISHLIST_MESSAGE = "You must login or register to add items to your wishlist.";
-const ADD_TO_COMPARISION_MESSAGE = "You added product Juno Jacket to the comparison list.";
+const ADD_TO_COMPARISION_MESSAGE = "You added product Carina Basic Capri to the comparison list.";
 
 const isEquipment = false;
 
@@ -14,6 +14,7 @@ const isEquipment = false;
 describe('PDP - Related Products', () => {
 
     beforeEach(() => {
+        
         cy.visit('/juno-jacket.html');
         cy.clearAllCookies();
     })
@@ -36,7 +37,7 @@ describe('PDP - Related Products', () => {
 
     it('Should add to Wishlist', () => {
 
-        product.addToWishlist();
+        product.addToWishlistOrCompare("wishlist");
         results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
 
         cy.url()
@@ -45,7 +46,7 @@ describe('PDP - Related Products', () => {
 
     it('Should add to Comparision', () => {
 
-        product.addToComparision();
+        product.addToWishlistOrCompare("compare");
         results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
     })
 })

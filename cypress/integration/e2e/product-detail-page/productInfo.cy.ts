@@ -12,7 +12,7 @@ const tabs = [
 ]
 
 const ADD_TO_WISHLIST_MESSAGE = "You must login or register to add items to your wishlist.";
-const ADD_TO_COMPARISION_MESSAGE = "You added product Juno Jacket to the comparison list.";
+const ADD_TO_COMPARISION_MESSAGE = "You added product Carina Basic Capri to the comparison list.";
 const ADD_TO_CART_MESSAGE = "You added Juno Jacket to your shopping cart.";
 
 
