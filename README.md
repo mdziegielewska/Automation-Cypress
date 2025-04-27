@@ -23,31 +23,31 @@ This repository contains Cypress automation tests written in TypeScript to autom
 **Test Coverages**
 
 - Main Page
-    - Menu
-    - Search
-    - Widgets
-    - Hot sellers
-    - Footer
+    - Menu [x]
+    - Search [x]
+    - Widgets [x]
+    - Hot sellers [x]
+    - Footer [x]
 - Authorization
-    - Registration
-    - Login
-        - Forgotten password
+    - Registration [x]
+    - Login [x]
+        - Forgotten password [ ]
 - Categories
-    - Listings
-    - Filters
-    - Products Comparision
+    - Listings [x]
+    - Filters [x]
+    - Products Comparision [x]
 - PDP (Product Detail Page)
-    - Product info
-    - Reviews
-    - Related products
+    - Product info [ ]
+    - Reviews [ ]
+    - Related products [x]
 - Transaction path
-    - Cart
-    - Checkout
+    - Cart [ ]
+    - Checkout [ ]
 - My Account
-    - Orders
-    - Address book
-    - Wishlist
-    - Reviews
+    - Orders [ ]
+    - Address book [ ]
+    - Wishlist [ ]
+    - Reviews [ ]
 
 
 **Future work**
