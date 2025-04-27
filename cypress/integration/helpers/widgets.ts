@@ -2,7 +2,7 @@
 
 class Widgets {
     getGridWidget() {
-        cy.log('getting hot sellers widget'); 
+        cy.log('getting hot sellers widget');
 
         return cy.get('.widget-product-grid')
             .should('be.visible')
@@ -10,24 +10,24 @@ class Widgets {
     }
 
     shouldVerifyNumberOfElements(section: string, number: number) {
-        cy.log('verifying number of element'); 
+        cy.log('verifying number of element');
 
         cy.get(section)
             .should('have.length', number);
     }
 
     shouldVerifyUrl(element: string, index: number, url: string) {
-        cy.log('verifying redirection url'); 
+        cy.log('verifying redirection url');
 
         cy.get(element)
             .eq(index)
             .click();
-        
+
         cy.url().should('include', url);
     }
 
     shouldVerifyWidgetInfo(index: number, info: string) {
-        cy.log('verifying widget info'); 
+        cy.log('verifying widget info');
 
         cy.get('span.info')
             .eq(index)

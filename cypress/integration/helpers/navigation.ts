@@ -11,6 +11,17 @@ class Navigation {
             .find('span.ui-menu-icon');
     }
 
+    private verifyNavigation(locator: string, name: string, url: string) {
+        cy.log(`verifying navigation link for ${name}`);
+
+        cy.get(locator)
+            .contains(name)
+            .should('be.visible')
+            .click();
+
+        cy.url().should('contain', url);
+    }
+
     shouldContainTab(tab: string) {
         cy.log('verifying tabs in section');
 
@@ -19,7 +30,7 @@ class Navigation {
             .should('contain', tab);
     }
 
-    shouldBeExpandable(tab: string) { 
+    shouldBeExpandable(tab: string) {
         cy.log('verifying expandable tabs');
 
         this.getExpandableIcon(tab)
@@ -33,7 +44,7 @@ class Navigation {
             .should('be.visible')
             .should('exist')
             .trigger('mouseover').as('submenu');
-        
+
         cy.get('@submenu')
             .get(`ul.submenu`)
             .should('be.visible')
@@ -46,7 +57,7 @@ class Navigation {
         cy.log('verifying level2 subtabs in tabs');
 
         this.shouldContainSubtabLevel1(tablevel0, tab);
-   
+
         cy.get('@subsubmenu')
             .get(`ul.submenu`)
             .should('be.visible')
@@ -67,28 +78,20 @@ class Navigation {
     }
 
     shouldVerifyNavigationLinks(navigationLink: string, url: string) {
-        cy.log('verifying navigation links'); 
+        cy.log('verifying navigation links');
 
-        cy.get('ul.header.links a')
-            .contains(navigationLink)
-            .should('be.visible')
-            .click();
-
-        cy.url().should('contain', url);
+        this.verifyNavigation('ul.header.links a', navigationLink, url);
     }
 
     shouldVerifyFooter(footer: string, url: string) {
-        cy.log('verifying navigation links'); 
+        cy.log('verifying navigation links');
 
-        cy.get('ul.footer.links a')
-            .contains(footer)
-            .should('be.visible')
-            .click();
-
-        cy.url().should('contain', url);
+        this.verifyNavigation('ul.footer.links a', footer, url);
     }
 
     shouldContainNavPanel(nav: string) {
+        cy.log('verifying nav panel visibility');
+
         cy.get(nav)
             .should('be.visible');
     }

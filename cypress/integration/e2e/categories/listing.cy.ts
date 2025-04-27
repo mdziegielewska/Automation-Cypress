@@ -46,6 +46,7 @@ urls.forEach(({name, url, items, isEquipment}) => {
         it('Should contain listing elements', () => {
 
             listing.shouldVerifyListingElements();
+            listing.shouldVerifyProductsNumber(items);
             
             listing.shouldContainFilterBlock();
             listing.shouldContainAdditionalSidebar();

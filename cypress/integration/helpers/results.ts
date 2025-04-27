@@ -1,37 +1,30 @@
 /// <reference types="cypress"/>
 
 class Results {
-    shouldVerifyTextInSection(locator: string, text: string) {
-        cy.log('verifying text in section');
-        
+
+    private verifyText(locator: string, text: string) {
+        cy.log(`Verifying text for locator: ${locator}`);
+
         cy.get(locator)
             .should('be.visible')
-            .should('contain.text', text);
+            .and('contain.text', text);
+    }
+
+    shouldVerifyTextInSection(locator: string, text: string) {
+        this.verifyText(locator, text);
     }
 
     shouldVerifyPageTitle(title: string) {
-        cy.log('verifying page title');
-        
-        cy.get('.page-title')
-            .should('be.visible')
-            .should('contain.text', title);
+        this.verifyText('.page-title', title);
     }
 
     shouldVerifyPageMessage(text: string) {
-        cy.log('verifying page message');
-        
-        cy.get('.message')
-            .should('be.visible')
-            .should('contain.text', text);
-    } 
+        this.verifyText('.message', text);
+    }
 
     shouldVerifyMageErrorMessage(text: string) {
-        cy.log('verifying mage error message');
-
-        cy.get('.mage-error')
-            .should('be.visible')
-            .should('contain.text', text);
+        this.verifyText('.mage-error', text);
     }
-} 
+}
 
 export const results = new Results();

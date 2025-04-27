@@ -60,8 +60,8 @@ class Product {
     }
 
     private selectOption(attribute: string, value?: string) {
-        cy.log(`Selecting ${attribute}`);
-        
+        cy.log(`selecting ${attribute}`);
+
         this.getAttribute(attribute).as('attribute');
 
         if (value) {
@@ -73,7 +73,7 @@ class Product {
             cy.get('@attribute')
                 .find('.swatch-option')
                 .not('.disabled')
-                .first()
+                .eq(1)
                 .click();
         }
     }
@@ -106,7 +106,7 @@ class Product {
 
         cells.forEach(({ name, locator }) => {
 
-            cy.log(`Verifying product info element: ${name}`);
+            cy.log(`verifying product info element: ${name}`);
             cy.get(locator).should('be.visible');
         });
     }
@@ -135,8 +135,8 @@ class Product {
         this.hoverItem();
 
         actionElements.forEach(({ name, locator }) => {
-            cy.log(`Verifying hidden action: ${name}`);
-            
+            cy.log(`verifying hidden action: ${name}`);
+
             cy.get('@item')
                 .find('.actions-secondary')
                 .find(locator)
@@ -156,8 +156,8 @@ class Product {
 
     shouldVerifyTabSwitching(tabs: { name: string; locator: string; }[]) {
         tabs.forEach(({ name, locator }) => {
-            
-            cy.log(`Switching to tab: ${name}`);
+
+            cy.log(`switching to tab: ${name}`);
             this.getTab(name);
             cy.get(locator).should('be.visible');
         });
@@ -165,43 +165,47 @@ class Product {
 
     shouldVerifyMoreInformationSections() {
         const expectedSections = ['Style', 'Material', 'Pattern', 'Climate'];
-        
+
         this.getTab('More Information');
         expectedSections.forEach(section => {
-            
-            cy.log(`Verifying section: ${section}`);
+
+            cy.log(`verifying section: ${section}`);
             cy.get('#additional').contains('th', section).should('be.visible');
         });
     }
 
     shouldDisplayDetailsSectionText() {
-        cy.log('Verifying description text in Details tab');
-        
+        cy.log('verifying description text in Details tab');
+
         this.getTab('Details');
         cy.get('#description')
             .should('not.be.empty')
             .and($el => {
-                
+
                 expect($el.text().trim().length).to.be.greaterThan(10);
             });
     }
 
     selectSize(value?: string) {
+        cy.log(`selecting ${value}`);
+
         this.selectOption('size', value);
     }
 
     selectColor(value?: string) {
+        cy.log(`selecting ${value}`);
+
         this.selectOption('color', value);
     }
 
     addToCart(isEquipment: boolean) {
-        cy.log('Adding product to cart');
-        
+        cy.log('adding product to cart');
+
         if (!isEquipment) {
             this.selectSize();
             this.selectColor();
         }
-        
+
         this.hoverItem();
         cy.get('@item')
             .find('.action.tocart')
@@ -209,21 +213,21 @@ class Product {
     }
 
     addToCartPDP() {
-        cy.log('Adding to cart on PDP');
-        
+        cy.log('adding to cart on PDP');
+
         this.selectSize();
         this.selectColor();
-        
+
         cy.get('#product-addtocart-button')
             .should('be.visible')
             .click();
     }
 
     addToWishlistOrCompare(type: 'wishlist' | 'compare') {
-        cy.log(`Adding product to ${type}`);
-        
+        cy.log(`adding product to ${type}`);
+
         this.hoverItem();
-        
+
         cy.get('@item')
             .find('[data-role="add-to-links"]')
             .find(`a.action.to${type}`)
@@ -232,16 +236,18 @@ class Product {
     }
 
     getCompareTable() {
+        cy.log('getting compare table');
+
         return cy.get('#product-comparison tr').should('be.visible');
     }
 
     compareProducts() {
-        cy.log('Comparing products');
-        
+        cy.log('comparing products');
+
         cy.get('.actions-toolbar')
             .find('a.action.compare')
             .click();
-        
+
         cy.url().should('contain', '/catalog/product_compare/');
     }
 }
