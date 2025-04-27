@@ -12,7 +12,7 @@ const productClothCell = [
 
 const productEquipmentCell = [
     { name: 'image', locator: '.product-image-photo' },
-    { name: '.title',  locator: '.product-item-name' },
+    { name: 'title',  locator: '.product-item-name' },
     { name: 'reviews', locator: '.rating-result' },
     { name: 'price',  locator: '.price' },
     { name: 'add to cart',  locator: '.action.tocart' }
@@ -22,6 +22,22 @@ const actionElements = [
     { name: 'wishlist',  locator: 'a.action.towishlist' },
     { name: 'compare',  locator: 'a.action.tocompare' }
 ]; 
+
+const pdpElements = [
+    { name: 'main elements', locator: '.product-info-main' },
+    { name: 'gallery', locator: '.product.media' },
+    { name: 'details', locator: '.product.info.detailed' }
+];
+
+const infoElements = [
+    { name: 'Title', locator: 'h1.page-title span', mustNotBeEmpty: true },
+    { name: 'Review', locator: '.reviews-actions', mustNotBeEmpty: false },
+    { name: 'Price', locator: '.price', mustNotBeEmpty: false },
+    { name: 'Stock', locator: '.stock', mustContainText: 'In stock' },
+    { name: 'SKU', locator: '.product.attribute.sku .value', mustNotBeEmpty: true },
+    { name: 'Size', locator: '.swatch-attribute.size .swatch-option', mustNotBeEmpty: false },
+    { name: 'Colors', locator: '.swatch-attribute.color .swatch-option', mustNotBeEmpty: false },
+  ]
 
 
 class Product {
@@ -51,9 +67,18 @@ class Product {
             .find('.product-item-info');
     }
 
+    getTab(name: string, locator: string) {
+        return cy.get('.product.info.detailed')
+            .within(() => {
+                cy.contains(name).click();
+                cy.get(locator).should('be.visible');
+            });
+    }
+
     shouldVerifyProductCellElements(isEquipment: boolean) {
         if (isEquipment) {
             for(const productInfo of productEquipmentCell) {
+                
                 cy.log(`verifying product info elements - ${productInfo.name}`);
     
                 cy.get(productInfo.locator)
@@ -61,6 +86,7 @@ class Product {
             };
         } else {
             for(const productInfo of productClothCell) {
+                
                 cy.log(`verifying product info elements - ${productInfo.name}`);
     
                 cy.get(productInfo.locator)
@@ -68,6 +94,26 @@ class Product {
             };
         }
     } 
+
+    shouldDisplayProductInfo() {
+        infoElements.forEach(({ name, locator, mustNotBeEmpty, mustContainText }) => {
+            cy.log(`verifying element - ${name}`);
+          
+            cy.get('.product-info-main')
+                .find(locator)
+                .should('be.visible')
+                .then(($el) => {
+                    
+                    if (mustNotBeEmpty) {
+                        expect($el.text().trim().length).to.be.greaterThan(0);
+                    }
+                    
+                    if (mustContainText) {
+                        expect($el.text()).to.include(mustContainText);
+                    }
+            });
+        });
+    }
 
     shouldVerifyActionElements() {
         for(const productAction of actionElements) {
@@ -83,6 +129,52 @@ class Product {
                 .find(productAction.locator).first()
                 .should('exist');
         }
+    }
+
+    shouldVerifyMainPDPElements() {
+        for(const pdpElement of pdpElements) {
+            cy.log(`verifying visibility of ${pdpElement.name}`)
+
+            cy.get(pdpElement.locator)
+                .should('be.visible');
+        }
+    }
+
+    shouldVerifyTabSwitching(tabs: { name: string; locator: string; }[]) {
+        for(const tab of tabs) {
+            cy.log(`verifying clickability of ${tab.name} tab`);
+
+            cy.get('.product.info.detailed')
+                .within(() => {
+                    cy.contains(tab.name).click();
+                    cy.get(tab.locator).should('be.visible');
+            });
+        }
+    }
+
+    shouldVerifyMoreInformationSections() {
+        const expectedSections = ['Style', 'Material', 'Pattern', 'Climate'];
+        
+        this.getTab('More Information', '#additional')
+            .within(() => {
+                expectedSections.forEach((section) => {
+                    cy.log(`verifying section - ${section}`)
+                    
+                    cy.get('#additional')
+                        .contains('th', section)
+                        .should('be.visible');
+                  });
+            })
+    }
+
+    shouldDisplayDetailsSectionText() {
+        cy.log('verifying description in details tab');
+
+        this.getTab('Details', '#description')
+            .should('not.be.empty')
+            .and(($el) => {
+                expect($el.text().trim().length).to.be.greaterThan(10);
+          });
     }
 
     selectSize(value?: string) {
@@ -111,11 +203,13 @@ class Product {
 
         if(value) {
             cy.get('@attribute')
-            .find(`[option-label="${value}"]`)
-            .should('be.visible')
-            .click();
+                .find(`[option-label="${value}"]`)
+                .should('be.visible')
+                .click();
+        
         } else {
             cy.log(`Color option not found. Selecting first...`);
+            
             cy.get('@attribute')
                 .find('.swatch-option.color')
                 .first()
@@ -139,6 +233,33 @@ class Product {
             .find('.action.tocart')
             .click({force: true} );
     }
+
+    selectProductSize() {
+        cy.get('.swatch-attribute.size .swatch-option')
+          .not('.disabled')
+          .first()
+          .click();
+    }
+      
+    selectProductColor() {
+        cy.get('.swatch-attribute.color .swatch-option')
+          .not('.disabled')
+          .first()
+          .click();
+    }
+
+    addToCartPDP() {
+        cy.log('adding to cart on PDP');
+
+        this.selectProductSize();
+        this.selectProductColor();
+
+        cy.get('#product-addtocart-button')
+            .should('be.visible')
+            .click();
+    }
+
+
 
     addToWishlist() {
         cy.log('adding to wishlist');
