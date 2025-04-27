@@ -15,11 +15,13 @@ const swatchFilters = [
 describe('Filters', () => {
 
     beforeEach(() => {
+        
         cy.visit('/women/tops-women.html');
     })
 
     listingFilters.forEach((filter) => {
         it(`Should contain list filters - ${filter}`, () => {
+
             listing.shouldVerifyFilterList(filter);
 
             listing.shouldBeCollapsible(filter);
@@ -35,6 +37,7 @@ describe('Filters', () => {
 
     swatchFilters.forEach(({ name, type }, index) => {
         it(`Should contain block filters - ${name}`, () => {
+
             listing.shouldVerifyFilterBlocks(name, index);
 
             listing.shouldBeCollapsible(name);

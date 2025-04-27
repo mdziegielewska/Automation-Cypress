@@ -14,6 +14,7 @@ const isEquipment = false;
 describe('Main page - Hot Sellers', () => {
 
     beforeEach(() => {
+        
         cy.visit('/');
         cy.clearAllCookies();
     })
@@ -45,7 +46,7 @@ describe('Main page - Hot Sellers', () => {
 
     it('Should add to Wishlist', () => {
 
-        product.addToWishlist();
+        product.addToWishlistOrCompare("wishlist");
         results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
 
         cy.url()
@@ -54,7 +55,7 @@ describe('Main page - Hot Sellers', () => {
 
     it('Should add to Comparision', () => {
 
-        product.addToComparision();
+        product.addToWishlistOrCompare("compare");
         results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
     })
 })

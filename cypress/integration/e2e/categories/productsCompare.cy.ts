@@ -15,6 +15,7 @@ let compareTable = [ 'SKU', 'Description' ];
 describe('Product comparision', () => {
 
     beforeEach(() => {
+        
         cy.clearAllCookies();
         cy.visit('/women/bottoms-women/pants-women.html');
     })
@@ -27,7 +28,7 @@ describe('Product comparision', () => {
 
             ADD_TO_COMPARISION_MESSAGE = `You added product ${productName} to the comparison list.`;
 
-            product.addToComparision();
+            product.addToWishlistOrCompare("compare");
             results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
 
             product.compareProducts();
@@ -36,11 +37,11 @@ describe('Product comparision', () => {
     
     it('Should open compare page', () => {
 
-        product.addToComparision();
+        product.addToWishlistOrCompare("compare");
 
         cy.visit('/women/bottoms-women/shorts-women.html');
 
-        product.addToComparision();
+        product.addToWishlistOrCompare("compare");
         product.compareProducts();
 
         results.shouldVerifyPageTitle('Compare Products');

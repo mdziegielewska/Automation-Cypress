@@ -61,6 +61,7 @@ categories.forEach(({category, url, widget, grid}) => {
     describe(`Categories - ${category}`, () => {
 
         beforeEach(() => {
+            
             cy.visit(url);
         })
     

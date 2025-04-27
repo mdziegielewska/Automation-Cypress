@@ -26,6 +26,7 @@ const actionLinks = [
 describe('Main Page - Menu', () => {
 
     beforeEach(() => {
+        
         cy.visit('/');
     })
  

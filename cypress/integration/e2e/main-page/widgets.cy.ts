@@ -15,6 +15,7 @@ const widget = [
 describe('Main page - Widgets', () => {
 
     beforeEach(() => {
+        
         cy.visit('/');
     })
 

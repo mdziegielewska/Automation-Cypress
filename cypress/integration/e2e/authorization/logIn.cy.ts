@@ -13,6 +13,7 @@ const RESET_PASSWORD_MESSAGE = `If there is an account associated with ${Cypress
 describe('Log in', () => {
 
     beforeEach(() => {
+        
         cy.clearAllCookies();
         cy.visit('/customer/account/login/');
     })

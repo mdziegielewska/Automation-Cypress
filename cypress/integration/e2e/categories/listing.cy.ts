@@ -38,6 +38,7 @@ urls.forEach(({name, url, items, isEquipment}) => {
     describe(`Listing - ${name}`, () => {
 
         beforeEach(() => {
+
             cy.clearAllCookies();
             cy.visit(url);
         })
@@ -58,6 +59,7 @@ urls.forEach(({name, url, items, isEquipment}) => {
         }) 
     
         it('Should add to Cart', () => {
+            
             product.getProductName().then(name => {
 
                 productName = name.trim();
@@ -71,7 +73,7 @@ urls.forEach(({name, url, items, isEquipment}) => {
     
         it('Should add to Wishlist', () => {
     
-            product.addToWishlist();
+            product.addToWishlistOrCompare("wishlist");
             results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
     
             cy.url()
@@ -85,7 +87,7 @@ urls.forEach(({name, url, items, isEquipment}) => {
     
                 ADD_TO_COMPARISION_MESSAGE = `You added product ${productName} to the comparison list.`;
     
-                product.addToComparision();
+                product.addToWishlistOrCompare("compare");
                 results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
             });
         })

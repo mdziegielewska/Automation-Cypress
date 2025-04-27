@@ -12,6 +12,7 @@ const mode = ['list', 'grid'];
 describe('Listings - Toolbar', () => {
 
     beforeEach(() => {
+        
         cy.visit('/women/tops-women.html');
     })
     
