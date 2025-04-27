@@ -50,7 +50,7 @@ describe('PDP - Product Info', () => {
 
     it('Should add to Wishlist', () => {
     
-        product.addToWishlist();
+        product.addToWishlistOrCompare("wishlist");
         results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
     
         cy.url()
@@ -59,7 +59,7 @@ describe('PDP - Product Info', () => {
     
     it('Should add to Comparision', () => {
     
-        product.addToComparision();
+        product.addToWishlistOrCompare("compare");
         results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
     })
 
