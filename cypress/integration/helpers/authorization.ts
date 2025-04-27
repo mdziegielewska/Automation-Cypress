@@ -10,7 +10,7 @@ class Authorization {
 
         cy.get('input[title="Password"]')
             .should('have.attr', 'aria-required', 'true')
-            .type(password);     
+            .type(password);
     }
 }
 

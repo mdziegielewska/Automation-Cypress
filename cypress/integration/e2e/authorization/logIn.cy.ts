@@ -13,7 +13,7 @@ const RESET_PASSWORD_MESSAGE = `If there is an account associated with ${Cypress
 describe('Log in', () => {
 
     beforeEach(() => {
-        
+
         cy.clearAllCookies();
         cy.visit('/customer/account/login/');
     })
@@ -21,7 +21,7 @@ describe('Log in', () => {
     const loginPanel = '[data-ui-id="page-title-wrapper"]';
     const resetPanel = '.action.remind';
 
-    it('Should log in correctly', () => { 
+    it('Should log in correctly', () => {
 
         results.shouldVerifyTextInSection(loginPanel, 'Customer Login');
 
@@ -30,14 +30,14 @@ describe('Log in', () => {
 
         routes.expect('LoadPage');
 
-        results.shouldVerifyTextInSection('li.greet.welcome', 
+        results.shouldVerifyTextInSection('li.greet.welcome',
             `Welcome, ${Cypress.env("TEST_FIRST_NAME")} ${Cypress.env("TEST_LAST_NAME")}!`);
     })
 
     it('Should log in incorrectly', () => {
 
         results.shouldVerifyTextInSection(loginPanel, 'Customer Login');
-        
+
         authorization.fillInLogInData(Cypress.env("TEST_USER_EMAIL"), "123456789");
         forms.submit('login');
 

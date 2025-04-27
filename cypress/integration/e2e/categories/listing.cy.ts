@@ -34,7 +34,7 @@ const urls = [
 ];
 
 
-urls.forEach(({name, url, items, isEquipment}) => {
+urls.forEach(({ name, url, items, isEquipment }) => {
     describe(`Listing - ${name}`, () => {
 
         beforeEach(() => {
@@ -42,51 +42,52 @@ urls.forEach(({name, url, items, isEquipment}) => {
             cy.clearAllCookies();
             cy.visit(url);
         })
-    
+
         it('Should contain listing elements', () => {
 
             listing.shouldVerifyListingElements();
-            
+            listing.shouldVerifyProductsNumber(items);
+
             listing.shouldContainFilterBlock();
             listing.shouldContainAdditionalSidebar();
             listing.shouldChangeLimiter(36);
         })
-    
+
         it('Product Item should contain elements', () => {
-    
+
             product.shouldVerifyProductCellElements(isEquipment);
             product.shouldVerifyActionElements();
-        }) 
-    
+        })
+
         it('Should add to Cart', () => {
-            
+
             product.getProductName().then(name => {
 
                 productName = name.trim();
-                
+
                 ADD_TO_CART_MESSAGE = `You added ${productName} to your shopping cart.`;
-    
+
                 product.addToCart(isEquipment);
                 results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
             });
         })
-    
+
         it('Should add to Wishlist', () => {
-    
+
             product.addToWishlistOrCompare("wishlist");
             results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
-    
+
             cy.url()
                 .should('contain', '/customer/account/login/');
         })
-    
+
         it('Should add to Comparision', () => {
 
             product.getProductName().then(name => {
                 productName = name.trim();
-    
+
                 ADD_TO_COMPARISION_MESSAGE = `You added product ${productName} to the comparison list.`;
-    
+
                 product.addToWishlistOrCompare("compare");
                 results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
             });

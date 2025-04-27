@@ -14,7 +14,7 @@ const isEquipment = false;
 describe('Main page - Hot Sellers', () => {
 
     beforeEach(() => {
-        
+
         cy.visit('/');
         cy.clearAllCookies();
     })
@@ -22,7 +22,7 @@ describe('Main page - Hot Sellers', () => {
     const hotSellers = '.content-heading';
 
     it('Should show Hot Sellers', () => {
-        
+
         results.shouldVerifyTextInSection(hotSellers, 'Hot Sellers');
 
         widgets.getGridWidget().as('products');
@@ -33,7 +33,7 @@ describe('Main page - Hot Sellers', () => {
 
         product.shouldVerifyProductCellElements(isEquipment);
         product.shouldVerifyActionElements();
-    }) 
+    })
 
     it('Should add to Cart', () => {
 

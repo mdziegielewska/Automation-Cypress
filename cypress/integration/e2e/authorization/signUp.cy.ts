@@ -33,12 +33,12 @@ describe('Sign Up', () => {
         results.shouldVerifyTextInSection(newCustomer, 'New Customers');
         cy.get('a.create')
             .click();
-            
+
         routes.expect('SignUpPage');
 
         results.shouldVerifyTextInSection(signUpPanel, 'Create New Customer Account');
 
-        for(const data of signUpParams) {
+        for (const data of signUpParams) {
             forms.fillField(data.field, data.value);
         };
 
@@ -51,16 +51,16 @@ describe('Sign Up', () => {
     it('Should sign up with existing email address', () => {
 
         cy.visit('/customer/account/create/');
-        
+
         routes.expect('SignUpPage');
 
-        for(const data of signUpParams) {
+        for (const data of signUpParams) {
             if (data.field === 'email_address') {
                 data.value = `${Cypress.env("TEST_USER_EMAIL")}`;
             }
 
             forms.fillField(data.field, data.value);
-          };
+        };
 
         forms.submit('submit');
 
@@ -70,10 +70,10 @@ describe('Sign Up', () => {
     it('Should sign up with incorrect password', () => {
 
         cy.visit('/customer/account/create/');
-        
+
         routes.expect('SignUpPage');
 
-        forms.fillField('password','test');
+        forms.fillField('password', 'test');
         forms.fillField('password-confirmation', '123');
 
         forms.submit('submit');

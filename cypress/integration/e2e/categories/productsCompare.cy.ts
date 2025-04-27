@@ -9,13 +9,13 @@ import { navigation } from "../../helpers/navigation";
 let productName: string;
 let ADD_TO_COMPARISION_MESSAGE: string;
 
-let compareTable = [ 'SKU', 'Description' ];
+let compareTable = ['SKU', 'Description'];
 
 
 describe('Product comparision', () => {
 
     beforeEach(() => {
-        
+
         cy.clearAllCookies();
         cy.visit('/women/bottoms-women/pants-women.html');
     })
@@ -34,7 +34,7 @@ describe('Product comparision', () => {
             product.compareProducts();
         });
     })
-    
+
     it('Should open compare page', () => {
 
         product.addToWishlistOrCompare("compare");
@@ -46,8 +46,8 @@ describe('Product comparision', () => {
 
         results.shouldVerifyPageTitle('Compare Products');
 
-        for(const element of compareTable) {
-            
+        for (const element of compareTable) {
+
             product.getCompareTable()
                 .should('contain', element);
         }

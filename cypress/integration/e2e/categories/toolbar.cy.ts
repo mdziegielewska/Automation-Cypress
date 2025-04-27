@@ -12,13 +12,13 @@ const mode = ['list', 'grid'];
 describe('Listings - Toolbar', () => {
 
     beforeEach(() => {
-        
+
         cy.visit('/women/tops-women.html');
     })
-    
+
     limiter.forEach((limiter) => {
         it(`Should verify limiter per page - ${limiter} `, () => {
-    
+
             listing.shouldChangeLimiter(limiter);
 
             routes.expect('Limiter');
@@ -40,7 +40,7 @@ describe('Listings - Toolbar', () => {
         it(`Should verify display mode - ${mode}`, () => {
 
             listing.shouldChangeModes(mode);
-            
+
             routes.expect('Mode');
             listing.shouldVerifyCurrentMode(mode);
         })

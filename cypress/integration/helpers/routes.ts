@@ -15,11 +15,11 @@ class Routes {
         cy.wait(`@${key}`);
     }
 
-    private getRoute(key:string) {
+    private getRoute(key: string) {
         switch (key) {
             case 'LoadPage': return ['GET', '/'];
             case 'SignUpPage': return ['GET', '/customer/account/create/'];
-            case 'ResetPassword' : return ['POST, /customer/account/forgotpasswordpost/'];
+            case 'ResetPassword': return ['POST, /customer/account/forgotpasswordpost/'];
             case 'SearchResults': return ['GET', '/catalogsearch/result/'];
             case 'Limiter': return ['GET', '/women/tops-women.html?product_list_limit='];
             case 'Sorter': return ['GET', '/women/tops-women.html?product_list_order='];

@@ -10,7 +10,7 @@ class Search {
             .click();
     }
 
-    shouldShowAutocomplete(){
+    shouldShowAutocomplete() {
         cy.log('verifying autocomplete search');
 
         cy.get('#search_autocomplete')
@@ -19,7 +19,7 @@ class Search {
 
     shouldDisplaySearchResults() {
         cy.log('verifying display search results visibility');
-        
+
         cy.get('.search.results')
             .should('be.visible');
     }
@@ -27,13 +27,13 @@ class Search {
     getSearchTerms(type: string) {
         cy.log('getting search terms');
 
-        switch(type) {
-            case 'related': 
+        switch (type) {
+            case 'related':
                 return cy.get('.block')
-                        .find('dd.item');
-            case 'popular': 
+                    .find('dd.item');
+            case 'popular':
                 return cy.get('.search-terms')
-                        .find('li.item');
+                    .find('li.item');
 
             default: throw Error(`Unknown search terms type: ${type}`)
         }
@@ -49,6 +49,6 @@ class Search {
 
         routes.expect('SearchResults');
     }
-} 
+}
 
 export const search = new Search();

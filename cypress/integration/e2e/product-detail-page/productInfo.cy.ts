@@ -27,12 +27,12 @@ describe('PDP - Product Info', () => {
     const thumbnail = '.fotorama__thumb';
 
     it('Should show PDP elements', () => {
-        
+
         product.shouldVerifyMainPDPElements();
         product.shouldDisplayProductInfo();
     })
 
-    it('Gallery should contain images', ()=> {
+    it('Gallery should contain images', () => {
 
         gallery.getGallery();
 
@@ -49,22 +49,22 @@ describe('PDP - Product Info', () => {
     });
 
     it('Should add to Wishlist', () => {
-    
+
         product.addToWishlistOrCompare("wishlist");
         results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
-    
+
         cy.url()
             .should('contain', '/customer/account/login/');
     })
-    
+
     it('Should add to Comparision', () => {
-    
+
         product.addToWishlistOrCompare("compare");
         results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
     })
 
     it('Should add to Cart', () => {
-        
+
         product.addToCartPDP();
         results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
     })

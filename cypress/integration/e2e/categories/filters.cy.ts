@@ -3,19 +3,19 @@
 import { listing } from "../../helpers/listings";
 
 
-const listingFilters = [ 'Category', 'Style', 'Climate', 'Eco Collection', 'Erin Recommends', 
-    'Material', 'New', 'Pattern', 'Performance Fabric', 'Price', 'Sale' ];
+const listingFilters = ['Category', 'Style', 'Climate', 'Eco Collection', 'Erin Recommends',
+    'Material', 'New', 'Pattern', 'Performance Fabric', 'Price', 'Sale'];
 
-const swatchFilters = [ 
+const swatchFilters = [
     { name: 'Size', type: 'text' },
-    { name: 'Color', type: 'color' } 
+    { name: 'Color', type: 'color' }
 ];
 
 
 describe('Filters', () => {
 
     beforeEach(() => {
-        
+
         cy.visit('/women/tops-women.html');
     })
 
@@ -25,7 +25,7 @@ describe('Filters', () => {
             listing.shouldVerifyFilterList(filter);
 
             listing.shouldBeCollapsible(filter);
-            listing.shouldFilter(filter);
+            listing.shouldFilter();
             listing.shouldVerifyFilterValue();
 
             listing.shouldClearFilters();
@@ -41,7 +41,7 @@ describe('Filters', () => {
             listing.shouldVerifyFilterBlocks(name, index);
 
             listing.shouldBeCollapsible(name);
-            listing.shouldFilterByAttributes(name, type, index);
+            listing.shouldFilterByAttributes(type, index);
             listing.shouldVerifyFilterValue();
 
             listing.shouldClearFilters();

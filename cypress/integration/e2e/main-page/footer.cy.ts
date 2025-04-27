@@ -9,9 +9,9 @@ import { widgets } from '../../helpers/widgets';
 
 
 const footer = [
-    { footer: 'Search Terms', url: '/search/term/popular/' }, 
-    { footer: 'Privacy and Cookie Policy', url: '/privacy-policy-cookie-restriction-mode'}, 
-    { footer: 'Advanced Search', url: '/catalogsearch/advanced/' }, 
+    { footer: 'Search Terms', url: '/search/term/popular/' },
+    { footer: 'Privacy and Cookie Policy', url: '/privacy-policy-cookie-restriction-mode' },
+    { footer: 'Advanced Search', url: '/catalogsearch/advanced/' },
     { footer: 'Orders and Returns', url: '/sales/guest/form/' }
 ];
 
@@ -30,7 +30,7 @@ describe('Footer', () => {
     const footerPanel = '.footer.links li';
     const title = '.page-title';
 
-    footer.forEach(({footer, url}) => {
+    footer.forEach(({ footer, url }) => {
         it(`Should verify footer links - ${footer}`, () => {
 
             cy.visit('/');
