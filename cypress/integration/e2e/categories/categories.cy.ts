@@ -3,7 +3,7 @@
 import { listing } from '../../helpers/listings';
 import { results } from '../../helpers/results';
 import { widgets } from '../../helpers/widgets';
-import { CATEGORY_SELECTORS } from '../../selectors/selectors';
+import { LISTING_SELECTORS } from '../../selectors/selectors';
 
 
 const whatsNew = [
@@ -68,13 +68,13 @@ categories.forEach(({ category, url, widget, grid }) => {
         widget.forEach(({ name, info, url }, index) => {
             it(`Should contain widget - ${name}`, () => {
 
-                widgets.shouldVerifyNumberOfElements(CATEGORY_SELECTORS.widgetBlocks, widget.length);
+                widgets.shouldVerifyNumberOfElements(LISTING_SELECTORS.widgetBlocks, widget.length);
                 widgets.shouldVerifyWidgetInfo(index, info);
 
                 if (url == null) {
                     cy.log('No url. Passing...');
                 } else {
-                    widgets.shouldVerifyUrl(CATEGORY_SELECTORS.widgetBlocks, index, url);
+                    widgets.shouldVerifyUrl(LISTING_SELECTORS.widgetBlocks, index, url);
                 }
             })
         })
@@ -82,7 +82,7 @@ categories.forEach(({ category, url, widget, grid }) => {
         if (grid !== null) {
             it('Should show Grid Widget', () => {
 
-                results.shouldVerifyTextInSection(CATEGORY_SELECTORS.gridBlocks, grid);
+                results.shouldVerifyTextInSection(LISTING_SELECTORS.gridBlocks, grid);
 
                 widgets.getGridWidget().as('products');
                 widgets.shouldVerifyNumberOfElements('@products', 4);

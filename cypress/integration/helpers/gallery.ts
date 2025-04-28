@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
 
-import { GALLERY_SELECTORS } from '../selectors/selectors'; // dopasuj ścieżkę!
+import { PRODUCT_SELECTORS } from '../selectors/selectors'; // dopasuj ścieżkę!
 
 const arrows = ['prev', 'next'] as const;
 
@@ -8,8 +8,8 @@ const arrows = ['prev', 'next'] as const;
 class Gallery {
 
     getGallery() {
-        return cy.get(GALLERY_SELECTORS.productMedia)
-            .find(GALLERY_SELECTORS.galleryPlaceholder)
+        return cy.get(PRODUCT_SELECTORS.productMedia)
+            .find(PRODUCT_SELECTORS.galleryPlaceholder)
             .should('be.visible');
     }
 
@@ -17,8 +17,8 @@ class Gallery {
         for (const arrow of arrows) {
             cy.log(`verifying ${arrow} arrow scrolling`);
 
-            cy.get(GALLERY_SELECTORS.arrow(arrow)).click();
-            cy.get(GALLERY_SELECTORS.activeImage)
+            cy.get(PRODUCT_SELECTORS.arrow(arrow)).click();
+            cy.get(PRODUCT_SELECTORS.activeImage)
                 .should('be.visible');
         }
     }

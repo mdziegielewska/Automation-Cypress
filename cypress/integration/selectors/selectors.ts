@@ -1,21 +1,37 @@
-export const LOGIN_SELECTORS = {
+export const AUTHORIZATION_SELECTORS = {
     loginPanel: '[data-ui-id="page-title-wrapper"]',
     resetPanel: '.action.remind',
     greetMessage: 'li.greet.welcome',
-};
-
-
-export const SIGNUP_SELECTORS = {
     newCustomer: '.block-new-customer',
     signUpPanel: '[data-ui-id="page-title-wrapper"]',
     createAccountLink: 'a.create',
-    dashboardInfoBlock: '.block-dashboard-info',
+    dashboardInfoBlock: '.block-dashboard-info'
 };
 
 
-export const CATEGORY_SELECTORS = {
-    widgetBlocks: '.block-promo',
-    gridBlocks: '.content-heading',
+export const NAVIGATION_SELECTORS = {
+    navigationMenu: '[class="navigation"]',
+    menuItem: '[role="menuitem"]',
+    tab: (tab: string) => `li.category-item:contains(${tab})`,
+    expandableIcon: (tab: string) => `${NAVIGATION_SELECTORS.tab(tab)} span.ui-menu-icon`,
+    subMenu: 'ul.submenu',
+    pageTitleHeading: '#page-title-heading',
+    headerLinks: 'ul.header.links a',
+    footerLinks: 'ul.footer.links a',
+    footerPanel: '.footer.links li',
+    title: '.page-title',
+    privacyPolicyNavPanel: '#privacy-policy-nav-content',
+    privacyPolicyContent: '.privacy-policy-content',
+    navPanel: (nav: string) => nav
+};
+
+
+export const SEARCH_SELECTORS = {
+    searchButton: '.actions-toolbar .search',
+    autocomplete: '#search_autocomplete',
+    searchResults: '.search.results',
+    relatedSearchTerms: '.block dd.item',
+    popularSearchTerms: '.search-terms li.item',
 };
 
 
@@ -42,54 +58,12 @@ export const LISTING_SELECTORS = {
     productItems: '.product-items',
     filtersBlock: '#layered-filter-block',
     compareSection: '#block-compare-heading',
-    wishlistSection: '.block-wishlist'
-};
-
-
-export const GALLERY_SELECTORS = {
-    productMedia: '.product.media',
-    galleryPlaceholder: '.gallery-placeholder',
-    activeImage: '.fotorama__stage__frame.fotorama__active img',
-    arrow: (direction: 'prev' | 'next') => `.fotorama__arr--${direction}`
-};
-
-
-export const REVIEWS_SELECTORS = {
-    reviewsSummary: '.product-reviews-summary',
-    addReviewButton: '.reviews-actions a.add',
-    viewReviewCount: '.reviews-actions a.view [itemprop="reviewCount"]',
-    ratingSummary: '.rating-summary',
-    reviewsTab: '.product.data.items .title.active',
-    reviewItems: '.review-items .review-item',
-    nicknameField: '#nickname_field',
-    summaryField: '#summary_field',
-    reviewField: '#review_field',
-    submitButton: 'button.submit',
-    successMessage: '.message-success'
-};
-
-
-export const NAVIGATION_SELECTORS = {
-    navigationMenu: '[class="navigation"]',
-    menuItem: '[role="menuitem"]',
-    tab: (tab: string) => `li.category-item:contains(${tab})`,
-    expandableIcon: (tab: string) => `${NAVIGATION_SELECTORS.tab(tab)} span.ui-menu-icon`,
-    subMenu: 'ul.submenu',
-    pageTitleHeading: '#page-title-heading',
-    headerLinks: 'ul.header.links a',
-    footerLinks: 'ul.footer.links a',
-    footerPanel: '.footer.links li',
-    title: '.page-title',
-    privacyPolicyNavPanel: '#privacy-policy-nav-content',
-    privacyPolicyContent: '.privacy-policy-content',
-    navPanel: (nav: string) => nav
-};
-
-
-export const RESULTS_SELECTORS = {
-    pageTitle: '.page-title',
-    pageMessage: '.message',
-    mageErrorMessage: '.mage-error',
+    wishlistSection: '.block-wishlist',
+    gridWidget: '.widget-product-grid',
+    productItem: 'li.product-item',
+    info: 'span.info',
+    widgetBlocks: '.block-promo',
+    gridBlocks: '.content-heading'
 };
 
 
@@ -98,7 +72,7 @@ export const PRODUCT_SELECTORS = {
     descriptionTab: '#description',
     additionalTab: '#additional',
     reviewsTab: '#reviews',
-    relatedProductsBlock: '.block.related', 
+    relatedProductsBlock: '.block.related',
     productItemDetails: '.product-item-details',
     productImage: '.product-image-photo',
     productTitle: '.product-item-name',
@@ -124,20 +98,26 @@ export const PRODUCT_SELECTORS = {
     addToCartButtonPDP: '#product-addtocart-button',
     productComparisonTable: '#product-comparison tr',
     compareLink: '.actions-toolbar a.action.compare',
+    productMedia: '.product.media',
+    galleryPlaceholder: '.gallery-placeholder',
+    activeImage: '.fotorama__stage__frame.fotorama__active img',
+    arrow: (direction: 'prev' | 'next') => `.fotorama__arr--${direction}`,
+    reviewsSummary: '.product-reviews-summary',
+    addReviewButton: '.reviews-actions a.add',
+    viewReviewCount: '.reviews-actions a.view [itemprop="reviewCount"]',
+    ratingSummary: '.rating-summary',
+    reviewsTabActive: '.product.data.items .title.active',
+    reviewItems: '.review-items .review-item',
+    nicknameField: '#nickname_field',
+    summaryField: '#summary_field',
+    reviewField: '#review_field',
+    submitButton: 'button.submit',
+    successMessage: '.message-success'
 };
 
 
-export const SEARCH_SELECTORS = {
-    searchButton: '.actions-toolbar .search',
-    autocomplete: '#search_autocomplete',
-    searchResults: '.search.results',
-    relatedSearchTerms: '.block dd.item',
-    popularSearchTerms: '.search-terms li.item',
-};
-
-
-export const WIDGETS_SELECTORS = {
-    gridWidget: '.widget-product-grid',
-    productItem: 'li.product-item',
-    info: 'span.info',
+export const RESULTS_SELECTORS = {
+    pageTitle: '.page-title',
+    pageMessage: '.message',
+    mageErrorMessage: '.mage-error',
 };

@@ -2,13 +2,13 @@
 
 import { results } from '../../helpers/results';
 import { reviews } from '../../helpers/reviews';
-import { REVIEWS_SELECTORS } from '../../selectors/selectors';
+import { PRODUCT_SELECTORS } from '../../selectors/selectors';
 
 
 const reviewForm = [
-    { selector: REVIEWS_SELECTORS.reviewField, text: Cypress.env("REVIEW") },
-    { selector: REVIEWS_SELECTORS.nicknameField, text: Cypress.env("TEST_FIRST_NAME") },
-    { selector: REVIEWS_SELECTORS.summaryField, text: 'Perfect!' }
+    { selector: PRODUCT_SELECTORS.reviewField, text: Cypress.env("REVIEW") },
+    { selector: PRODUCT_SELECTORS.nicknameField, text: Cypress.env("TEST_FIRST_NAME") },
+    { selector: PRODUCT_SELECTORS.summaryField, text: 'Perfect!' }
 ];
 
 const REVIEW_SUBMISSION_MESSAGE = 'You submitted your review for moderation.';

@@ -4,7 +4,7 @@ import { forms } from '../../helpers/forms';
 import { generate } from '../../helpers/generate';
 import { results } from '../../helpers/results';
 import { routes } from '../../helpers/routes';
-import { SIGNUP_SELECTORS } from '../../selectors/selectors';
+import { AUTHORIZATION_SELECTORS } from '../../selectors/selectors';
 
 
 const generateEmail = `${generate.generateString()}@gmail.com`;
@@ -28,13 +28,13 @@ describe('Sign Up', () => {
 
         cy.visit('/customer/account/login');
 
-        results.shouldVerifyTextInSection(SIGNUP_SELECTORS.newCustomer, 'New Customers');
-        cy.get(SIGNUP_SELECTORS.createAccountLink)
+        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.newCustomer, 'New Customers');
+        cy.get(AUTHORIZATION_SELECTORS.createAccountLink)
             .click();
 
         routes.expect('SignUpPage');
 
-        results.shouldVerifyTextInSection(SIGNUP_SELECTORS.signUpPanel, 'Create New Customer Account');
+        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.signUpPanel, 'Create New Customer Account');
 
         for (const data of signUpParams) {
             forms.fillField(data.field, data.value);
@@ -43,7 +43,7 @@ describe('Sign Up', () => {
         forms.submit('submit');
 
         results.shouldVerifyPageMessage(REGISTER_MESSAGE);
-        results.shouldVerifyTextInSection(SIGNUP_SELECTORS.dashboardInfoBlock, `${generateEmail}`);
+        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.dashboardInfoBlock, `${generateEmail}`);
     })
 
     it('Should sign up with existing email address', () => {

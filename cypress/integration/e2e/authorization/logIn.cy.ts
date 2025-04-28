@@ -4,7 +4,7 @@ import { authorization } from '../../helpers/authorization';
 import { forms } from '../../helpers/forms';
 import { results } from '../../helpers/results';
 import { routes } from '../../helpers/routes';
-import { LOGIN_SELECTORS } from '../../selectors/selectors';
+import { AUTHORIZATION_SELECTORS } from '../../selectors/selectors';
 
 
 const LOGIN_ERROR_MESSAGE = "The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.";
@@ -21,20 +21,20 @@ describe('Log in', () => {
 
     it('Should log in correctly', () => {
 
-        results.shouldVerifyTextInSection(LOGIN_SELECTORS.loginPanel, 'Customer Login');
+        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.loginPanel, 'Customer Login');
 
         authorization.fillInLogInData(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_USER_PASSWORD"));
         forms.submit('login');
 
         routes.expect('LoadPage');
 
-        results.shouldVerifyTextInSection(LOGIN_SELECTORS.greetMessage,
+        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.greetMessage,
             `Welcome, ${Cypress.env("TEST_FIRST_NAME")} ${Cypress.env("TEST_LAST_NAME")}!`);
     })
 
     it('Should log in incorrectly', () => {
 
-        results.shouldVerifyTextInSection(LOGIN_SELECTORS.loginPanel, 'Customer Login');
+        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.loginPanel, 'Customer Login');
 
         authorization.fillInLogInData(Cypress.env("TEST_USER_EMAIL"), "123456789");
         forms.submit('login');
@@ -44,7 +44,7 @@ describe('Log in', () => {
 
     it('Should remind password', () => {
 
-        cy.get(LOGIN_SELECTORS.resetPanel)
+        cy.get(AUTHORIZATION_SELECTORS.resetPanel)
             .should('contain.text', 'Forgot Your Password?')
             .click();
 
