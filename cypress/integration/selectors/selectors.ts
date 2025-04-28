@@ -1,3 +1,18 @@
+export const LOGIN_SELECTORS = {
+    loginPanel: '[data-ui-id="page-title-wrapper"]',
+    resetPanel: '.action.remind',
+    greetMessage: 'li.greet.welcome',
+};
+
+
+export const SIGNUP_SELECTORS = {
+    newCustomer: '.block-new-customer',
+    signUpPanel: '[data-ui-id="page-title-wrapper"]',
+    createAccountLink: 'a.create',
+    dashboardInfoBlock: '.block-dashboard-info',
+};
+
+
 export const LISTING_SELECTORS = {
     sidebarMain: '.sidebar-main',
     sidebarAdditional: '.sidebar-additional',

@@ -4,6 +4,7 @@ import { forms } from '../../helpers/forms';
 import { generate } from '../../helpers/generate';
 import { results } from '../../helpers/results';
 import { routes } from '../../helpers/routes';
+import { SIGNUP_SELECTORS } from '../../selectors/selectors';
 
 
 const generateEmail = `${generate.generateString()}@gmail.com`;
@@ -23,20 +24,17 @@ const CONFIRM_PASSWORD_ERROR_MESSAGE = 'Please enter the same value again.';
 
 describe('Sign Up', () => {
 
-    const newCustomer = '.block-new-customer';
-    const signUpPanel = '[data-ui-id="page-title-wrapper"]';
-
     it('Should sign up correctly', () => {
 
         cy.visit('/customer/account/login');
 
-        results.shouldVerifyTextInSection(newCustomer, 'New Customers');
-        cy.get('a.create')
+        results.shouldVerifyTextInSection(SIGNUP_SELECTORS.newCustomer, 'New Customers');
+        cy.get(SIGNUP_SELECTORS.createAccountLink)
             .click();
 
         routes.expect('SignUpPage');
 
-        results.shouldVerifyTextInSection(signUpPanel, 'Create New Customer Account');
+        results.shouldVerifyTextInSection(SIGNUP_SELECTORS.signUpPanel, 'Create New Customer Account');
 
         for (const data of signUpParams) {
             forms.fillField(data.field, data.value);
@@ -45,7 +43,7 @@ describe('Sign Up', () => {
         forms.submit('submit');
 
         results.shouldVerifyPageMessage(REGISTER_MESSAGE);
-        results.shouldVerifyTextInSection('.block-dashboard-info', `${generateEmail}`);
+        results.shouldVerifyTextInSection(SIGNUP_SELECTORS.dashboardInfoBlock, `${generateEmail}`);
     })
 
     it('Should sign up with existing email address', () => {
