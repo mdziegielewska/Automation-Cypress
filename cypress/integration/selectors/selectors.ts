@@ -84,6 +84,11 @@ export const RESULTS_SELECTORS = {
 
 
 export const PRODUCT_SELECTORS = {
+    thumbnail: '.fotorama__thumb',
+    descriptionTab: '#description',
+    additionalTab: '#additional',
+    reviewsTab: '#reviews',
+    relatedProductsBlock: '.block.related', 
     productItemDetails: '.product-item-details',
     productImage: '.product-image-photo',
     productTitle: '.product-item-name',

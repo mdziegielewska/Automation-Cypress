@@ -3,6 +3,7 @@
 import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
 import { widgets } from "../../helpers/widgets";
+import { PRODUCT_SELECTORS } from "../../selectors/selectors";
 
 
 const ADD_TO_WISHLIST_MESSAGE = "You must login or register to add items to your wishlist.";
@@ -23,7 +24,7 @@ describe('PDP - Related Products', () => {
 
     it('Should show Related Products', () => {
 
-        results.shouldVerifyTextInSection(relatedProducts, 'Related Products');
+        results.shouldVerifyTextInSection(PRODUCT_SELECTORS.relatedProductsBlock, 'Related Products');
 
         product.getRelated().as('products');
         widgets.shouldVerifyNumberOfElements('@products', 4);
