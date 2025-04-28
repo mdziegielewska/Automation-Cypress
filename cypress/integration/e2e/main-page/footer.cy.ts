@@ -6,6 +6,7 @@ import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
 import { search } from "../../helpers/search";
 import { widgets } from '../../helpers/widgets';
+import { NAVIGATION_SELECTORS } from "../../selectors/selectors";
 
 
 const footer = [
@@ -24,18 +25,14 @@ const oar = [
 const SEARCH_RESULT_MESSAGE = 'Don\'t see what you\'re looking for?';
 const isEquipment = false;
 
-
 describe('Footer', () => {
-
-    const footerPanel = '.footer.links li';
-    const title = '.page-title';
 
     footer.forEach(({ footer, url }) => {
         it(`Should verify footer links - ${footer}`, () => {
 
             cy.visit('/');
 
-            widgets.shouldVerifyNumberOfElements(footerPanel, 4);
+            widgets.shouldVerifyNumberOfElements(NAVIGATION_SELECTORS.footerPanel, 4);
             navigation.shouldVerifyFooter(footer, url);
         })
     })
@@ -58,20 +55,20 @@ describe('Footer', () => {
 
         results.shouldVerifyPageTitle('Privacy Policy');
 
-        navigation.shouldContainNavPanel('#privacy-policy-nav-content');
-        results.shouldVerifyTextInSection('.privacy-policy-content', '.');
+        navigation.shouldContainNavPanel(NAVIGATION_SELECTORS.privacyPolicyNavPanel);
+        results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.privacyPolicyContent, '.');
     })
 
     it('Should verify Advanced Search', () => {
 
         cy.visit('/catalogsearch/advanced/');
 
-        results.shouldVerifyTextInSection(title, 'Advanced Search');
+        results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, 'Advanced Search');
 
         forms.fillField('sku', 'WT09');
         search.advancedSearch();
 
-        results.shouldVerifyTextInSection(title, 'Catalog Advanced Search');
+        results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, 'Catalog Advanced Search');
         product.shouldVerifyProductCellElements(isEquipment);
         results.shouldVerifyPageMessage(SEARCH_RESULT_MESSAGE);
     })
@@ -80,7 +77,7 @@ describe('Footer', () => {
 
         cy.visit('/sales/guest/form/');
 
-        results.shouldVerifyTextInSection(title, 'Orders and Returns');
+        results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, 'Orders and Returns');
 
         for (const elem of oar) {
             forms.fillField(elem.id, elem.value);
@@ -88,6 +85,6 @@ describe('Footer', () => {
 
         forms.submit('submit');
 
-        results.shouldVerifyTextInSection(title, `Order # ${Cypress.env("ORDER_NUMBER")}`);
+        results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, `Order # ${Cypress.env("ORDER_NUMBER")}`);
     })
 })

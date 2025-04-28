@@ -13,6 +13,12 @@ export const SIGNUP_SELECTORS = {
 };
 
 
+export const CATEGORY_SELECTORS = {
+    widgetBlocks: '.block-promo',
+    gridBlocks: '.content-heading',
+};
+
+
 export const LISTING_SELECTORS = {
     sidebarMain: '.sidebar-main',
     sidebarAdditional: '.sidebar-additional',
@@ -72,6 +78,10 @@ export const NAVIGATION_SELECTORS = {
     pageTitleHeading: '#page-title-heading',
     headerLinks: 'ul.header.links a',
     footerLinks: 'ul.footer.links a',
+    footerPanel: '.footer.links li',
+    title: '.page-title',
+    privacyPolicyNavPanel: '#privacy-policy-nav-content',
+    privacyPolicyContent: '.privacy-policy-content',
     navPanel: (nav: string) => nav
 };
 

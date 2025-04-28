@@ -1,10 +1,7 @@
 /// <reference types="cypress"/>
 
 import { results } from "../../helpers/results";
-import { listing } from "../../helpers/listings";
 import { product } from "../../helpers/product";
-import { forms } from "../../helpers/forms";
-import { navigation } from "../../helpers/navigation";
 
 let productName: string;
 let ADD_TO_COMPARISION_MESSAGE: string;
