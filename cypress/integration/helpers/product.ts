@@ -1,49 +1,53 @@
 /// <reference types="cypress"/>
 
+import { PRODUCT_SELECTORS } from "../selectors/selectors";
+
+
 const productCells = {
     cloth: [
-        { name: 'image', locator: '.product-image-photo' },
-        { name: 'title', locator: '.product-item-name' },
-        { name: 'reviews', locator: '.rating-result' },
-        { name: 'price', locator: '.normal-price' },
-        { name: 'size', locator: '.swatch-attribute.size' },
-        { name: 'colors', locator: '.swatch-attribute.color' },
-        { name: 'add to cart', locator: '.action.tocart' }
+        { name: 'image', locator: PRODUCT_SELECTORS.productImage },
+        { name: 'title', locator: PRODUCT_SELECTORS.productTitle },
+        { name: 'reviews', locator: PRODUCT_SELECTORS.productReviews },
+        { name: 'price', locator: PRODUCT_SELECTORS.productPrice },
+        { name: 'size', locator: PRODUCT_SELECTORS.productSize },
+        { name: 'colors', locator: PRODUCT_SELECTORS.productColors },
+        { name: 'add to cart', locator: PRODUCT_SELECTORS.addToCart }
     ],
     equipment: [
-        { name: 'image', locator: '.product-image-photo' },
-        { name: 'title', locator: '.product-item-name' },
-        { name: 'reviews', locator: '.rating-result' },
-        { name: 'price', locator: '.price' },
-        { name: 'add to cart', locator: '.action.tocart' }
+        { name: 'image', locator: PRODUCT_SELECTORS.productImage },
+        { name: 'title', locator: PRODUCT_SELECTORS.productTitle },
+        { name: 'reviews', locator: PRODUCT_SELECTORS.productReviews },
+        { name: 'price', locator: PRODUCT_SELECTORS.productPrice },
+        { name: 'add to cart', locator: PRODUCT_SELECTORS.addToCart }
     ]
 };
 
 const actionElements = [
-    { name: 'wishlist', locator: 'a.action.towishlist' },
-    { name: 'compare', locator: 'a.action.tocompare' }
+    { name: 'wishlist', locator: PRODUCT_SELECTORS.actionElements.wishlist },
+    { name: 'compare', locator: PRODUCT_SELECTORS.actionElements.compare }
 ];
 
 const pdpElements = [
-    { name: 'main elements', locator: '.product-info-main' },
-    { name: 'gallery', locator: '.product.media' },
-    { name: 'details', locator: '.product.info.detailed' }
+    { name: 'main elements', locator: PRODUCT_SELECTORS.productInfoMain },
+    { name: 'gallery', locator: PRODUCT_SELECTORS.productGallery },
+    { name: 'details', locator: PRODUCT_SELECTORS.productDetails }
 ];
 
 const infoElements = [
-    { name: 'Title', locator: 'h1.page-title span', mustNotBeEmpty: true },
-    { name: 'Review', locator: '.reviews-actions', mustNotBeEmpty: false },
-    { name: 'Price', locator: '.price', mustNotBeEmpty: false },
-    { name: 'Stock', locator: '.stock', mustContainText: 'In stock' },
-    { name: 'SKU', locator: '.product.attribute.sku .value', mustNotBeEmpty: true },
-    { name: 'Size', locator: '.swatch-attribute.size .swatch-option', mustNotBeEmpty: false },
-    { name: 'Colors', locator: '.swatch-attribute.color .swatch-option', mustNotBeEmpty: false },
+    { name: 'Title', locator: PRODUCT_SELECTORS.pageTitle, mustNotBeEmpty: true },
+    { name: 'Review', locator: PRODUCT_SELECTORS.productReviews, mustNotBeEmpty: false },
+    { name: 'Price', locator: PRODUCT_SELECTORS.productPrice, mustNotBeEmpty: false },
+    { name: 'Stock', locator: PRODUCT_SELECTORS.productStock, mustContainText: 'In stock' },
+    { name: 'SKU', locator: PRODUCT_SELECTORS.productSku, mustNotBeEmpty: true },
+    { name: 'Size', locator: PRODUCT_SELECTORS.productSizeOption, mustNotBeEmpty: false },
+    { name: 'Colors', locator: PRODUCT_SELECTORS.productColorOption, mustNotBeEmpty: false },
 ]
 
 
 class Product {
+
     private getItem() {
-        return cy.get('.product-item-details').first();
+        return cy.get(PRODUCT_SELECTORS.productItemDetails).first();
     }
 
     private hoverItem() {
@@ -81,13 +85,13 @@ class Product {
     getProductName() {
         return this.getItem()
             .should('be.visible')
-            .find('.product-item-name a')
+            .find(PRODUCT_SELECTORS.productTitle + ' a')
             .invoke('text');
     }
 
     getPrice() {
         return this.getItem()
-            .find('.price');
+            .find(PRODUCT_SELECTORS.productPrice);
     }
 
     getRelated() {
@@ -96,7 +100,7 @@ class Product {
     }
 
     getTab(name: string) {
-        return cy.get('.product.info.detailed').within(() => {
+        return cy.get(PRODUCT_SELECTORS.productDetails).within(() => {
             cy.contains(name).click();
         });
     }
@@ -115,7 +119,7 @@ class Product {
         infoElements.forEach(({ name, locator, mustNotBeEmpty, mustContainText }) => {
             cy.log(`verifying element - ${name}`);
 
-            cy.get('.product-info-main')
+            cy.get(PRODUCT_SELECTORS.productInfoMain)
                 .find(locator)
                 .should('be.visible')
                 .then(($el) => {
@@ -170,7 +174,7 @@ class Product {
         expectedSections.forEach(section => {
 
             cy.log(`verifying section: ${section}`);
-            cy.get('#additional').contains('th', section).should('be.visible');
+            cy.get(PRODUCT_SELECTORS.additionalInfoSection).contains('th', section).should('be.visible');
         });
     }
 
@@ -178,7 +182,7 @@ class Product {
         cy.log('verifying description text in Details tab');
 
         this.getTab('Details');
-        cy.get('#description')
+        cy.get(PRODUCT_SELECTORS.descriptionText)
             .should('not.be.empty')
             .and($el => {
 
@@ -208,7 +212,7 @@ class Product {
 
         this.hoverItem();
         cy.get('@item')
-            .find('.action.tocart')
+            .find(PRODUCT_SELECTORS.addToCart)
             .click({ force: true });
     }
 
@@ -218,7 +222,7 @@ class Product {
         this.selectSize();
         this.selectColor();
 
-        cy.get('#product-addtocart-button')
+        cy.get(PRODUCT_SELECTORS.addToCartButtonPDP)
             .should('be.visible')
             .click();
     }
@@ -238,14 +242,13 @@ class Product {
     getCompareTable() {
         cy.log('getting compare table');
 
-        return cy.get('#product-comparison tr').should('be.visible');
+        return cy.get(PRODUCT_SELECTORS.productComparisonTable).should('be.visible');
     }
 
     compareProducts() {
         cy.log('comparing products');
 
-        cy.get('.actions-toolbar')
-            .find('a.action.compare')
+        cy.get(PRODUCT_SELECTORS.compareLink)
             .click();
 
         cy.url().should('contain', '/catalog/product_compare/');

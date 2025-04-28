@@ -1,11 +1,13 @@
 /// <reference types="cypress"/>
 
-import { SELECTORS } from '../helpers/selectors';
+import { REVIEWS_SELECTORS } from '../selectors/selectors';
+import { forms } from './forms';
 
 
 class Reviews {
+
     private getReviewCount() {
-        return cy.get(SELECTORS.viewReviewCount)
+        return cy.get(REVIEWS_SELECTORS.viewReviewCount)
             .invoke('text')
             .then(text => parseInt(text.match(/\d+/)?.[0] || '0', 10));
     }
@@ -13,13 +15,13 @@ class Reviews {
     verifyReviewsSummaryElements() {
         cy.log('verifying review summary elements');
 
-        cy.get(SELECTORS.reviewsSummary).should('be.visible');
+        cy.get(REVIEWS_SELECTORS.reviewsSummary).should('be.visible');
 
-        cy.get(SELECTORS.addReviewButton)
+        cy.get(REVIEWS_SELECTORS.addReviewButton)
             .should('be.visible')
             .and('contain.text', 'Add Your Review');
 
-        cy.get(SELECTORS.ratingSummary).should('be.visible');
+        cy.get(REVIEWS_SELECTORS.ratingSummary).should('be.visible');
 
         this.getReviewCount()
             .then(reviewsNumber => {
@@ -31,13 +33,13 @@ class Reviews {
     clickAddYourReview() {
         cy.log('clicking on add your review');
 
-        cy.get(SELECTORS.addReviewButton).click();
+        cy.get(REVIEWS_SELECTORS.addReviewButton).click();
     }
 
     verifyRedirectedToReviewsTab() {
         cy.log('redirecting to reviews tab');
 
-        cy.get(SELECTORS.reviewsTab)
+        cy.get(REVIEWS_SELECTORS.reviewsTab)
             .should('have.id', 'tab-label-reviews');
     }
 
@@ -48,7 +50,7 @@ class Reviews {
             .then(expectedReviewsCount => {
                 this.clickAddYourReview();
 
-                cy.get(SELECTORS.reviewItems)
+                cy.get(REVIEWS_SELECTORS.reviewItems)
                     .should('have.length', expectedReviewsCount);
             });
     }
@@ -58,8 +60,7 @@ class Reviews {
 
         for (const data of reviewData) {
 
-            cy.get(data.selector)
-                .type(data.text);
+            forms.fillField(data.selector, data.text);
         }
 
         cy.get(`label#Rating_${rating}_label`).first().click({ force: true });
@@ -68,7 +69,7 @@ class Reviews {
     submitReview() {
         cy.log('submitting review');
 
-        cy.get(SELECTORS.submitButton).click();
+        cy.get(REVIEWS_SELECTORS.submitButton).click();
     }
 }
 

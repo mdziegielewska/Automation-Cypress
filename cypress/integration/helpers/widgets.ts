@@ -1,12 +1,16 @@
 /// <reference types="cypress"/>
 
+import { WIDGETS_SELECTORS } from "../selectors/selectors";
+
+
 class Widgets {
+
     getGridWidget() {
         cy.log('getting hot sellers widget');
 
-        return cy.get('.widget-product-grid')
+        return cy.get(WIDGETS_SELECTORS.gridWidget)
             .should('be.visible')
-            .find('li.product-item');
+            .find(WIDGETS_SELECTORS.productItem);
     }
 
     shouldVerifyNumberOfElements(section: string, number: number) {
@@ -29,7 +33,7 @@ class Widgets {
     shouldVerifyWidgetInfo(index: number, info: string) {
         cy.log('verifying widget info');
 
-        cy.get('span.info')
+        cy.get(WIDGETS_SELECTORS.info)
             .eq(index)
             .and('contain', info);
     }

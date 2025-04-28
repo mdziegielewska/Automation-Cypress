@@ -1,11 +1,15 @@
 /// <reference types="cypress"/>
 
-const arrows = ['prev', 'next']
+import { GALLERY_SELECTORS } from '../selectors/selectors'; // dopasuj ścieżkę!
+
+const arrows = ['prev', 'next'] as const;
+
 
 class Gallery {
+
     getGallery() {
-        return cy.get('.product.media')
-            .find('.gallery-placeholder')
+        return cy.get(GALLERY_SELECTORS.productMedia)
+            .find(GALLERY_SELECTORS.galleryPlaceholder)
             .should('be.visible');
     }
 
@@ -13,8 +17,8 @@ class Gallery {
         for (const arrow of arrows) {
             cy.log(`verifying ${arrow} arrow scrolling`);
 
-            cy.get(`.fotorama__arr--${arrow}`).click();
-            cy.get('.fotorama__stage__frame.fotorama__active img')
+            cy.get(GALLERY_SELECTORS.arrow(arrow)).click();
+            cy.get(GALLERY_SELECTORS.activeImage)
                 .should('be.visible');
         }
     }

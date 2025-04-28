@@ -38,7 +38,7 @@ This repository contains Cypress automation tests written in TypeScript to autom
     - [x] Products Comparision
 - PDP (Product Detail Page)
     - [x] Product info
-    - [ ] Reviews
+    - [x ] Reviews
     - [x] Related products
 - Transaction path
     - [ ] Cart

@@ -1,9 +1,12 @@
 /// <reference types="cypress"/>
 
+import { RESULTS_SELECTORS } from "../selectors/selectors";
+
+
 class Results {
 
     private verifyText(locator: string, text: string) {
-        cy.log(`Verifying text for locator: ${locator}`);
+        cy.log(`verifying text for locator: ${locator}`);
 
         cy.get(locator)
             .should('be.visible')
@@ -11,19 +14,27 @@ class Results {
     }
 
     shouldVerifyTextInSection(locator: string, text: string) {
+        cy.log('verifying text in section');
+
         this.verifyText(locator, text);
     }
 
     shouldVerifyPageTitle(title: string) {
-        this.verifyText('.page-title', title);
+        cy.log('verifying page title');
+
+        this.verifyText(RESULTS_SELECTORS.pageTitle, title);
     }
 
     shouldVerifyPageMessage(text: string) {
-        this.verifyText('.message', text);
+        cy.log('verifying page message');
+
+        this.verifyText(RESULTS_SELECTORS.pageMessage, text);
     }
 
     shouldVerifyMageErrorMessage(text: string) {
-        this.verifyText('.mage-error', text);
+        cy.log('verifying mage error');
+
+        this.verifyText(RESULTS_SELECTORS.mageErrorMessage, text);
     }
 }
 

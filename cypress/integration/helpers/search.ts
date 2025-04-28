@@ -1,11 +1,13 @@
 /// <reference types="cypress"/>
 
 import { routes } from "./routes";
+import { SEARCH_SELECTORS } from "../selectors/selectors";
+
 
 class Search {
+
     advancedSearch() {
-        cy.get('.actions-toolbar')
-            .find(`.search`)
+        cy.get(SEARCH_SELECTORS.searchButton)
             .should('be.visible')
             .click();
     }
@@ -13,14 +15,14 @@ class Search {
     shouldShowAutocomplete() {
         cy.log('verifying autocomplete search');
 
-        cy.get('#search_autocomplete')
+        cy.get(SEARCH_SELECTORS.autocomplete)
             .should('be.visible');
     }
 
     shouldDisplaySearchResults() {
         cy.log('verifying display search results visibility');
 
-        cy.get('.search.results')
+        cy.get(SEARCH_SELECTORS.searchResults)
             .should('be.visible');
     }
 
@@ -29,11 +31,9 @@ class Search {
 
         switch (type) {
             case 'related':
-                return cy.get('.block')
-                    .find('dd.item');
+                return cy.get(SEARCH_SELECTORS.relatedSearchTerms);
             case 'popular':
-                return cy.get('.search-terms')
-                    .find('li.item');
+                return cy.get(SEARCH_SELECTORS.popularSearchTerms);
 
             default: throw Error(`Unknown search terms type: ${type}`)
         }

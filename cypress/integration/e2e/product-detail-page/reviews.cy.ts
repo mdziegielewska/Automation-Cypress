@@ -2,7 +2,7 @@
 
 import { results } from '../../helpers/results';
 import { reviews } from '../../helpers/reviews';
-import { SELECTORS } from '../../helpers/selectors';
+import { SELECTORS } from '../../selectors/selectors';
 
 
 const reviewForm = [

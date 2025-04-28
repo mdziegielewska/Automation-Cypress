@@ -1,6 +1,7 @@
 /// <reference types="cypress"/>
 
 class Routes {
+
     expect(key: string) {
         cy.log('expecting route');
 

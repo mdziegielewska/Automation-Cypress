@@ -1,27 +1,32 @@
 /// <reference types="cypress"/>
 
 import { product } from "./product";
+import { LISTING_SELECTORS } from "../selectors/selectors";
+
 
 const listingElements = [
-    { name: 'Title', locator: '.page-title' },
-    { name: 'Toolbar', locator: '.toolbar-products' },
-    { name: 'Results', locator: '.product-items' },
-    { name: 'Filters', locator: '#layered-filter-block' },
-    { name: 'Compare section', locator: '#block-compare-heading' },
-    { name: 'Wishlist section', locator: '.block-wishlist' }
+    { name: 'Title', locator: LISTING_SELECTORS.pageTitle },
+    { name: 'Toolbar', locator: LISTING_SELECTORS.toolbarProducts },
+    { name: 'Results', locator: LISTING_SELECTORS.productItems },
+    { name: 'Filters', locator: LISTING_SELECTORS.filtersBlock },
+    { name: 'Compare section', locator: LISTING_SELECTORS.compareSection },
+    { name: 'Wishlist section', locator: LISTING_SELECTORS.wishlistSection }
 ];
 
 const additionalSidebar = ['Compare Products', 'My Wish List'];
 
+
 class Listing {
+
     private getFilter(filter: string) {
-        return cy.get('.filter-options')
-            .find('[data-role="collapsible"]')
+        return cy.get(LISTING_SELECTORS.filterOptions)
+            .find(LISTING_SELECTORS.filterOptionsCollapsible)
             .contains(filter);
     }
 
     private clickAndVerify(locator: string, action: string) {
         cy.log(`performing ${action}`);
+
         cy.get(locator).click();
     }
 
@@ -34,15 +39,15 @@ class Listing {
     shouldContainFilterBlock() {
         cy.log('verifying filters block');
 
-        cy.get('.sidebar-main').should('be.visible');
+        cy.get(LISTING_SELECTORS.sidebarMain).should('be.visible');
     }
 
     shouldContainAdditionalSidebar() {
         additionalSidebar.forEach(sidebar => {
-            cy.log(`verifying ${sidebar} visibility`);
 
-            cy.get('.sidebar-additional')
-                .find('.block')
+            cy.log(`verifying ${sidebar} visibility`);
+            cy.get(LISTING_SELECTORS.sidebarAdditional)
+                .find(LISTING_SELECTORS.block)
                 .contains(sidebar)
                 .should('be.visible');
         });
@@ -50,8 +55,8 @@ class Listing {
 
     shouldVerifyListingElements() {
         listingElements.forEach(element => {
-            cy.log(`verifying ${element}`);
 
+            cy.log(`verifying ${element.name}`);
             cy.get(element.locator).should('be.visible');
         });
     }
@@ -59,15 +64,15 @@ class Listing {
     shouldVerifyProductsNumber(number: number) {
         cy.log('verifying products number');
 
-        cy.get('.toolbar-amount')
-            .find('.toolbar-number')
+        cy.get(LISTING_SELECTORS.toolbarAmount)
+            .find(LISTING_SELECTORS.toolbarNumber)
             .should('contain', `${number}`);
     }
 
     shouldChangeLimiter(number: number) {
         cy.log('verifying limiter change');
 
-        cy.get('#limiter.limiter-options')
+        cy.get(LISTING_SELECTORS.limiterOptions)
             .eq(1)
             .select(`${number}`)
             .wait(500);
@@ -76,21 +81,22 @@ class Listing {
     shouldSortBy(sort: string) {
         cy.log('sorting options');
 
-        this.selectOption('#sorter.sorter-options', sort);
+        this.selectOption(LISTING_SELECTORS.sorterOptions, sort);
     }
 
     shouldChangeModes(mode: string) {
         cy.log('changing modes');
 
         if (mode === 'list') {
-            cy.get(`a.mode-${mode}`).eq(0).click({ force: true });
+
+            cy.get(LISTING_SELECTORS.modeButton(mode)).eq(0).click({ force: true });
         }
     }
 
     shouldVerifyCurrentMode(mode: string) {
         cy.log(`verifying ${mode} mode`);
 
-        cy.get(`.products.wrapper.${mode}.products-${mode}`)
+        cy.get(LISTING_SELECTORS.productsWrapperMode(mode))
             .should('be.visible');
     }
 
@@ -100,7 +106,6 @@ class Listing {
         switch (sortBy) {
             case 'Product Name':
                 product.getProductName().then(text => {
-
                     expect(text.trim().startsWith('A')).to.be.true;
                 });
 
@@ -121,7 +126,7 @@ class Listing {
 
         this.getFilter(filter)
             .should('be.visible')
-            .get('.filter-options-content')
+            .get(LISTING_SELECTORS.filterOptionsContent)
             .find('ol li')
             .should('have.class', 'item');
     }
@@ -131,9 +136,9 @@ class Listing {
 
         this.getFilter(filter)
             .should('be.visible')
-            .get('.swatch-attribute')
+            .get(LISTING_SELECTORS.swatchAttribute)
             .eq(index)
-            .find('.swatch-option')
+            .find(LISTING_SELECTORS.swatchOption)
             .should('have.attr', 'option-label');
     }
 
@@ -151,19 +156,19 @@ class Listing {
     shouldFilter() {
         cy.log('verifying filtering');
 
-        cy.get('.filter-options-item.allow.active')
+        cy.get(LISTING_SELECTORS.filterOptionsItemActive)
             .find('ol li a')
             .eq(1)
             .click();
     }
 
     shouldFilterByAttributes(type: string, index: number) {
-        cy.log(`verifying filtering by attibute ${type}`);
+        cy.log(`verifying filtering by attribute ${type}`);
 
-        cy.get('.filter-options-content')
-            .find('.swatch-attribute')
+        cy.get(LISTING_SELECTORS.filterOptionsContent)
+            .find(LISTING_SELECTORS.swatchAttribute)
             .eq(index)
-            .find(`.swatch-option.${type}`)
+            .find(`${LISTING_SELECTORS.swatchOption}.${type}`)
             .first()
             .click();
     }
@@ -171,13 +176,13 @@ class Listing {
     shouldVerifyFilterValue() {
         cy.log('verifying filter value');
 
-        cy.get('.filter-value').should('be.visible');
+        cy.get(LISTING_SELECTORS.filterValue).should('be.visible');
     }
 
     shouldClearFilters() {
         cy.log('clearing filters');
 
-        cy.get('.filter-clear')
+        cy.get(LISTING_SELECTORS.filterClear)
             .should('be.visible')
             .click();
     }

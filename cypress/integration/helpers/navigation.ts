@@ -1,14 +1,16 @@
 /// <reference types="cypress"/>
 
+import { NAVIGATION_SELECTORS } from "../selectors/selectors";
+
 
 class Navigation {
+
     private getTab(tab: string) {
-        return cy.get('li.category-item').contains(tab);
+        return cy.get(NAVIGATION_SELECTORS.tab(tab));
     }
 
     private getExpandableIcon(tab: string) {
-        return this.getTab(tab)
-            .find('span.ui-menu-icon');
+        return cy.get(NAVIGATION_SELECTORS.expandableIcon(tab));
     }
 
     private verifyNavigation(locator: string, name: string, url: string) {
@@ -25,8 +27,8 @@ class Navigation {
     shouldContainTab(tab: string) {
         cy.log('verifying tabs in section');
 
-        cy.get('[class="navigation"]')
-            .find('[role="menuitem"]')
+        cy.get(NAVIGATION_SELECTORS.navigationMenu)
+            .find(NAVIGATION_SELECTORS.menuItem)
             .should('contain', tab);
     }
 
@@ -46,7 +48,7 @@ class Navigation {
             .trigger('mouseover').as('submenu');
 
         cy.get('@submenu')
-            .get(`ul.submenu`)
+            .get(NAVIGATION_SELECTORS.subMenu)
             .should('be.visible')
             .and('contain', subtab).as('subsubmenu');
 
@@ -59,7 +61,7 @@ class Navigation {
         this.shouldContainSubtabLevel1(tablevel0, tab);
 
         cy.get('@subsubmenu')
-            .get(`ul.submenu`)
+            .get(NAVIGATION_SELECTORS.subMenu)
             .should('be.visible')
             .and('contain', subtab);
     }
@@ -73,26 +75,26 @@ class Navigation {
         cy.url()
             .should('contain', url);
 
-        cy.get('#page-title-heading')
+        cy.get(NAVIGATION_SELECTORS.pageTitleHeading)
             .should('contain.text', tab);
     }
 
     shouldVerifyNavigationLinks(navigationLink: string, url: string) {
         cy.log('verifying navigation links');
 
-        this.verifyNavigation('ul.header.links a', navigationLink, url);
+        this.verifyNavigation(NAVIGATION_SELECTORS.headerLinks, navigationLink, url);
     }
 
     shouldVerifyFooter(footer: string, url: string) {
         cy.log('verifying navigation links');
 
-        this.verifyNavigation('ul.footer.links a', footer, url);
+        this.verifyNavigation(NAVIGATION_SELECTORS.footerLinks, footer, url);
     }
 
     shouldContainNavPanel(nav: string) {
         cy.log('verifying nav panel visibility');
 
-        cy.get(nav)
+        cy.get(NAVIGATION_SELECTORS.navPanel(nav))
             .should('be.visible');
     }
 }

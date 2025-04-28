@@ -1,6 +1,7 @@
 /// <reference types="cypress"/>
 
 class Forms {
+
     fillField(field: string, value: string) {
         cy.log('filling form field');
 
