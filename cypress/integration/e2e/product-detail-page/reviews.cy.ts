@@ -23,10 +23,12 @@ describe('PDP - Reviews', () => {
     })
 
     it('Should verify review summary elements', () => {
+
         reviews.verifyReviewsSummaryElements();
     });
 
     it('Should redirect to reviews tab', () => {
+
         reviews.clickAddYourReview();
 
         reviews.verifyRedirectedToReviewsTab();
@@ -34,11 +36,11 @@ describe('PDP - Reviews', () => {
     });
 
     it('Should add a new review', () => {
+
         reviews.clickAddYourReview();
 
         reviews.fillReviewForm(5, reviewForm);
         reviews.submitReview();
         results.shouldVerifyPageMessage(REVIEW_SUBMISSION_MESSAGE);
     });
-
 })

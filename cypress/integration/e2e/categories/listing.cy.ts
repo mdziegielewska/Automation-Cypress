@@ -47,7 +47,7 @@ urls.forEach(({ name, url, items, isEquipment }) => {
 
             listing.shouldVerifyListingElements();
             listing.shouldVerifyProductsNumber(items);
-            
+
             listing.shouldContainFilterBlock();
             listing.shouldContainAdditionalSidebar();
             listing.shouldChangeLimiter(36);

@@ -20,8 +20,6 @@ describe('PDP - Related Products', () => {
         cy.clearAllCookies();
     })
 
-    const relatedProducts = '.block.related';
-
     it('Should show Related Products', () => {
 
         results.shouldVerifyTextInSection(PRODUCT_SELECTORS.relatedProductsBlock, 'Related Products');

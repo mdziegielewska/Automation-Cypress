@@ -97,6 +97,12 @@ class Navigation {
         cy.get(NAVIGATION_SELECTORS.navPanel(nav))
             .should('be.visible');
     }
+
+    shouldConfirmModal() {
+        cy.get('.modal-inner-wrap')
+            .find('button').contains('OK')
+            .click();
+    }
 }
 
 export const navigation = new Navigation();

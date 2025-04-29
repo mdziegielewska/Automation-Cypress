@@ -6,6 +6,7 @@ import { results } from "../../helpers/results";
 import { widgets } from "../../helpers/widgets";
 import { PRODUCT_SELECTORS } from "../../selectors/selectors";
 
+
 const tabs = [
     { name: 'Details', locator: PRODUCT_SELECTORS.descriptionTab },
     { name: 'More Information', locator: PRODUCT_SELECTORS.additionalTab },
@@ -20,16 +21,19 @@ const ADD_TO_CART_MESSAGE = "You added Juno Jacket to your shopping cart.";
 describe('PDP - Product Info', () => {
 
     beforeEach(() => {
+
         cy.visit('/juno-jacket.html');
         cy.clearAllCookies();
     });
 
     it('Should show PDP elements', () => {
+
         product.shouldVerifyMainPDPElements();
         product.shouldDisplayProductInfo();
     });
 
     it('Gallery should contain images', () => {
+
         gallery.getGallery();
 
         widgets.shouldVerifyNumberOfElements(PRODUCT_SELECTORS.thumbnail, 3);
@@ -37,6 +41,7 @@ describe('PDP - Product Info', () => {
     });
 
     it('Should verify details and more information sections', () => {
+
         product.shouldVerifyTabSwitching(tabs);
 
         product.shouldDisplayDetailsSectionText();
@@ -44,6 +49,7 @@ describe('PDP - Product Info', () => {
     });
 
     it('Should add to Wishlist', () => {
+
         product.addToWishlistOrCompare("wishlist");
         results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
 
@@ -52,11 +58,13 @@ describe('PDP - Product Info', () => {
     });
 
     it('Should add to Comparision', () => {
+
         product.addToWishlistOrCompare("compare");
         results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
     });
 
     it('Should add to Cart', () => {
+
         product.addToCartPDP();
         results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
     });

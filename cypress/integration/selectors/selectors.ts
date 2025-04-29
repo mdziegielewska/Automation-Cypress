@@ -121,3 +121,23 @@ export const RESULTS_SELECTORS = {
     pageMessage: '.message',
     mageErrorMessage: '.mage-error',
 };
+
+
+export const CART_SELECTORS = {
+    miniCartToggle: '[data-block="minicart"] .showcart',
+    miniCartWrapper: '#minicart-content-wrapper',
+    miniCartItemsWrapper: '#minicart-items-wrapper',
+    closeMiniCartButton: '#btn-minicart-close',
+    itemsTotal: '.items-total .count',
+    priceWrapper: '.amount .price-wrapper',
+    productDetails: '.product-item-details',
+    productOptions: 'dl.product.options',
+    qtyValue: '.details-qty .value',
+    editButton: '.action.edit',
+    deleteButton: '.action.delete',
+    updateCartForm: '#product_addtocart_form',
+    sizeSwatch: '.swatch-attribute.size',
+    swatchOption: '[role="option"]',
+    checkoutButton: '#top-cart-btn-checkout',
+    updateCartButton: '#product-updatecart-button'
+  };
