@@ -1,10 +1,11 @@
 /// <reference types="cypress"/>
 
 import { CART_SELECTORS } from "../selectors/selectors";
+import { routes } from "./routes";
 
 
 class Cart {
-    
+
     openMiniCart() {
         cy.log('opening mini cart');
 
@@ -108,7 +109,25 @@ class Cart {
 
         this.openMiniCart();
         cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
+
             cy.get(CART_SELECTORS.deleteButton).click();
+        });
+    }
+
+    changeCartItemQuantity(quantity: number) {
+        cy.log('changing cart item quantity');
+
+        cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
+
+            cy.get(CART_SELECTORS.qtyInput)
+                .clear()
+                .type(quantity.toString())
+                .blur();
+
+            cy.get(CART_SELECTORS.updateMiniCartButton)
+                .click();
+
+            routes.expect('ChangeQty');
         });
     }
 

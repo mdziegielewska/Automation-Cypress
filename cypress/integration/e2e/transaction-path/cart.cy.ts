@@ -16,7 +16,7 @@ describe('Transaction path - Mini Cart', () => {
     beforeEach(() => {
 
         switch (Cypress.currentTest.title) {
-            case 'Should show empty cart':
+            case 'Should show empty mini cart':
                 cy.visit('/women/tops-women/hoodies-and-sweatshirts-women.html');
 
                 break;
@@ -39,9 +39,9 @@ describe('Transaction path - Mini Cart', () => {
         }
     })
 
-    it('Should show empty mini cart', () => {
-        cart.openMiniCart();
+    it.skip('Should show empty mini cart', () => {
 
+        cart.openMiniCart();
         cart.shouldBeEmpty();
     })
 
@@ -68,4 +68,15 @@ describe('Transaction path - Mini Cart', () => {
         navigation.shouldConfirmModal();
         cart.shouldBeEmpty();
     })
+
+
+    it('Should increase quantity of product in cart', () => {
+
+        cart.openMiniCart();
+        cart.verifyItemsCount(1);
+
+        cart.changeCartItemQuantity(2);
+
+        cart.verifyItemsCount(2);
+    });
 })

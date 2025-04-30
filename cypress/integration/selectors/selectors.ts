@@ -139,5 +139,7 @@ export const CART_SELECTORS = {
     sizeSwatch: '.swatch-attribute.size',
     swatchOption: '[role="option"]',
     checkoutButton: '#top-cart-btn-checkout',
+    qtyInput: '.item-qty.cart-item-qty',
+    updateMiniCartButton: 'button[title="Update"]',
     updateCartButton: '#product-updatecart-button'
-  };
+};

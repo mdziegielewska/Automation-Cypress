@@ -25,6 +25,7 @@ class Routes {
             case 'Limiter': return ['GET', '/women/tops-women.html?product_list_limit='];
             case 'Sorter': return ['GET', '/women/tops-women.html?product_list_order='];
             case 'Mode': return ['GET', '/women/tops-women.html?product_list_mode='];
+            case 'ChangeQty': return ['POST', '/checkout/sidebar/updateItemQty/'];
 
             default: throw Error(`Unknown route key: ${key}`)
         }
