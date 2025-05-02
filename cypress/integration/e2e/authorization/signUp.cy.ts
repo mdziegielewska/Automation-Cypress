@@ -1,11 +1,17 @@
 /// <reference types="cypress"/>
 
+import { authorization } from '../../helpers/authorization';
 import { forms } from '../../helpers/forms';
 import { generate } from '../../helpers/generate';
 import { results } from '../../helpers/results';
 import { routes } from '../../helpers/routes';
 import { AUTHORIZATION_SELECTORS } from '../../selectors/selectors';
 
+
+const REGISTER_MESSAGE = `Thank you for registering with Main Website Store.`;
+const EXISTING_EMAIL_MESSAGE = 'There is already an account with this email address.';
+const PASSWORD_ERROR_MESSAGE = 'Minimum length of this field must be equal or greater than 8 symbols. Leading and trailing spaces will be ignored.';
+const CONFIRM_PASSWORD_ERROR_MESSAGE = 'Please enter the same value again.';
 
 const generateEmail = `${generate.generateString()}@gmail.com`;
 const signUpParams = [
@@ -16,61 +22,50 @@ const signUpParams = [
     { field: 'password-confirmation', value: Cypress.env("TEST_USER_PASSWORD") }
 ];
 
-const REGISTER_MESSAGE = `Thank you for registering with Main Website Store.`;
-const EXISTING_EMAIL_MESSAGE = 'There is already an account with this email address.';
-const PASSWORD_ERROR_MESSAGE = 'Minimum length of this field must be equal or greater than 8 symbols. Leading and trailing spaces will be ignored.';
-const CONFIRM_PASSWORD_ERROR_MESSAGE = 'Please enter the same value again.';
+/**
+ * Helper function to visit the sign-up page and verify its title.
+ */
+const goToSignUpPageAndVerify = () => {
+    routes.visitAndWait('/customer/account/create/', 'SignUpPage');
+    results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.authotizationPanel, 'Create New Customer Account');
+};
 
 
-describe('Sign Up', () => {
+describe('Authorization - Sign Up', () => {
+
+    beforeEach(() => {
+        goToSignUpPageAndVerify();
+    })
 
     it('Should sign up correctly', () => {
+        authorization.fillSignUpForm(signUpParams);
 
-        cy.visit('/customer/account/login');
-
-        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.newCustomer, 'New Customers');
-        cy.get(AUTHORIZATION_SELECTORS.createAccountLink)
-            .click();
-
-        routes.expect('SignUpPage');
-
-        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.signUpPanel, 'Create New Customer Account');
-
-        for (const data of signUpParams) {
-            forms.fillField(data.field, data.value);
-        };
-
+        routes.expect('SignUpResult');
         forms.submit('submit');
+        cy.wait('@SignUpResult');
 
         results.shouldVerifyPageMessage(REGISTER_MESSAGE);
         results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.dashboardInfoBlock, `${generateEmail}`);
     })
 
     it('Should sign up with existing email address', () => {
+        const existingEmailSignUpParams = signUpParams.map(param => ({ ...param }));
 
-        cy.visit('/customer/account/create/');
+        const emailParam = existingEmailSignUpParams.find(param => param.field === 'email_address');
+        if (emailParam) {
+            emailParam.value = Cypress.env("TEST_USER_EMAIL");
+        }
 
-        routes.expect('SignUpPage');
+        authorization.fillSignUpForm(existingEmailSignUpParams);
 
-        for (const data of signUpParams) {
-            if (data.field === 'email_address') {
-                data.value = `${Cypress.env("TEST_USER_EMAIL")}`;
-            }
-
-            forms.fillField(data.field, data.value);
-        };
-
+        routes.expect('SignUpResult');
         forms.submit('submit');
+        cy.wait('@SignUpResult');
 
         results.shouldVerifyPageMessage(EXISTING_EMAIL_MESSAGE);
     })
 
     it('Should sign up with incorrect password', () => {
-
-        cy.visit('/customer/account/create/');
-
-        routes.expect('SignUpPage');
-
         forms.fillField('password', 'test');
         forms.fillField('password-confirmation', '123');
 

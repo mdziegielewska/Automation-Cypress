@@ -1,11 +1,13 @@
 export const AUTHORIZATION_SELECTORS = {
-    loginPanel: '[data-ui-id="page-title-wrapper"]',
-    resetPanel: '.action.remind',
-    greetMessage: 'li.greet.welcome',
-    newCustomer: '.block-new-customer',
-    signUpPanel: '[data-ui-id="page-title-wrapper"]',
+    authotizationPanel: '[data-ui-id="page-title-wrapper"]',
     createAccountLink: 'a.create',
-    dashboardInfoBlock: '.block-dashboard-info'
+    dashboardInfoBlock: '.block-dashboard-info',
+    greetMessage: 'li.greet.welcome',
+    logInInput: 'input[title="Email"]',
+    newCustomer: '.block-new-customer',
+    passwordInput: 'input[title="Password"]',
+    resetPanel: '.action.remind',
+    signOut: '.authorization-link a'
 };
 
 
@@ -22,7 +24,8 @@ export const NAVIGATION_SELECTORS = {
     title: '.page-title',
     privacyPolicyNavPanel: '#privacy-policy-nav-content',
     privacyPolicyContent: '.privacy-policy-content',
-    navPanel: (nav: string) => nav
+    navPanel: (nav: string) => nav,
+    welcomeUserTab: '.customer-welcome .customer-name'
 };
 
 

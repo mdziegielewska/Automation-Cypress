@@ -19,14 +19,21 @@ class Routes {
      * @param url The URL path to visit.
      * @param routeKey The key for the route that was set up with `routes.expect()` and should be waited for.
      */
-    visitAndExpect(url: string, routeKey: string): void {
+    visitAndWait(url: string, routeKey: string): void {
         cy.log(`Visiting ${url} and waiting for route: ${routeKey}`);
 
-        cy.visit(url);
         this.expect(routeKey);
+        cy.visit(url);
+        cy.wait(`@${routeKey}`);
     }
 
-    private getRoute(key: string) {
+    /**
+     * Retrieves the HTTP method and URL pattern for a given route key.
+     * @param key The key identifying the desired route.
+     * @returns A tuple containing the HTTP method (string) and the URL pattern (string).
+     * @throws Error if the route key is unknown.
+     */
+    private getRoute(key: string): [string, string] {
         switch (key) {
             case 'CartPage': return ['GET', '/checkout/cart/'];
             case 'ChangeQty': return ['POST', '/checkout/sidebar/updateItemQty/'];
@@ -34,13 +41,19 @@ class Routes {
             case 'CouponResult': return ['POST', '/checkout/cart/couponPost/'];
             case 'DeleteResult': return ['POST', '/checkout/cart/delete/'];
             case 'EditPage': return ['GET', '/checkout/cart/configure/'];
+            case 'ForgotPasswordPage': return ['GET', '/customer/account/forgotpassword/'];
             case 'HoodiePDP': return ['GET', '/circe-hooded-ice-fleece.html'];
             case 'Limiter': return ['GET', '/women/tops-women.html?product_list_limit='];
             case 'ListingPage': return ['GET', '/women/tops-women/hoodies-and-sweatshirts-women.html'];
             case 'LoadPage': return ['GET', '/'];
+            case 'LogInPage': return ['GET', '/customer/account/login/'];
+            case 'LogInResult': return ['POST', '/customer/account/loginPost/'];
+            case 'LogOut': return ['POST', '/customer/account/logout/'];
             case 'Mode': return ['GET', '/women/tops-women.html?product_list_mode='];
-            case 'ResetPassword': return ['POST', '/customer/account/forgotpasswordpost/'];
-            case 'SearchResults': return ['GET', '/catalogsearch/result/'];
+            case 'ResetPasswordResult': return ['POST', '/customer/account/forgotpasswordpost/'];
+            case 'SearchResult': return ['GET', '/catalogsearch/result/'];
+            case 'SignUpPage': return ['GET', '/customer/account/create/'];
+            case 'SignUpResult': return ['POST', '/customer/account/createpost/'];
             case 'Sorter': return ['GET', '/women/tops-women.html?product_list_order='];
             case 'UpdateResult': return ['POST', '/checkout/cart/updateItemOptions/'];
             case 'WaterBottlePDP': return ['GET', '/affirm-water-bottle.html'];
@@ -55,7 +68,7 @@ class Routes {
      * @param method The HTTP method (e.g., 'GET', 'POST').
      * @param body The request body (if applicable).
      */
-    sendRequest(url: string, method: string, body: string) {
+    sendRequest(url: string, method: string, body: string): void {
         cy.log('sending request');
 
         cy.request({

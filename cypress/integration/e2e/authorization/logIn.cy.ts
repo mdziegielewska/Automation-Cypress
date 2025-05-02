@@ -7,52 +7,107 @@ import { routes } from '../../helpers/routes';
 import { AUTHORIZATION_SELECTORS } from '../../selectors/selectors';
 
 
+const LOGIN_SUCCESS_MESSAGE = `Welcome, ${Cypress.env("TEST_FIRST_NAME")} ${Cypress.env("TEST_LAST_NAME")}!`;
 const LOGIN_ERROR_MESSAGE = "The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.";
-const RESET_PASSWORD_MESSAGE = `If there is an account associated with ${Cypress.env("TEST_USER_EMAIL")} you will receive an email with a link to reset your password.`;
+const PASSWORD_RESET_MESSAGE = `If there is an account associated with ${Cypress.env("TEST_USER_EMAIL")} you will receive an email with a link to reset your password.`;
+
+const loginTestCases = [
+    {
+        name: 'successful',
+        email: Cypress.env("TEST_USER_EMAIL"),
+        password: Cypress.env("TEST_USER_PASSWORD"),
+        messageSelector: AUTHORIZATION_SELECTORS.greetMessage,
+        expectedMessage: LOGIN_SUCCESS_MESSAGE
+    },
+    {
+        name: 'unsuccessful',
+        email: Cypress.env("TEST_USER_EMAIL"),
+        password: "123456789",
+        expectedMessage: LOGIN_ERROR_MESSAGE,
+    },
+];
+
+/**
+ * Helper function to clear cookies, visit the login page, and verify the title.
+ */
+const goToLoginPageAndVerify = () => {
+    cy.clearAllCookies();
+
+    routes.visitAndWait('/customer/account/login/', 'LogInPage');
+    results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.authotizationPanel, 'Customer Login');
+};
 
 
-describe('Log in', () => {
+describe('Authorization', () => {
 
-    beforeEach(() => {
+    describe('Login Page Verification', () => {
 
-        cy.clearAllCookies();
-        cy.visit('/customer/account/login/');
-    })
+        beforeEach(() => {
+            goToLoginPageAndVerify();
+        });
 
-    it('Should log in correctly', () => {
+        it('Should Remind Password', () => {
+            routes.expect('ForgotPasswordPage');
 
-        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.loginPanel, 'Customer Login');
+            cy.get(AUTHORIZATION_SELECTORS.resetPanel)
+                .should('be.visible')
+                .and('contain.text', 'Forgot Your Password?')
+                .click();
 
-        authorization.fillInLogInData(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_USER_PASSWORD"));
-        forms.submit('login');
+            cy.wait('@ForgotPasswordPage');
+            cy.url()
+                .should('include', '/customer/account/forgotpassword/');
 
-        routes.expect('LoadPage');
+            routes.expect('ResetPasswordResult');
 
-        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.greetMessage,
-            `Welcome, ${Cypress.env("TEST_FIRST_NAME")} ${Cypress.env("TEST_LAST_NAME")}!`);
-    })
+            forms.fillField('email_address', `${Cypress.env("TEST_USER_EMAIL")}`);
+            forms.submit('submit');
 
-    it('Should log in incorrectly', () => {
+            cy.wait('@ResetPasswordResult');
 
-        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.loginPanel, 'Customer Login');
+            results.shouldVerifyPageMessage(PASSWORD_RESET_MESSAGE);
+        });
 
-        authorization.fillInLogInData(Cypress.env("TEST_USER_EMAIL"), "123456789");
-        forms.submit('login');
+        loginTestCases.forEach((testCase) => {
+            it(`Should handle ${testCase.name} login attempt`, () => {
+                authorization.performLoginAttempt(testCase.email, testCase.password);
 
-        results.shouldVerifyPageMessage(LOGIN_ERROR_MESSAGE);
-    })
+                if (testCase.name === 'successful') {
+                    results.shouldVerifyTextInSection(testCase.messageSelector, testCase.expectedMessage);
 
-    it('Should remind password', () => {
+                    cy.url()
+                        .should('include', '/customer/account/');
+                } else {
+                    results.shouldVerifyPageMessage(testCase.expectedMessage);
 
-        cy.get(AUTHORIZATION_SELECTORS.resetPanel)
-            .should('contain.text', 'Forgot Your Password?')
-            .click();
+                    cy.url()
+                        .should('include', '/customer/account/login/');
+                }
+            });
+        });
 
-        routes.expect('ResetPassword');
+        it('Should Log Out', () => {
+            authorization.performLoginAttempt(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_USER_PASSWORD"));
 
-        forms.fillField('email_address', `${Cypress.env("TEST_USER_EMAIL")}`);
-        forms.submit('submit');
+            results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.greetMessage, LOGIN_SUCCESS_MESSAGE);
 
-        results.shouldVerifyPageMessage(RESET_PASSWORD_MESSAGE);
-    })
-})
+            authorization.openWelcomeUserTab();
+            routes.expect('LogOut');
+            authorization.signOut();
+            cy.wait('@LogOut');
+
+            cy.url()
+                .should('include', '/');
+        });
+
+        it('Should redirect to Sign Up Page', () => {
+            results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.newCustomer, 'New Customers');
+
+            routes.expect('SignUpPage');
+            cy.get(AUTHORIZATION_SELECTORS.createAccountLink)
+                .click();
+
+            cy.wait('@SignUpPage');
+        })
+    });
+});

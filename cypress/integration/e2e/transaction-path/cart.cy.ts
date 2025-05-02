@@ -9,11 +9,16 @@ import { routes } from '../../helpers/routes';
 let ADD_TO_CART_MESSAGE: string;
 let UPDATE_MESSAGE: string;
 
+const couponList = [
+    { couponCode: 'test123', type: 'invalid' },
+    { couponCode: 'h20', type: 'valid' },
+]
+
 /**
  * Helper function to add a default product to the cart and navigate to the cart page.
  */
 const addDefaultProductAndGoToCart = () => {
-    routes.visitAndExpect('/women/tops-women/hoodies-and-sweatshirts-women.html', 'ListingPage');
+    routes.visitAndWait('/women/tops-women/hoodies-and-sweatshirts-women.html', 'ListingPage');
 
     product.getProductName().then(name => {
         const productName = name.trim();
@@ -24,26 +29,21 @@ const addDefaultProductAndGoToCart = () => {
         product.addToCart();
         results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
 
-        routes.visitAndExpect('/checkout/cart/', 'CartPage');
+        routes.visitAndWait('/checkout/cart/', 'CartPage');
     });
 };
-
-const couponList = [
-    { couponCode: 'test123', type: 'invalid' },
-    { couponCode: 'h20', type: 'valid' },
-]
 
 
 describe('Transaction Path - Cart', () => {
     it('Should display all Cart item elements', () => {
-            addDefaultProductAndGoToCart();
+        addDefaultProductAndGoToCart();
 
-            results.shouldVerifyPageTitle('Shopping Cart');
-            cart.verifyProductDetailsInCart();
-        });
+        results.shouldVerifyPageTitle('Shopping Cart');
+        cart.verifyProductDetailsInCart();
+    });
 
     describe('Cart Actions Verification', () => {
-        
+
         beforeEach(() => {
             addDefaultProductAndGoToCart();
         })
@@ -56,15 +56,15 @@ describe('Transaction Path - Cart', () => {
         it('Should edit Product from cart', () => {
             cart.editCartItem('cart');
             cart.updateCartPDP();
-    
+
             results.shouldVerifyPageMessage(UPDATE_MESSAGE);
         });
-    
+
         it('Should delete Product from cart', () => {
             cart.deleteCartItem('cart');
             cart.shouldBeEmpty();
         });
-    
+
         it('Should increase Product Quantity', () => {
             cart.verifyItemsCount(1, 'cart');
             cart.changeCartItemQuantity(2, 'cart');
@@ -79,30 +79,30 @@ describe('Transaction Path - Cart', () => {
 
         it('Should proceed to Checkout', () => {
             cart.shouldClickCheckoutButton('cart');
-    
+
             cy.url()
                 .should('include', '/checkout/#shipping');
         });
     })
 
     describe('Coupon Section Verification', () => {
-    
+
         beforeEach(() => {
-            routes.visitAndExpect('/affirm-water-bottle.html', 'WaterBottlePDP');
-    
+            routes.visitAndWait('/affirm-water-bottle.html', 'WaterBottlePDP');
+
             product.addToCartPDP(true);
-    
+
             ADD_TO_CART_MESSAGE = 'You added Affirm Water Bottle  to your shopping cart.';
             results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
-    
-            routes.visitAndExpect('/checkout/cart/', 'CartPage');
+
+            routes.visitAndWait('/checkout/cart/', 'CartPage');
         })
 
-        couponList.forEach(({couponCode, type})  => {
+        couponList.forEach(({ couponCode, type }) => {
             it(`Should apply ${type} Code`, () => {
                 const COUPON_MESSAGE = (type === 'invalid')
                     ? `The coupon code "${couponCode}" is not valid.`
-                    : `You used coupon code "${couponCode}".`; 
+                    : `You used coupon code "${couponCode}".`;
 
                 cart.openCouponSection();
                 cart.applyCoupon(couponCode);
