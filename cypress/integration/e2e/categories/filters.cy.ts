@@ -3,51 +3,52 @@
 import { listing } from "../../helpers/listings";
 
 
-const listingFilters = ['Category', 'Style', 'Climate', 'Eco Collection', 'Erin Recommends',
-    'Material', 'New', 'Pattern', 'Performance Fabric', 'Price', 'Sale'];
-
-const swatchFilters = [
-    { name: 'Size', type: 'text' },
-    { name: 'Color', type: 'color' }
+const allFilters = [
+    // List filters
+    { name: 'Category', type: 'list' },
+    { name: 'Style', type: 'list' },
+    { name: 'Climate', type: 'list' },
+    { name: 'Eco Collection', type: 'list' },
+    { name: 'Erin Recommends', type: 'list' },
+    { name: 'Material', type: 'list' },
+    { name: 'New', type: 'list' },
+    { name: 'Pattern', type: 'list' },
+    { name: 'Performance Fabric', type: 'list' },
+    { name: 'Price', type: 'list' },
+    { name: 'Sale', type: 'list' },
+    // Swatch filters
+    { name: 'Size', type: 'swatch', attributeType: 'text', index: 0 },
+    { name: 'Color', type: 'swatch', attributeType: 'color', index: 1 }
 ];
 
 
-describe('Filters', () => {
+describe('Categories - Filters', () => {
 
     beforeEach(() => {
-
         cy.visit('/women/tops-women.html');
     })
 
-    listingFilters.forEach((filter) => {
-        it(`Should contain list filters - ${filter}`, () => {
+    allFilters.forEach((filterData) => {
+        it(`Should correctly apply and clear Filter - ${filterData.name}`, () => {
+            if (filterData.type === 'list') {
+                listing.shouldVerifyFilterList(filterData.name);
+            } else if (filterData.type === 'swatch') {
+                listing.shouldVerifyFilterBlocks(filterData.name, filterData.index);
+            }
 
-            listing.shouldVerifyFilterList(filter);
+            listing.shouldBeCollapsible(filterData.name);
 
-            listing.shouldBeCollapsible(filter);
-            listing.shouldFilter();
+            if (filterData.type === 'list') {
+                listing.shouldFilter();
+            } else if (filterData.type === 'swatch') {
+                listing.shouldFilterByAttributes(filterData.attributeType, filterData.index);
+            }
             listing.shouldVerifyFilterValue();
 
             listing.shouldClearFilters();
 
             cy.url()
                 .should('contain', '/women/tops-women.html');
-        })
-    })
-
-    swatchFilters.forEach(({ name, type }, index) => {
-        it(`Should contain block filters - ${name}`, () => {
-
-            listing.shouldVerifyFilterBlocks(name, index);
-
-            listing.shouldBeCollapsible(name);
-            listing.shouldFilterByAttributes(type, index);
-            listing.shouldVerifyFilterValue();
-
-            listing.shouldClearFilters();
-
-            cy.url()
-                .should('contain', '/women/tops-women.html');
-        })
-    })
+        });
+    });
 })

@@ -2,43 +2,52 @@
 
 import { results } from "../../helpers/results";
 import { product } from "../../helpers/product";
+import { routes } from "../../helpers/routes";
 
-let productName: string;
-let ADD_TO_COMPARISION_MESSAGE: string;
 
 let compareTable = ['SKU', 'Description'];
 
+/**
+ * Helper function to add a product to the comparison list and verify the message.
+ * @param productIndex The index of the product on the listing page to add (default is 0).
+ */
+const addProductToCompareAndVerifyMessage = () => {
+    product.getProductName().then(name => {
+        const productName = name.trim();
 
-describe('Product comparision', () => {
+        const ADD_TO_COMPARISION_MESSAGE = `You added product ${productName} to the comparison list.`;
+
+        routes.expect('AddToCompareResult');
+        product.addToWishlistOrCompare('compare');
+        cy.wait('@AddToCompareResult');
+
+        results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
+
+        product.compareProducts();
+    });
+};
+
+
+describe('Categories - Product Comparision', () => {
 
     beforeEach(() => {
-
         cy.clearAllCookies();
-        cy.visit('/women/bottoms-women/pants-women.html');
+        routes.visitAndWait('/women/bottoms-women/pants-women.html', 'ListingPantsPage');
     })
 
     it('Should add to Compare', () => {
+        addProductToCompareAndVerifyMessage();
+        product.compareProducts();
 
-        product.getProductName().then(name => {
-
-            productName = name.trim();
-
-            ADD_TO_COMPARISION_MESSAGE = `You added product ${productName} to the comparison list.`;
-
-            product.addToWishlistOrCompare("compare");
-            results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
-
-            product.compareProducts();
-        });
+        results.shouldVerifyPageTitle('Compare Products');
     })
 
-    it('Should open compare page', () => {
-
-        product.addToWishlistOrCompare("compare");
+    it('Should open Compare Page', () => {
+        addProductToCompareAndVerifyMessage();
 
         cy.visit('/women/bottoms-women/shorts-women.html');
 
-        product.addToWishlistOrCompare("compare");
+        addProductToCompareAndVerifyMessage();
         product.compareProducts();
 
         results.shouldVerifyPageTitle('Compare Products');

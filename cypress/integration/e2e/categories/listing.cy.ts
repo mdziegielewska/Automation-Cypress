@@ -3,11 +3,8 @@
 import { results } from "../../helpers/results";
 import { listing } from "../../helpers/listings";
 import { product } from "../../helpers/product";
+import { routes } from "../../helpers/routes";
 
-
-let productName: string;
-let ADD_TO_CART_MESSAGE: string;
-let ADD_TO_COMPARISION_MESSAGE: string;
 
 const ADD_TO_WISHLIST_MESSAGE = "You must login or register to add items to your wishlist.";
 
@@ -35,46 +32,42 @@ const urls = [
 
 
 urls.forEach(({ name, url, items, isEquipment }) => {
-    describe(`Listing - ${name}`, () => {
+    describe(`Categories - Listing - ${name}`, () => {
 
         beforeEach(() => {
-
             cy.clearAllCookies();
             cy.visit(url);
         })
 
-        it('Should contain listing elements', () => {
-
+        it('Should contain Listing Elements', () => {
             listing.shouldVerifyListingElements();
             listing.shouldVerifyProductsNumber(items);
-
             listing.shouldContainFilterBlock();
             listing.shouldContainAdditionalSidebar();
             listing.shouldChangeLimiter(36);
         })
 
-        it('Product Item should contain elements', () => {
-
+        it('Product Item should contain Elements', () => {
             product.shouldVerifyProductCellElements(isEquipment);
             product.shouldVerifyActionElements();
         })
 
         it('Should add to Cart', () => {
-
             product.getProductName().then(name => {
+                const productName = name.trim();
 
-                productName = name.trim();
+                const ADD_TO_CART_MESSAGE = `You added ${productName} to your shopping cart.`;
 
-                ADD_TO_CART_MESSAGE = `You added ${productName} to your shopping cart.`;
-
-                product.addToCart(isEquipment);
+                product.addToCart('Listing Page', isEquipment);
                 results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
             });
         })
 
         it('Should add to Wishlist', () => {
-
+            routes.expect('AddToWishlistResult');
             product.addToWishlistOrCompare("wishlist");
+            cy.wait('@AddToWishlistResult');
+
             results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
 
             cy.url()
@@ -82,13 +75,15 @@ urls.forEach(({ name, url, items, isEquipment }) => {
         })
 
         it('Should add to Comparision', () => {
-
             product.getProductName().then(name => {
-                productName = name.trim();
+                const productName = name.trim();
 
-                ADD_TO_COMPARISION_MESSAGE = `You added product ${productName} to the comparison list.`;
+                const ADD_TO_COMPARISION_MESSAGE = `You added product ${productName} to the comparison list.`;
 
+                routes.expect('AddToCompareResult');
                 product.addToWishlistOrCompare("compare");
+                cy.wait('@AddToCompareResult');
+
                 results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
             });
         })

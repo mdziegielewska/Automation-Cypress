@@ -35,16 +35,21 @@ class Routes {
      */
     private getRoute(key: string): [string, string] {
         switch (key) {
+            case 'AddToCartResult': return ['POST', '/checkout/cart/add/'];
+            case 'AddToCompareResult': return ['POST', '/catalog/product_compare/add/'];
+            case 'AddToWishlistResult': return ['POST', '/wishlist/index/add/'];
             case 'CartPage': return ['GET', '/checkout/cart/'];
             case 'ChangeQty': return ['POST', '/checkout/sidebar/updateItemQty/'];
             case 'CheckoutPage': return ['GET', '/checkout/'];
             case 'CouponResult': return ['POST', '/checkout/cart/couponPost/'];
+            case 'CompareProductsPage': return ['GET', '/catalog/product_compare/'];
             case 'DeleteResult': return ['POST', '/checkout/cart/delete/'];
             case 'EditPage': return ['GET', '/checkout/cart/configure/'];
             case 'ForgotPasswordPage': return ['GET', '/customer/account/forgotpassword/'];
             case 'HoodiePDP': return ['GET', '/circe-hooded-ice-fleece.html'];
             case 'Limiter': return ['GET', '/women/tops-women.html?product_list_limit='];
             case 'ListingPage': return ['GET', '/women/tops-women/hoodies-and-sweatshirts-women.html'];
+            case 'ListingPantsPage': return ['GET', '/women/bottoms-women/pants-women.html'];
             case 'LoadPage': return ['GET', '/'];
             case 'LogInPage': return ['GET', '/customer/account/login/'];
             case 'LogInResult': return ['POST', '/customer/account/loginPost/'];

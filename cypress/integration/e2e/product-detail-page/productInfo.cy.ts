@@ -65,7 +65,7 @@ describe('PDP - Product Info', () => {
 
     it('Should add to Cart', () => {
 
-        product.addToCartPDP();
+        product.addToCart('PDP');
         results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
     });
 });

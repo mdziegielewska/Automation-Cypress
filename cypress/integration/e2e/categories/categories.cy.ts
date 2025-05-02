@@ -50,15 +50,15 @@ const sale = [
 ];
 
 const categories = [
-    { category: 'What\'s New', url: '/what-is-new.html', widget: whatsNew, grid: 'Luma\'s Latest' },
-    { category: 'Women', url: '/women.html', widget: women, grid: 'Hot Sellers' },
-    { category: 'Men', url: '/men.html', widget: men, grid: 'Hot Sellers' },
-    { category: 'Gear', url: '/gear.html', widget: gear, grid: 'Hot Sellers' },
-    { category: 'Sale', url: '/sale.html', widget: sale, grid: null }
+    { category: 'What\'s New', url: '/what-is-new.html', widget: whatsNew, grid: 'Luma\'s Latest', expectedGridCount: 4 },
+    { category: 'Women', url: '/women.html', widget: women, grid: 'Hot Sellers', expectedGridCount: 4 },
+    { category: 'Men', url: '/men.html', widget: men, grid: 'Hot Sellers', expectedGridCount: 4 },
+    { category: 'Gear', url: '/gear.html', widget: gear, grid: 'Hot Sellers', expectedGridCount: 4 },
+    { category: 'Sale', url: '/sale.html', widget: sale, grid: null, expectedGridCount: 0 }
 ];
 
 
-categories.forEach(({ category, url, widget, grid }) => {
+categories.forEach(({ category, url, widget, grid, expectedGridCount }) => {
     describe(`Categories - ${category}`, () => {
 
         beforeEach(() => {
@@ -66,14 +66,11 @@ categories.forEach(({ category, url, widget, grid }) => {
         })
 
         widget.forEach(({ name, info, url }, index) => {
-            it(`Should contain widget - ${name}`, () => {
-
+            it(`Should show the ${name} Widget`, () => {
                 widgets.shouldVerifyNumberOfElements(LISTING_SELECTORS.widgetBlocks, widget.length);
                 widgets.shouldVerifyWidgetInfo(index, info);
 
-                if (url == null) {
-                    cy.log('No url. Passing...');
-                } else {
+                if (url !== null) {
                     widgets.shouldVerifyUrl(LISTING_SELECTORS.widgetBlocks, index, url);
                 }
             })
@@ -81,16 +78,14 @@ categories.forEach(({ category, url, widget, grid }) => {
 
         if (grid !== null) {
             it('Should show Grid Widget', () => {
-
-                results.shouldVerifyTextInSection(LISTING_SELECTORS.gridBlocks, grid);
+                results.shouldVerifyTextInSection(LISTING_SELECTORS.gridBlocksHeading, grid);
 
                 widgets.getGridWidget().as('products');
-                widgets.shouldVerifyNumberOfElements('@products', 4);
+                widgets.shouldVerifyNumberOfElements('@products', expectedGridCount);
             })
         }
 
-        it('Should contain Sidebar', () => {
-
+        it('Should contain Sidebar Filter and Additional Blocks', () => {
             listing.shouldContainFilterBlock();
             listing.shouldContainAdditionalSidebar();
         })

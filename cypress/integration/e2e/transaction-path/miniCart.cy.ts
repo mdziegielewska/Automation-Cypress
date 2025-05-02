@@ -18,14 +18,12 @@ describe('Transaction path - Mini Cart', () => {
         switch (Cypress.currentTest.title) {
             case 'Should show empty mini cart':
                 cy.visit('/women/tops-women/hoodies-and-sweatshirts-women.html');
-
                 break;
 
             default:
                 cy.visit('/women/tops-women/hoodies-and-sweatshirts-women.html');
 
                 product.getProductName().then(name => {
-
                     productName = name.trim();
 
                     ADD_TO_CART_MESSAGE = `You added ${productName} to your shopping cart.`;
@@ -34,19 +32,16 @@ describe('Transaction path - Mini Cart', () => {
                     product.addToCart();
                     results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
                 })
-
                 break;
         }
     })
 
     it.skip('Should show empty mini cart', () => {
-
         cart.openMiniCart();
         cart.shouldBeEmpty();
     })
 
     it('Should add to Cart and verify its content', () => {
-
         cart.openMiniCart();
 
         cart.verifyItemsCount(1, 'minicart');
@@ -58,7 +53,6 @@ describe('Transaction path - Mini Cart', () => {
     })
 
     it('Should edit item in cart', () => {
-
         cart.editCartItem('minicart');
         cart.updateCartPDP();
 
@@ -66,7 +60,6 @@ describe('Transaction path - Mini Cart', () => {
     })
 
     it('Should delete item from cart', () => {
-
         cart.deleteCartItem('minicart');
         navigation.shouldConfirmModal();
         cart.shouldBeEmpty();
@@ -74,7 +67,6 @@ describe('Transaction path - Mini Cart', () => {
 
 
     it('Should increase quantity of product in cart', () => {
-
         cart.openMiniCart();
         cart.verifyItemsCount(1, 'minicart');
 

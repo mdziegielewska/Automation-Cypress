@@ -9,39 +9,38 @@ const sortType = ['Position', 'Product Name', 'Price'];
 const mode = ['list', 'grid'];
 
 
-describe('Listings - Toolbar', () => {
+describe('Listings - Toolbar Verification', () => {
 
     beforeEach(() => {
-
         cy.visit('/women/tops-women.html');
     })
 
     limiter.forEach((limiter) => {
         it(`Should verify limiter per page - ${limiter} `, () => {
-
-            listing.shouldChangeLimiter(limiter);
-
             routes.expect('Limiter');
+            listing.shouldChangeLimiter(limiter);
+            cy.wait('@Limiter');
+
             listing.shouldVerifyProductsNumber(limiter);
         })
     })
 
     sortType.forEach((sortType) => {
         it(`Should verify sorting options - ${sortType}`, () => {
-
-            listing.shouldSortBy(sortType);
-
             routes.expect('Sorter');
+            listing.shouldSortBy(sortType);
+            cy.wait('@Sorter');
+
             listing.shouldVerifySorting(sortType);
         })
     })
 
     mode.forEach((mode) => {
         it(`Should verify display mode - ${mode}`, () => {
-
-            listing.shouldChangeModes(mode);
-
             routes.expect('Mode');
+            listing.shouldChangeModes(mode);
+            cy.wait('@Mode');
+
             listing.shouldVerifyCurrentMode(mode);
         })
     })

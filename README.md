@@ -42,7 +42,7 @@ This repository contains Cypress automation tests written in TypeScript to autom
     - [x] Related products
 - Transaction path
     - [x] Mini Cart 
-    - [ ] Cart
+    - [x] Cart
     - [ ] Checkout
 - My Account
     - [ ] Orders

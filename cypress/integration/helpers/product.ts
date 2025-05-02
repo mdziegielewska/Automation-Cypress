@@ -1,6 +1,7 @@
 /// <reference types="cypress"/>
 
 import { PRODUCT_SELECTORS } from "../selectors/selectors";
+import { routes } from "./routes";
 
 
 const productCells = {
@@ -46,10 +47,22 @@ const infoElements = [
 
 class Product {
 
+    /**
+     * Retrieves the first product item element on a listing page.
+     * @returns A Cypress chainable yielding the first product item element.
+     */
     private getItem() {
-        return cy.get(PRODUCT_SELECTORS.productItemDetails).first();
+        return cy.get(PRODUCT_SELECTORS.productItemDetails)
+            .first();
     }
 
+    /**
+     * Hovers over a product item to reveal hidden action links (Wishlist, Compare, etc.).
+     * Assumes the hover effect is triggered by mouseover and reveals elements
+     * within the hovered item.
+     * @param itemElement The Cypress chainable representing the product item element to hover.
+     * @returns A Cypress chainable yielding the hovered item element (aliased as '@item').
+     */
     private hoverItem() {
         return this.getItem()
             .should('be.visible')
@@ -58,30 +71,45 @@ class Product {
             .as('item');
     }
 
+    /**
+     * Retrieves a specific swatch attribute block (e.g., Size, Color) within a product item.
+     * @param attribute The name or type of the swatch attribute (e.g., 'size', 'color').
+     * @returns A Cypress chainable yielding the swatch attribute element.
+     */
     private getAttribute(attribute: string) {
         return this.getItem()
-            .find(`.swatch-attribute.${attribute}`);
+            .find(PRODUCT_SELECTORS.swatchAttribute(attribute));
     }
 
+    /**
+     * Selects an option (swatch or dropdown) for a specific product attribute.
+     * @param attribute The name or type of the attribute to select an option for (e.g., 'size', 'color').
+     * @param value Optional. The specific value of the option to select.
+     */
     private selectOption(attribute: string, value?: string) {
-        cy.log(`selecting ${attribute}`);
+        cy.log(`Selecting ${attribute}`);
 
         this.getAttribute(attribute).as('attribute');
 
         if (value) {
             cy.get('@attribute')
-                .find('[role="option"]')
+                .find(PRODUCT_SELECTORS.swatchOptionRole)
                 .contains(value)
                 .click();
         } else {
             cy.get('@attribute')
-                .find('.swatch-option')
+                .find(PRODUCT_SELECTORS.swatchOption)
                 .not('.disabled')
                 .eq(1)
                 .click();
         }
     }
 
+    /**
+     * Retrieves the product name of the first product item on a listing page.
+     * NOTE: This method *always* gets the name of the first item.
+     * @returns A Cypress chainable yielding the text content of the product name.
+     */
     getProductName() {
         return this.getItem()
             .should('be.visible')
@@ -89,45 +117,68 @@ class Product {
             .invoke('text');
     }
 
+    /**
+     * Retrieves the product price element of the first product item on a listing page.
+     * NOTE: This method *always* gets the price of the first item.
+     * @returns A Cypress chainable yielding the product price element.
+     */
     getPrice() {
         return this.getItem()
             .find(PRODUCT_SELECTORS.productPrice);
     }
 
+    /**
+     * Retrieves the related products block.
+     * @returns A Cypress chainable yielding the product item elements within the related products block.
+     */
     getRelated() {
-        return cy.get('.products-related')
-            .find('.product-item-info');
+        return cy.get(PRODUCT_SELECTORS.relatedProductsWrapper)
+            .find(PRODUCT_SELECTORS.productItemDetails);
     }
 
+    /**
+     * Clicks on a specific tab (e.g., Description, Details, Reviews, More Information)
+     * within the product details section on a PDP.
+     * @param name The text content of the tab to click.
+     * @returns A Cypress chainable yielding the clicked tab element.
+     */
     getTab(name: string) {
         return cy.get(PRODUCT_SELECTORS.productDetails).within(() => {
-            cy.contains(name).click();
+            cy.contains(name)
+                .click();
         });
     }
 
+    /**
+     * Verifies the visibility of core elements expected within a product listing item cell.
+     * Uses a predefined list of selectors based on product type (cloth or equipment).
+     * @param isEquipment Boolean indicating if verifying an equipment product cell (affects which selectors are used).
+     */
     shouldVerifyProductCellElements(isEquipment: boolean) {
         const cells = isEquipment ? productCells.equipment : productCells.cloth;
 
         cells.forEach(({ name, locator }) => {
-
-            cy.log(`verifying product info element: ${name}`);
-            cy.get(locator).should('be.visible');
+            cy.log(`Verifying Product Info Element: ${name}`);
+            cy.get(locator)
+                .should('be.visible');
         });
     }
 
+    /**
+     * Verifies key product information displayed in the main info block on a PDP.
+     * Uses a predefined list of verifications including visibility, text content, and length checks.
+     */
     shouldDisplayProductInfo() {
         infoElements.forEach(({ name, locator, mustNotBeEmpty, mustContainText }) => {
-            cy.log(`verifying element - ${name}`);
+            cy.log(`Verifying Display Info of an Element: ${name}`);
 
             cy.get(PRODUCT_SELECTORS.productInfoMain)
                 .find(locator)
                 .should('be.visible')
                 .then(($el) => {
-
                     if (mustNotBeEmpty) {
                         expect($el.text().trim().length).to.be.greaterThan(0);
                     }
-
                     if (mustContainText) {
                         expect($el.text()).to.include(mustContainText);
                     }
@@ -135,128 +186,186 @@ class Product {
         });
     }
 
+    /**
+     * Verifies that the action elements (Wishlist, Compare) are visible on a product item after hovering.
+     * Requires hovering over the product item to reveal the links.
+     */
     shouldVerifyActionElements() {
         this.hoverItem();
 
         actionElements.forEach(({ name, locator }) => {
-            cy.log(`verifying hidden action: ${name}`);
+            cy.log(`Verifying hidden action: ${name}`);
 
             cy.get('@item')
-                .find('.actions-secondary')
+                .find(PRODUCT_SELECTORS.actionsSecondary)
                 .find(locator)
                 .first()
                 .should('exist');
         });
     }
 
+    /**
+     * Verifies the visibility of main sections/blocks on a Product Detail Page (PDP).
+     * Uses a predefined list of selectors for main PDP elements.
+     */
     shouldVerifyMainPDPElements() {
         for (const pdpElement of pdpElements) {
-            cy.log(`verifying visibility of ${pdpElement.name}`)
+            cy.log(`Verifying visibility of ${pdpElement.name}`)
 
             cy.get(pdpElement.locator)
                 .should('be.visible');
         }
     }
 
+    /**
+     * Clicks through a list of tabs within the product details section on a PDP
+     * and verifies that the content panel associated with each clicked tab becomes visible.
+     * @param tabs An array of objects with 'name' (tab text) and 'locator' (selector for the tab's content panel).
+     */
     shouldVerifyTabSwitching(tabs: { name: string; locator: string; }[]) {
         tabs.forEach(({ name, locator }) => {
+            cy.log(`Switching to Tab: ${name}`);
 
-            cy.log(`switching to tab: ${name}`);
             this.getTab(name);
-            cy.get(locator).should('be.visible');
+            cy.get(locator)
+                .should('be.visible');
         });
     }
 
+    /**
+     * Verifies the presence and visibility of specific sections within the "More Information" tab content.
+     * Requires clicking the "More Information" tab first.
+     */
     shouldVerifyMoreInformationSections() {
         const expectedSections = ['Style', 'Material', 'Pattern', 'Climate'];
 
         this.getTab('More Information');
         expectedSections.forEach(section => {
+            cy.log(`Verifying section: ${section}`);
 
-            cy.log(`verifying section: ${section}`);
-            cy.get(PRODUCT_SELECTORS.additionalInfoSection).contains('th', section).should('be.visible');
+            cy.get(PRODUCT_SELECTORS.additionalInfoSection)
+                .contains('th', section)
+                .should('be.visible');
         });
     }
 
+    /**
+     * Verifies that the description text content within the "Details" tab is not empty.
+     * Requires clicking the "Details" tab first.
+     */
     shouldDisplayDetailsSectionText() {
-        cy.log('verifying description text in Details tab');
+        cy.log('Verifying Description Text in Details Tab');
 
         this.getTab('Details');
         cy.get(PRODUCT_SELECTORS.descriptionText)
             .should('not.be.empty')
             .and($el => {
-
                 expect($el.text().trim().length).to.be.greaterThan(10);
             });
     }
 
+    /**
+     * Selects an option for the 'Size' attribute.
+     * @param value Optional. The specific size value to select. If not provided, selects the second available option.
+     */
     selectSize(value?: string) {
-        cy.log(`selecting ${value}`);
+        cy.log(`Selecting ${value}`);
 
         this.selectOption('size', value);
     }
 
+    /**
+     * Selects an option for the 'Color' attribute.
+     * @param value Optional. The specific color value to select. If not provided, selects the second available option.
+     */
     selectColor(value?: string) {
-        cy.log(`selecting ${value}`);
+        cy.log(`Selecting ${value}`);
 
         this.selectOption('color', value);
     }
 
-    addToCart(isEquipment: boolean = false) {
-        cy.log('adding product to cart');
+    /**
+     * Adds the current product (from a listing page or PDP) to the cart.
+     * Requires selecting size and color options if the product is not equipment.
+     * If adding from a listing page, requires hovering to reveal the add to cart button.
+     * @param isEquipment Boolean indicating if the product is equipment (skips size/color selection).
+     * @param itemElement Optional. The product item element if adding from a listing page.
+     * If not provided, assumes adding from a PDP or that hoverItem works on the current subject.
+     */
+    addToCart(type: 'PDP' | 'Listing Page', isEquipment: boolean = false) {
+        cy.log(`Adding to Cart from ${type}`);
 
-        if (!isEquipment) {
-            this.selectSize();
-            this.selectColor();
+        switch(type) {
+            case 'PDP':
+                if (!isEquipment) {
+                    this.selectSize();
+                    this.selectColor();
+                }
+        
+                cy.get(PRODUCT_SELECTORS.addToCartButtonPDP)
+                    .should('be.visible')
+                    .click();
+                break;
+            
+            case 'Listing Page':
+                if (!isEquipment) {
+                    this.selectSize();
+                    this.selectColor();
+                }
+        
+                this.hoverItem();
+                cy.get('@item')
+                    .find(PRODUCT_SELECTORS.addToCart)
+                    .click({ force: true });
+                break;
+            
+            default:
+                throw Error(`Unknown page type: ${type}`);
         }
-
-        this.hoverItem();
-        cy.get('@item')
-            .find(PRODUCT_SELECTORS.addToCart)
-            .click({ force: true });
     }
 
-    addToCartPDP(isEquipment: boolean = false) {
-        cy.log('adding to cart on PDP');
-
-        if (!isEquipment) {
-            this.selectSize();
-            this.selectColor();
-        }
-
-        cy.get(PRODUCT_SELECTORS.addToCartButtonPDP)
-            .should('be.visible')
-            .click();
-    }
-
+    /**
+     * Adds the current product to the Wishlist or Comparison list.
+     * Assumes this is done from a listing page and requires hovering to reveal the links.
+     * @param type The action type ('wishlist' or 'compare').
+     * @param itemElement Optional. The product item element if performing action from a listing page.
+     * If not provided, assumes hoverItem works on the current subject (less common).
+     */
     addToWishlistOrCompare(type: 'wishlist' | 'compare') {
-        cy.log(`adding product to ${type}`);
+        cy.log(`Adding Product to ${type}`);
 
         this.hoverItem();
-
         cy.get('@item')
-            .find('[data-role="add-to-links"]')
-            .find(`a.action.to${type}`)
-            .first()
+            .find(PRODUCT_SELECTORS.actionButton(type))
             .click({ force: true });
     }
 
+    /**
+     * Retrieves the product comparison table element on the compare page.
+     * @returns A Cypress chainable yielding the product comparison table element.
+     */
     getCompareTable() {
-        cy.log('getting compare table');
+        cy.log('Getting Compare Table');
 
-        return cy.get(PRODUCT_SELECTORS.productComparisonTable).should('be.visible');
+        return cy.get(PRODUCT_SELECTORS.productComparisonTable)
+            .should('be.visible');
     }
 
+    /**
+     * Navigates to the product comparison page by clicking the comparison link.
+     * Expects the 'CompareProductsPage' route to be triggered upon navigation.
+     */
     compareProducts() {
-        cy.log('comparing products');
+        cy.log('Comparing Products');
 
         cy.get(PRODUCT_SELECTORS.compareLink)
             .click();
 
-        cy.url().should('contain', '/catalog/product_compare/');
+        routes.expect('CompareProductsPage'); 
+        cy.url()
+            .should('contain', '/catalog/product_compare/');
+        cy.wait('@CompareProductsPage');
     }
-
-    clickThumbnail
 }
 
 export const product = new Product(); 
