@@ -145,7 +145,7 @@ export const CART_SELECTORS = {
     miniCartToggle: '[data-block="minicart"] .showcart',
     miniCartWrapper: '#minicart-content-wrapper',
     priceWrapper: '.amount .price-wrapper',
-    proceedToCheckoutButton: '.checkout-methods-items [data-role="proceed-to-checkout"]',
+    proceedToCheckoutButton: '.checkout-methods-items li button[data-role="proceed-to-checkout"]',
     productCartOptions: '.item-options',
     productDetails: '.product-item-details',
     productImage: '.product-image-photo',

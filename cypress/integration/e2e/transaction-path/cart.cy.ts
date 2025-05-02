@@ -28,90 +28,86 @@ const addDefaultProductAndGoToCart = () => {
     });
 };
 
+const couponList = [
+    { couponCode: 'test123', type: 'invalid' },
+    { couponCode: 'h20', type: 'valid' },
+]
 
-describe('Transaction path - Cart', () => {
 
+describe('Transaction Path - Cart', () => {
     it('Should display all Cart item elements', () => {
-        addDefaultProductAndGoToCart();
+            addDefaultProductAndGoToCart();
 
-        results.shouldVerifyPageTitle('Shopping Cart');
-        cart.verifyProductDetailsInCart();
-    });
+            results.shouldVerifyPageTitle('Shopping Cart');
+            cart.verifyProductDetailsInCart();
+        });
 
-    it('Should redirect to Product Page after clicking thumbnail', () => {
-        addDefaultProductAndGoToCart();
-
-        cart.redirectToPDP('/circe-hooded-ice-fleece.html');
-        routes.expect('HoodiePDP');
-    });
-
-    it('Should edit Product from cart', () => {
-        addDefaultProductAndGoToCart();
-
-        cart.editCartItem('cart');
-        cart.updateCartPDP();
-
-        results.shouldVerifyPageMessage(UPDATE_MESSAGE);
-    });
-
-    it('Should delete Product from cart', () => {
-        addDefaultProductAndGoToCart();
-
-        cart.deleteCartItem('cart');
-        cart.shouldBeEmpty();
-    });
-
-    it('Should increase Product Quantity', () => {
-        addDefaultProductAndGoToCart();
-
-        cart.verifyItemsCount(1, 'cart');
-        cart.changeCartItemQuantity(2, 'cart');
-        cart.verifyItemsCount(2, 'cart');
-    });
-
-    it('Should apply invalid code', () => {
-        addDefaultProductAndGoToCart();
+    describe('Cart Actions Verification', () => {
         
-        const invalidCoupon = 'test123';
-        const INVALID_COUPON_MESSAGE = `The coupon code "${invalidCoupon}" is not valid.`;
+        beforeEach(() => {
+            addDefaultProductAndGoToCart();
+        })
 
-        cart.openCouponSection();
-        cart.applyCoupon(invalidCoupon);
-        results.shouldVerifyPageMessage(INVALID_COUPON_MESSAGE);
-    });
+        it('Should redirect to Product Page after clicking thumbnail', () => {
+            cart.redirectToPDP('/circe-hooded-ice-fleece.html');
+            routes.expect('HoodiePDP');
+        });
 
-    it('Should apply valid code', () => {
-        routes.visitAndExpect('/affirm-water-bottle.html', 'WaterBottlePDP');
+        it('Should edit Product from cart', () => {
+            cart.editCartItem('cart');
+            cart.updateCartPDP();
+    
+            results.shouldVerifyPageMessage(UPDATE_MESSAGE);
+        });
+    
+        it('Should delete Product from cart', () => {
+            cart.deleteCartItem('cart');
+            cart.shouldBeEmpty();
+        });
+    
+        it('Should increase Product Quantity', () => {
+            cart.verifyItemsCount(1, 'cart');
+            cart.changeCartItemQuantity(2, 'cart');
+            cart.verifyItemsCount(2, 'cart');
+        });
 
-        product.addToCartPDP(true);
+        it('Should test Estimate Shipping and Tax section', () => {
+            cart.openTaxSection();
+            cart.fillTaxSection('Poland', 'pomorskie', '12-345');
+            cart.verifyingShippingRates();
+        });
 
-        ADD_TO_CART_MESSAGE = 'You added Affirm Water Bottle  to your shopping cart.';
-        results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
+        it('Should proceed to Checkout', () => {
+            cart.shouldClickCheckoutButton('cart');
+    
+            cy.url()
+                .should('include', '/checkout/#shipping');
+        });
+    })
 
-        routes.visitAndExpect('/checkout/cart/', 'CartPage');
+    describe('Coupon Section Verification', () => {
+    
+        beforeEach(() => {
+            routes.visitAndExpect('/affirm-water-bottle.html', 'WaterBottlePDP');
+    
+            product.addToCartPDP(true);
+    
+            ADD_TO_CART_MESSAGE = 'You added Affirm Water Bottle  to your shopping cart.';
+            results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
+    
+            routes.visitAndExpect('/checkout/cart/', 'CartPage');
+        })
 
-        const validCoupon = 'h20';
-        const VALID_COUPON_MESSAGE = `You used coupon code "${validCoupon}".`;;
+        couponList.forEach(({couponCode, type})  => {
+            it(`Should apply ${type} Code`, () => {
+                const COUPON_MESSAGE = (type === 'invalid')
+                    ? `The coupon code "${couponCode}" is not valid.`
+                    : `You used coupon code "${couponCode}".`; 
 
-        cart.openCouponSection();
-        cart.applyCoupon(validCoupon);
-        results.shouldVerifyPageMessage(VALID_COUPON_MESSAGE);
-    });
-
-    it('Should test Estimate Shipping and Tax section', () => {
-        addDefaultProductAndGoToCart();
-
-        cart.openTaxSection();
-        cart.fillTaxSection('Poland', 'pomorskie', '12-345');
-        cart.verifyingShippingRates();
-    });
-
-    it('Should proceed to Checkout', () => {
-        addDefaultProductAndGoToCart();
-
-        cart.shouldClickCheckoutButton('cart');
-
-        cy.url()
-            .should('include', '/checkout/#shipping');
-    });
+                cart.openCouponSection();
+                cart.applyCoupon(couponCode);
+                results.shouldVerifyPageMessage(COUPON_MESSAGE);
+            })
+        })
+    })
 });

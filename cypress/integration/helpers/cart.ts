@@ -293,7 +293,7 @@ class Cart {
 
             case 'cart':
                 cy.get(CART_SELECTORS.proceedToCheckoutButton)
-                    .should('contain', 'Proceed to Checkout')
+                    .should('have.attr', 'title', 'Proceed to Checkout')
                     .click();
                 break;
 
