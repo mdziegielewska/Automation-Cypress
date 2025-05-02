@@ -202,7 +202,7 @@ class Product {
         this.selectOption('color', value);
     }
 
-    addToCart(isEquipment: boolean) {
+    addToCart(isEquipment: boolean = false) {
         cy.log('adding product to cart');
 
         if (!isEquipment) {
@@ -216,11 +216,13 @@ class Product {
             .click({ force: true });
     }
 
-    addToCartPDP() {
+    addToCartPDP(isEquipment: boolean = false) {
         cy.log('adding to cart on PDP');
 
-        this.selectSize();
-        this.selectColor();
+        if (!isEquipment) {
+            this.selectSize();
+            this.selectColor();
+        }
 
         cy.get(PRODUCT_SELECTORS.addToCartButtonPDP)
             .should('be.visible')
@@ -253,6 +255,8 @@ class Product {
 
         cy.url().should('contain', '/catalog/product_compare/');
     }
+
+    clickThumbnail
 }
 
 export const product = new Product(); 

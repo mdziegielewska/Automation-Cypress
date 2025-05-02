@@ -31,7 +31,7 @@ describe('Transaction path - Mini Cart', () => {
                     ADD_TO_CART_MESSAGE = `You added ${productName} to your shopping cart.`;
                     UPDATE_MESSAGE = `${productName} was updated in your shopping cart.`;
 
-                    product.addToCart(false);
+                    product.addToCart();
                     results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
                 })
 
@@ -49,15 +49,18 @@ describe('Transaction path - Mini Cart', () => {
 
         cart.openMiniCart();
 
-        cart.verifyItemsCount(1);
+        cart.verifyItemsCount(1, 'minicart');
         cart.verifyProductDetailsInMiniCart(productName);
-        cart.shouldShowCheckoutButton();
+        cart.shouldClickCheckoutButton('minicart');
+
+        cy.url()
+            .should('include', '/checkout/#shipping');
     })
 
     it('Should edit item in cart', () => {
 
         cart.editCartItem('minicart');
-        cart.updateCart();
+        cart.updateCartPDP();
 
         results.shouldVerifyPageMessage(UPDATE_MESSAGE);
     })
@@ -73,10 +76,10 @@ describe('Transaction path - Mini Cart', () => {
     it('Should increase quantity of product in cart', () => {
 
         cart.openMiniCart();
-        cart.verifyItemsCount(1);
+        cart.verifyItemsCount(1, 'minicart');
 
-        cart.changeCartItemQuantity(2);
+        cart.changeCartItemQuantity(2, 'minicart');
 
-        cart.verifyItemsCount(2);
+        cart.verifyItemsCount(2, 'minicart');
     });
 })

@@ -40,7 +40,7 @@ describe('Main page - Hot Sellers', () => {
         product.selectSize('M');
         product.selectColor('Purple');
 
-        product.addToCart(false);
+        product.addToCart();
         results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
     })
 
