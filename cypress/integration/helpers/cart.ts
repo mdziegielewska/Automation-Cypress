@@ -26,7 +26,7 @@ class Cart {
      * Opens the mini cart.
      */
     openMiniCart(): void {
-        cy.log('Opening mini cart');
+        cy.log('Opening Mini Cart');
 
         cy.get(CART_SELECTORS.miniCartToggle)
             .click()
@@ -37,7 +37,7 @@ class Cart {
      * Closes the mini cart.
      */
     closeMiniCart(): void {
-        cy.log('Closing mini cart');
+        cy.log('Closing Mini Cart');
 
         cy.get(CART_SELECTORS.closeMiniCartButton)
             .click();
@@ -50,7 +50,7 @@ class Cart {
      * Verifies if the cart (mini cart) is empty.
      */
     shouldBeEmpty(): void {
-        cy.log('Verifying if cart is empty');
+        cy.log('Verifying if the Cart is empty');
 
         cy.get(CART_SELECTORS.miniCartWrapper)
             .should('contain.text', 'You have no items in your shopping cart.');
@@ -61,11 +61,11 @@ class Cart {
     * @param count The expected number of items.
     * @param type The type of cart ('minicart' or 'cart').
     */
-    verifyItemsCount(count: number, type: 'minicart' | 'cart'): void {
-        cy.log(`Verifying items count - ${type}`);
+    verifyItemsCount(count: number, type: 'Mini Cart' | 'Cart'): void {
+        cy.log(`Verifying if ${type} has ${count} Items`);
 
         switch (type) {
-            case 'minicart':
+            case 'Mini Cart':
                 cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
                     cy.get(CART_SELECTORS.itemsTotal)
                         .should('contain', count.toString());
@@ -75,7 +75,7 @@ class Cart {
                 });
                 break;
 
-            case 'cart':
+            case 'Cart':
                 cy.get(CART_SELECTORS.itemsTotal)
                     .should('contain', count.toString());
 
@@ -93,7 +93,7 @@ class Cart {
      * @param productName The name of the product to verify.
      */
     verifyProductDetailsInMiniCart(productName: string): void {
-        cy.log(`Verifying product details - ${productName}`);
+        cy.log(`Verifying Product Details for ${productName} in Mini Cart`);
 
         cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
             cy.get(CART_SELECTORS.productDetails).within(() => {
@@ -127,7 +127,7 @@ class Cart {
     verifyProductDetailsInCart(): void {
         cy.get(CART_SELECTORS.cartItem).within(() => {
             cartItemElements.forEach(({ name, selector }) => {
-                cy.log(`Verifying product detail in cart - ${name}`);
+                cy.log(`Verifying Product Details for ${name} in Cart`);
 
                 cy.get(selector)
                     .should('be.visible');
@@ -147,7 +147,7 @@ class Cart {
      * @param url The expected substring that should be present in the URL after redirection.
      */
     redirectToPDP(url: string): void {
-        cy.log('Redirecting to the product PDP');
+        cy.log(`Redirecting to the product PDP for Url ${url}`);
 
         cy.get(CART_SELECTORS.productImage)
             .first()
@@ -161,11 +161,11 @@ class Cart {
      * Clicks the edit button for a cart item in either the mini cart or main cart.
      * @param type The type of cart ('minicart' or 'cart').
      */
-    editCartItem(type: 'minicart' | 'cart'): void {
-        cy.log(`Editing cart item - ${type}`);
+    editCartItem(type: 'Mini Cart' | 'Cart'): void {
+        cy.log(`Editing Item in ${type}`);
 
         switch (type) {
-            case 'minicart':
+            case 'Mini Cart':
                 this.openMiniCart();
                 cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
                     cy.get(CART_SELECTORS.editButton)
@@ -174,7 +174,7 @@ class Cart {
                 });
                 break;
 
-            case 'cart':
+            case 'Cart':
                 cy.get(CART_SELECTORS.editButtonCart)
                     .click();
                 break;
@@ -214,11 +214,11 @@ class Cart {
      * Deletes a cart item from either the mini cart or main cart.
      * @param type The type of cart ('minicart' or 'cart').
      */
-    deleteCartItem(type: 'minicart' | 'cart'): void {
+    deleteCartItem(type: 'Mini Cart' | 'Cart'): void {
         cy.log(`Deleting cart item - ${type}`);
 
         switch (type) {
-            case 'minicart':
+            case 'Mini Cart':
                 this.openMiniCart();
                 cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
                     cy.get(CART_SELECTORS.deleteButton)
@@ -226,7 +226,7 @@ class Cart {
                 });
                 break;
 
-            case 'cart':
+            case 'Cart':
                 cy.get(CART_SELECTORS.deleteButtonCart)
                     .click();
                 break;
@@ -243,11 +243,11 @@ class Cart {
      * @param quantity The new quantity for the item.
      * @param type The type of cart ('minicart' or 'cart').
      */
-    changeCartItemQuantity(quantity: number, type: 'minicart' | 'cart'): void {
+    changeCartItemQuantity(quantity: number, type: 'Mini Cart' | 'Cart'): void {
         cy.log(`Changing cart item quantity to ${quantity} - ${type}`);
 
         switch (type) {
-            case 'minicart':
+            case 'Mini Cart':
                 cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
                     cy.get(CART_SELECTORS.qtyInput)
                         .clear()
@@ -259,7 +259,7 @@ class Cart {
                 });
                 break;
 
-            case 'cart':
+            case 'Cart':
                 cy.get(CART_SELECTORS.qtyInputCart)
                     .clear()
                     .type(quantity.toString())
@@ -279,11 +279,11 @@ class Cart {
     /**
      * Verifies the "Proceed to Checkout" button is visible and clicks it.
      */
-    shouldClickCheckoutButton(type: 'minicart' | 'cart'): void {
+    shouldClickCheckoutButton(type: 'Mini Cart' | 'Cart'): void {
         cy.log(`Verifying Proceed to Checkout button - ${type}`);
 
         switch (type) {
-            case 'minicart':
+            case 'Mini Cart':
                 cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
                     cy.get(CART_SELECTORS.checkoutButton)
                         .should('contain', 'Proceed to Checkout')
@@ -291,7 +291,7 @@ class Cart {
                 });
                 break;
 
-            case 'cart':
+            case 'Cart':
                 cy.get(CART_SELECTORS.proceedToCheckoutButton)
                     .should('have.attr', 'title', 'Proceed to Checkout')
                     .click();

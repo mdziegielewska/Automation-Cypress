@@ -1,6 +1,7 @@
 /// <reference types="cypress"/>
 
 import { navigation } from '../../helpers/navigation';
+import { routes } from '../../helpers/routes';
 
 
 const menu = [
@@ -26,25 +27,21 @@ const actionLinks = [
 describe('Main Page - Menu', () => {
 
     beforeEach(() => {
-
-        cy.visit('/');
+        cy.clearAllCookies();
+        routes.visitAndWait('LoadPage');
     })
 
     menu.forEach(({ tab, url, submenu }) => {
         it(`Should contain ${tab} in Menu`, () => {
-
             navigation.shouldContainTab(tab);
 
             if (submenu != null) {
-
                 navigation.shouldBeExpandable(tab);
-
                 submenu.forEach(subtab => {
                     const subSubMenuData = subMenu.find(item => item.tab === subtab)?.submenu;
 
                     if (subSubMenuData) {
                         navigation.shouldBeExpandable(subtab);
-
                         subSubMenuData.forEach(subsubmenu => {
                             navigation.shouldContainSubtabLevel2(tab, subtab, subsubmenu);
                         })
@@ -58,10 +55,11 @@ describe('Main Page - Menu', () => {
         })
     })
 
-    actionLinks.forEach(({ action, url }) => {
-        it(`Should redirect to navigation link - ${action}`, () => {
-
-            navigation.shouldVerifyNavigationLinks(action, url);
+    describe('Navigation Links Verification', () => {
+        actionLinks.forEach(({ action, url }) => {
+            it(`Should redirect to Navigation Link - ${action}`, () => {
+                navigation.shouldVerifyNavigationLinks(action, url);
+            })
         })
     })
 })

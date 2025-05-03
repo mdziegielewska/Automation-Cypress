@@ -7,7 +7,7 @@ class Routes {
      * @param key The key for the route as defined in the getRoute method.
      */
     expect(key: string): void {
-        cy.log('expecting route');
+        cy.log('Expecting route');
 
         const [method, pattern] = this.getRoute(key);
 
@@ -16,14 +16,20 @@ class Routes {
 
     /**
      * Visits a specific URL and then waits for a previously expected route to complete.
-     * @param url The URL path to visit.
+     * @param url The URL path to visit (Optional).
      * @param routeKey The key for the route that was set up with `routes.expect()` and should be waited for.
      */
-    visitAndWait(url: string, routeKey: string): void {
-        cy.log(`Visiting ${url} and waiting for route: ${routeKey}`);
+    visitAndWait(routeKey: string, url?: string): void {
+        cy.log(`Visiting and waiting for route: ${routeKey}`);
 
         this.expect(routeKey);
-        cy.visit(url);
+        
+        if(url) {
+            cy.visit(url);
+        } else {
+            cy.visit(this.getRoute(routeKey)[1]);
+        }
+
         cy.wait(`@${routeKey}`);
     }
 
@@ -38,11 +44,13 @@ class Routes {
             case 'AddToCartResult': return ['POST', '/checkout/cart/add/'];
             case 'AddToCompareResult': return ['POST', '/catalog/product_compare/add/'];
             case 'AddToWishlistResult': return ['POST', '/wishlist/index/add/'];
+            case 'AdvancedSearchPage': return ['GET', '/catalogsearch/advanced/'];
+            case 'AdvancedSearchResult': return ['GET', '/catalogsearch/advanced/result/'];
             case 'CartPage': return ['GET', '/checkout/cart/'];
             case 'ChangeQty': return ['POST', '/checkout/sidebar/updateItemQty/'];
             case 'CheckoutPage': return ['GET', '/checkout/'];
-            case 'CouponResult': return ['POST', '/checkout/cart/couponPost/'];
             case 'CompareProductsPage': return ['GET', '/catalog/product_compare/'];
+            case 'CouponResult': return ['POST', '/checkout/cart/couponPost/'];
             case 'DeleteResult': return ['POST', '/checkout/cart/delete/'];
             case 'EditPage': return ['GET', '/checkout/cart/configure/'];
             case 'ForgotPasswordPage': return ['GET', '/customer/account/forgotpassword/'];
@@ -55,8 +63,12 @@ class Routes {
             case 'LogInResult': return ['POST', '/customer/account/loginPost/'];
             case 'LogOut': return ['POST', '/customer/account/logout/'];
             case 'Mode': return ['GET', '/women/tops-women.html?product_list_mode='];
+            case 'OrdersReturnsPage': return ['GET', '/sales/guest/form/'];
+            case 'OrdersReturnsResult': return ['GET', '/sales/guest/view/'];
+            case 'PrivacyPolicyPage': return ['GET', '/privacy-policy-cookie-restriction-mode'];
             case 'ResetPasswordResult': return ['POST', '/customer/account/forgotpasswordpost/'];
             case 'SearchResult': return ['GET', '/catalogsearch/result/'];
+            case 'SearchTerms': return ['GET', '/search/term/popular/'];
             case 'SignUpPage': return ['GET', '/customer/account/create/'];
             case 'SignUpResult': return ['POST', '/customer/account/createpost/'];
             case 'Sorter': return ['GET', '/women/tops-women.html?product_list_order='];
@@ -74,7 +86,7 @@ class Routes {
      * @param body The request body (if applicable).
      */
     sendRequest(url: string, method: string, body: string): void {
-        cy.log('sending request');
+        cy.log('Sending request');
 
         cy.request({
             method: method,

@@ -12,6 +12,9 @@ export const AUTHORIZATION_SELECTORS = {
 
 
 export const NAVIGATION_SELECTORS = {
+    billingLastnameField: 'oar-billing-lastname', 
+    confirmButton: '.modal-inner-wrap button',
+    emailField: 'oar_email', 
     expandableIcon: (tab: string) => `${NAVIGATION_SELECTORS.tab(tab)} span.ui-menu-icon`,
     footerLinks: 'ul.footer.links a',
     footerPanel: '.footer.links li',
@@ -19,6 +22,7 @@ export const NAVIGATION_SELECTORS = {
     menuItem: '[role="menuitem"]',
     navigationMenu: '[class="navigation"]',
     navPanel: (nav: string) => nav, 
+    orderIdField: 'oar-order-id',
     pageTitleHeading: '#page-title-heading',
     privacyPolicyContent: '.privacy-policy-content',
     privacyPolicyNavPanel: '#privacy-policy-nav-content',
@@ -27,7 +31,7 @@ export const NAVIGATION_SELECTORS = {
     title: '.page-title',
     welcomeUserTab: '.customer-welcome .customer-name'
 };
-
+ 
 
 export const SEARCH_SELECTORS = {
     autocomplete: '#search_autocomplete',
@@ -84,6 +88,7 @@ export const PRODUCT_SELECTORS = {
     additionalTab: '#additional',
     addToCart: '.action.tocart',
     addToCartButtonPDP: '#product-addtocart-button',
+    addReviewButton: '.reviews-actions .add',
     arrow: (direction: 'prev' | 'next') => `.fotorama__arr--${direction}`,
     compareLink: '.actions-toolbar a.action.compare',
     descriptionTab: '#description',
@@ -107,6 +112,8 @@ export const PRODUCT_SELECTORS = {
     productSku: '.product.attribute.sku .value',
     productStock: '.stock',
     productTitle: '.product-item-name',
+    ratingLabel: (rating: number) => `label#Rating_${rating}_label`,
+    ratingSummary: '.rating-summary',
     relatedProductsBlock: '.block.related',
     relatedProductsWrapper: '.products-related',
     reviewField: '#review_field',
@@ -114,16 +121,15 @@ export const PRODUCT_SELECTORS = {
     reviewsSummary: '.product-reviews-summary',
     reviewsTab: '#reviews',
     reviewsTabActive: '.product.data.items .title.active',
-    ratingSummary: '.rating-summary',
     submitButton: 'button.submit',
     successMessage: '.message-success',
     summaryField: '#summary_field',
     swatchAttribute: (attribute: string) => `.swatch-attribute.${attribute}`,
     swatchOption: '.swatch-option',
-    swatchOptionRole: '[role="option"]',
+    swatchOptionByLabel: (label: string) => `[role="option"][aria-label="${label}"]`,
     thumbnail: '.fotorama__thumb',
     viewReviewCount: '.reviews-actions a.view [itemprop="reviewCount"]'
-}
+};
 
 
 export const RESULTS_SELECTORS = {

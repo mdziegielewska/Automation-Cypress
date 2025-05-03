@@ -21,7 +21,6 @@ class Results {
 
     /**
      * Verifies that a specific section of the page contains a certain text substring.
-     * Useful for checking titles, headings, or other static text within a defined section.
      * @param locator The CSS selector for the section element to verify.
      * @param text The expected substring of text content within the section.
      */
@@ -33,7 +32,6 @@ class Results {
 
     /**
      * Verifies that the main page title element contains a specific text substring.
-     * This typically refers to the main heading on the page (e.g., H1).
      * @param title The expected substring of text content in the page title.
      */
     shouldVerifyPageTitle(title: string): void {
@@ -44,8 +42,6 @@ class Results {
 
     /**
      * Verifies that a general page-level message element contains a specific text substring.
-     * This is often used for success messages, info messages, or non-validation errors
-     * that appear in a designated message area on the page.
      * @param text The expected substring of text content in the page message.
      */
     shouldVerifyPageMessage(text: string): void {

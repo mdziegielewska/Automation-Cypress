@@ -8,7 +8,7 @@ class Forms {
      * @param value The value to type into the field.
      */
     fillField(field: string, value: string): void {
-        cy.log('filling form field');
+        cy.log('Filling form field');
 
         cy.get(`#${field}`)
             .type(value);
@@ -33,13 +33,26 @@ class Forms {
      * @param action The class of the submit button to click (e.g., 'primary', 'action').
      */
     submit(action: string): void {
-        cy.log('submitting form');
+        cy.log('Submitting form');
 
         cy.get('button[type="submit"]')
             .filter(`.${action}`)
             .should('be.visible')
             .click();
     }
+
+    /**
+     * Fills Orders and Returns form.
+     * @param field The ID of the input field.
+     * @param value The value to type into the field.
+     */
+    fillOarFields(oarFormData: {field: string, value: string}[]): void {
+        cy.log('Filling Order and Returns Form');
+
+        oarFormData.forEach(({field, value}) => {
+            forms.fillField(field, value);
+        });
+    };
 }
 
 export const forms = new Forms();

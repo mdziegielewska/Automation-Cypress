@@ -13,7 +13,7 @@ class Authorization {
      * @param password The password to type.
      */
     fillLogInData(email: string, password: string): void {
-        cy.log('Filling in user data');
+        cy.log('Filling User Data');
 
         cy.get(AUTHORIZATION_SELECTORS.logInInput)
             .should('have.attr', 'aria-required', 'true')
@@ -30,7 +30,7 @@ class Authorization {
      * @param fieldData An array of objects with 'field' and 'value' properties.
      */
     fillSignUpForm(fieldData: { field: string, value: string }[]) {
-        cy.log('Filling sign up form fields');
+        cy.log('Filling Sign Up Form Fields');
 
         for (const data of fieldData) {
             forms.fillField(data.field, data.value);
@@ -43,8 +43,8 @@ class Authorization {
      * @param email The email to use for login.
      * @param password The password to use for login.
      */
-    performLoginAttempt(email: string, password: string): void {
-        cy.log(`Attempting ${email} login`);
+    performLogInAttempt(email: string, password: string): void {
+        cy.log(`Attempting Log In with ${email} and ${password}`);
 
         authorization.fillLogInData(email, password);
 
@@ -60,7 +60,7 @@ class Authorization {
      * to indicate its state.
      */
     openWelcomeUserTab(): void {
-        cy.log('Opening customer actions');
+        cy.log('Opening Customer Actions');
 
         cy.get(NAVIGATION_SELECTORS.welcomeUserTab)
             .first()
@@ -74,7 +74,7 @@ class Authorization {
      * Expects the 'LogOut' route to be triggered after clicking, indicating successful logout.
      */
     signOut(): void {
-        cy.log('Signing out');
+        cy.log('Signing Out');
 
         cy.get(AUTHORIZATION_SELECTORS.signOut)
             .contains('Sign Out')

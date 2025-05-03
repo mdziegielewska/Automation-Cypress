@@ -9,7 +9,7 @@ class Widgets {
      * Retrieves the product items within the grid widget section.
      * @returns A Cypress chainable that yields the jQuery collection of product item elements in the grid widget.
      */
-    getGridWidget(): Cypress.Chainable<JQuery<HTMLElement>> {
+    getGridWidgetItems(): Cypress.Chainable<JQuery<HTMLElement>> {
         cy.log('Getting grid widget product items');
 
         return cy.get(LISTING_SELECTORS.gridWidget)
@@ -23,11 +23,10 @@ class Widgets {
      * @param section The CSS selector for the elements to count.
      * @param number The exact expected number of elements.
      */
-    shouldVerifyNumberOfElements(section: string, number: number): void {
+    shouldVerifyNumberOfElements(section: string, expectedNumber: number): void {
         cy.log(`Verifying number of elements for selector ${section}`);
 
-        cy.get(section)
-            .should('have.length', number);
+        cy.get(section).should('have.length', expectedNumber);
     }
 
     /**
@@ -37,15 +36,14 @@ class Widgets {
      * @param index The zero-based index of the element within the collection to click.
      * @param urlSubstring The substring expected to be present in the URL after clicking.
      */
-    shouldVerifyUrl(element: string, index: number, url: string): void {
+    shouldVerifyUrlOnClick(element: string, index: number, url: string): void {
         cy.log(`Verifying redirection URL for element at index ${index}`);
 
         cy.get(element)
             .eq(index)
             .click();
 
-        cy.url()
-            .should('include', url);
+        cy.url().should('include', url);
     }
 
     /**

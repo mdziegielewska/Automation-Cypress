@@ -2,7 +2,9 @@
 
 import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
+import { routes } from "../../helpers/routes";
 import { widgets } from "../../helpers/widgets";
+import { LISTING_SELECTORS } from "../../selectors/selectors";
 
 
 const ADD_TO_CART_MESSAGE = "You added Radiant Tee to your shopping cart.";
@@ -11,42 +13,39 @@ const ADD_TO_COMPARISION_MESSAGE = "You added product Radiant Tee to the compari
 
 const isEquipment = false;
 
+
 describe('Main page - Hot Sellers', () => {
 
     beforeEach(() => {
-
-        cy.visit('/');
         cy.clearAllCookies();
+        routes.visitAndWait('LoadPage');
     })
 
-    const hotSellers = '.content-heading';
-
     it('Should show Hot Sellers', () => {
+        results.shouldVerifyTextInSection(LISTING_SELECTORS.gridBlocksHeading, 'Hot Sellers');
 
-        results.shouldVerifyTextInSection(hotSellers, 'Hot Sellers');
-
-        widgets.getGridWidget().as('products');
+        widgets.getGridWidgetItems().as('products');
         widgets.shouldVerifyNumberOfElements('@products', 6);
     })
 
     it('Product Item should contain elements', () => {
-
         product.shouldVerifyProductCellElements(isEquipment);
         product.shouldVerifyActionElements();
     })
 
     it('Should add to Cart', () => {
-
         product.selectSize('M');
         product.selectColor('Purple');
 
-        product.addToCart();
+        product.addToCart('Listing Page', true);
         results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
     })
 
     it('Should add to Wishlist', () => {
-
+        routes.expect('AddToWishlistResult');
         product.addToWishlistOrCompare("wishlist");
+        cy.wait('@AddToWishlistResult');
+
         results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
 
         cy.url()
@@ -54,8 +53,10 @@ describe('Main page - Hot Sellers', () => {
     })
 
     it('Should add to Comparision', () => {
-
+        routes.expect('AddToCompareResult');
         product.addToWishlistOrCompare("compare");
+        cy.wait('@AddToCompareResult');
+
         results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
     })
 })

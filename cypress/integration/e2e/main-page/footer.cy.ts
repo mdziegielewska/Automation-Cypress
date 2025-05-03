@@ -4,43 +4,46 @@ import { forms } from "../../helpers/forms";
 import { navigation } from "../../helpers/navigation";
 import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
+import { routes } from "../../helpers/routes";
 import { search } from "../../helpers/search";
 import { widgets } from '../../helpers/widgets';
 import { NAVIGATION_SELECTORS } from "../../selectors/selectors";
 
 
-const footer = [
+const footerLinksData = [
     { footer: 'Search Terms', url: '/search/term/popular/' },
     { footer: 'Privacy and Cookie Policy', url: '/privacy-policy-cookie-restriction-mode' },
     { footer: 'Advanced Search', url: '/catalogsearch/advanced/' },
     { footer: 'Orders and Returns', url: '/sales/guest/form/' }
 ];
 
-const oar = [
-    { id: 'oar-order-id', value: `${Cypress.env("ORDER_NUMBER")}` },
-    { id: 'oar-billing-lastname', value: `${Cypress.env("TEST_LAST_NAME")}` },
-    { id: 'oar_email', value: `${Cypress.env("TEST_USER_EMAIL")}` }
+const oarFormData = [
+    { field: NAVIGATION_SELECTORS.orderIdField, value: `${Cypress.env("ORDER_NUMBER")}` },
+    { field: NAVIGATION_SELECTORS.billingLastnameField, value: `${Cypress.env("TEST_LAST_NAME")}` },
+    { field: NAVIGATION_SELECTORS.emailField, value: `${Cypress.env("TEST_USER_EMAIL")}` }
 ];
 
 const SEARCH_RESULT_MESSAGE = 'Don\'t see what you\'re looking for?';
 const isEquipment = false;
 
-describe('Footer', () => {
 
-    footer.forEach(({ footer, url }) => {
-        it(`Should verify footer links - ${footer}`, () => {
+describe('Main Page - Footer', () => {
 
-            cy.visit('/');
-
+    describe('Footer Links Verification', () => {
+        beforeEach(() => {
+            routes.visitAndWait('LoadPage');
             widgets.shouldVerifyNumberOfElements(NAVIGATION_SELECTORS.footerPanel, 4);
-            navigation.shouldVerifyFooter(footer, url);
+        })
+
+        footerLinksData.forEach(({ footer, url }) => {
+            it(`Should verify Footer Links - ${footer}`, () => {
+                navigation.shouldVerifyFooter(footer, url);
+            })
         })
     })
 
     it('Should verify Popular Search Terms', () => {
-
-        cy.visit('/search/term/popular/');
-
+        routes.visitAndWait('SearchTerms');
         results.shouldVerifyPageTitle('Popular Search Terms');
 
         search.shouldClickInSearchTerms('popular');
@@ -50,9 +53,7 @@ describe('Footer', () => {
     })
 
     it('Should verify Privacy Policy', () => {
-
-        cy.visit('/privacy-policy-cookie-restriction-mode');
-
+        routes.visitAndWait('PrivacyPolicyPage');
         results.shouldVerifyPageTitle('Privacy Policy');
 
         navigation.shouldContainNavPanel(NAVIGATION_SELECTORS.privacyPolicyNavPanel);
@@ -60,9 +61,7 @@ describe('Footer', () => {
     })
 
     it('Should verify Advanced Search', () => {
-
-        cy.visit('/catalogsearch/advanced/');
-
+        routes.visitAndWait('AdvancedSearchPage');
         results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, 'Advanced Search');
 
         forms.fillField('sku', 'WT09');
@@ -74,15 +73,12 @@ describe('Footer', () => {
     })
 
     it('Should verify Orders and Returns', () => {
-
-        cy.visit('/sales/guest/form/');
-
+        routes.visitAndWait('OrdersReturnsPage');
         results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, 'Orders and Returns');
 
-        for (const elem of oar) {
-            forms.fillField(elem.id, elem.value);
-        }
+        forms.fillOarFields(oarFormData);
 
+        routes.expect('OrdersReturnsResult');
         forms.submit('submit');
 
         results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, `Order # ${Cypress.env("ORDER_NUMBER")}`);
