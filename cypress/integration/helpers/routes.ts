@@ -23,8 +23,8 @@ class Routes {
         cy.log(`Visiting and waiting for route: ${routeKey}`);
 
         this.expect(routeKey);
-        
-        if(url) {
+
+        if (url) {
             cy.visit(url);
         } else {
             cy.visit(this.getRoute(routeKey)[1]);
@@ -55,6 +55,7 @@ class Routes {
             case 'EditPage': return ['GET', '/checkout/cart/configure/'];
             case 'ForgotPasswordPage': return ['GET', '/customer/account/forgotpassword/'];
             case 'HoodiePDP': return ['GET', '/circe-hooded-ice-fleece.html'];
+            case 'JunoJacketPDP': return ['GET', '/juno-jacket.html'];
             case 'Limiter': return ['GET', '/women/tops-women.html?product_list_limit='];
             case 'ListingPage': return ['GET', '/women/tops-women/hoodies-and-sweatshirts-women.html'];
             case 'ListingPantsPage': return ['GET', '/women/bottoms-women/pants-women.html'];

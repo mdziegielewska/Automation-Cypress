@@ -33,19 +33,42 @@ const loginTestCases = [
 const goToLoginPageAndVerify = () => {
     cy.clearAllCookies();
 
-    routes.visitAndWait('/customer/account/login/', 'LogInPage');
+    routes.visitAndWait('LogInPage');
     results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.authotizationPanel, 'Customer Login');
 };
 
 
 describe('Authorization', () => {
 
+    beforeEach(() => {
+        goToLoginPageAndVerify();
+    });
+
+    it('Should redirect to Sign Up Page', () => {
+        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.newCustomer, 'New Customers');
+
+        routes.expect('SignUpPage');
+        cy.get(AUTHORIZATION_SELECTORS.createAccountLink)
+            .click();
+
+        cy.wait('@SignUpPage');
+    })
+
+    it('Should Log Out', () => {
+        authorization.performLogInAttempt(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_USER_PASSWORD"));
+
+        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.greetMessage, LOGIN_SUCCESS_MESSAGE);
+
+        authorization.openWelcomeUserTab();
+        routes.expect('LogOut');
+        authorization.signOut();
+        cy.wait('@LogOut');
+
+        cy.url()
+            .should('include', '/');
+    });
+
     describe('Login Page Verification', () => {
-
-        beforeEach(() => {
-            goToLoginPageAndVerify();
-        });
-
         it('Should Remind Password', () => {
             routes.expect('ForgotPasswordPage');
 
@@ -70,7 +93,7 @@ describe('Authorization', () => {
 
         loginTestCases.forEach((testCase) => {
             it(`Should handle ${testCase.name} login attempt`, () => {
-                authorization.performLoginAttempt(testCase.email, testCase.password);
+                authorization.performLogInAttempt(testCase.email, testCase.password);
 
                 if (testCase.name === 'successful') {
                     results.shouldVerifyTextInSection(testCase.messageSelector, testCase.expectedMessage);
@@ -85,29 +108,5 @@ describe('Authorization', () => {
                 }
             });
         });
-
-        it('Should Log Out', () => {
-            authorization.performLoginAttempt(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_USER_PASSWORD"));
-
-            results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.greetMessage, LOGIN_SUCCESS_MESSAGE);
-
-            authorization.openWelcomeUserTab();
-            routes.expect('LogOut');
-            authorization.signOut();
-            cy.wait('@LogOut');
-
-            cy.url()
-                .should('include', '/');
-        });
-
-        it('Should redirect to Sign Up Page', () => {
-            results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.newCustomer, 'New Customers');
-
-            routes.expect('SignUpPage');
-            cy.get(AUTHORIZATION_SELECTORS.createAccountLink)
-                .click();
-
-            cy.wait('@SignUpPage');
-        })
     });
 });

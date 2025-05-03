@@ -18,12 +18,10 @@ const addProductToCompareAndVerifyMessage = () => {
         const ADD_TO_COMPARISION_MESSAGE = `You added product ${productName} to the comparison list.`;
 
         routes.expect('AddToCompareResult');
-        product.addToWishlistOrCompare('compare');
+        product.addToWishlistOrCompare('Compare');
         cy.wait('@AddToCompareResult');
 
         results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
-
-        product.compareProducts();
     });
 };
 
@@ -32,13 +30,12 @@ describe('Categories - Product Comparision', () => {
 
     beforeEach(() => {
         cy.clearAllCookies();
-        routes.visitAndWait('/women/bottoms-women/pants-women.html', 'ListingPantsPage');
+        routes.visitAndWait('ListingPantsPage');
     })
 
     it('Should add to Compare', () => {
         addProductToCompareAndVerifyMessage();
         product.compareProducts();
-
         results.shouldVerifyPageTitle('Compare Products');
     })
 
@@ -49,11 +46,9 @@ describe('Categories - Product Comparision', () => {
 
         addProductToCompareAndVerifyMessage();
         product.compareProducts();
-
         results.shouldVerifyPageTitle('Compare Products');
 
         for (const element of compareTable) {
-
             product.getCompareTable()
                 .should('contain', element);
         }

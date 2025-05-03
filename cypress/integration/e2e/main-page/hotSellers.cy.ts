@@ -7,9 +7,9 @@ import { widgets } from "../../helpers/widgets";
 import { LISTING_SELECTORS } from "../../selectors/selectors";
 
 
-const ADD_TO_CART_MESSAGE = "You added Radiant Tee to your shopping cart.";
+const ADD_TO_CART_MESSAGE = "You added Breathe-Easy Tank to your shopping cart.";
 const ADD_TO_WISHLIST_MESSAGE = "You must login or register to add items to your wishlist.";
-const ADD_TO_COMPARISION_MESSAGE = "You added product Radiant Tee to the comparison list.";
+const ADD_TO_COMPARISION_MESSAGE = "You added product Breathe-Easy Tank to the comparison list.";
 
 const isEquipment = false;
 
@@ -18,7 +18,7 @@ describe('Main page - Hot Sellers', () => {
 
     beforeEach(() => {
         cy.clearAllCookies();
-        routes.visitAndWait('LoadPage');
+        cy.visit('/');
     })
 
     it('Should show Hot Sellers', () => {
@@ -34,8 +34,8 @@ describe('Main page - Hot Sellers', () => {
     })
 
     it('Should add to Cart', () => {
-        product.selectSize('M');
-        product.selectColor('Purple');
+        product.selectSize('Listing Page', 'M');
+        product.selectColor('Listing Page', 'Purple');
 
         product.addToCart('Listing Page', true);
         results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
@@ -43,7 +43,7 @@ describe('Main page - Hot Sellers', () => {
 
     it('Should add to Wishlist', () => {
         routes.expect('AddToWishlistResult');
-        product.addToWishlistOrCompare("wishlist");
+        product.addToWishlistOrCompare('Wishlist');
         cy.wait('@AddToWishlistResult');
 
         results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
@@ -54,7 +54,7 @@ describe('Main page - Hot Sellers', () => {
 
     it('Should add to Comparision', () => {
         routes.expect('AddToCompareResult');
-        product.addToWishlistOrCompare("compare");
+        product.addToWishlistOrCompare('Compare');
         cy.wait('@AddToCompareResult');
 
         results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);

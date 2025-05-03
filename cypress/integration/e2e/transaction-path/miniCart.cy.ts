@@ -10,68 +10,66 @@ let productName: string;
 let ADD_TO_CART_MESSAGE: string;
 let UPDATE_MESSAGE: string;
 
+const cartType = 'Mini Cart';
 
 describe('Transaction path - Mini Cart', () => {
 
     beforeEach(() => {
+        cy.visit('/women/tops-women/hoodies-and-sweatshirts-women.html');
 
         switch (Cypress.currentTest.title) {
-            case 'Should show empty mini cart':
-                cy.visit('/women/tops-women/hoodies-and-sweatshirts-women.html');
+            case 'Should show empty Mini Cart':
                 break;
 
             default:
-                cy.visit('/women/tops-women/hoodies-and-sweatshirts-women.html');
-
                 product.getProductName().then(name => {
                     productName = name.trim();
 
                     ADD_TO_CART_MESSAGE = `You added ${productName} to your shopping cart.`;
                     UPDATE_MESSAGE = `${productName} was updated in your shopping cart.`;
 
-                    product.addToCart();
+                    product.addToCart('Listing Page');
                     results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
                 })
                 break;
         }
     })
 
-    it.skip('Should show empty mini cart', () => {
-        cart.openMiniCart();
+    it('Should show empty Mini Cart', () => {
         cart.shouldBeEmpty();
     })
 
-    it('Should add to Cart and verify its content', () => {
+    it('Should add to Cart and verify its Content', () => {
         cart.openMiniCart();
 
-        cart.verifyItemsCount(1, 'minicart');
+        cart.verifyItemsCount(1, cartType);
         cart.verifyProductDetailsInMiniCart(productName);
-        cart.shouldClickCheckoutButton('minicart');
+        cart.shouldClickCheckoutButton(cartType);
 
         cy.url()
             .should('include', '/checkout/#shipping');
     })
 
-    it('Should edit item in cart', () => {
-        cart.editCartItem('minicart');
+    it('Should edit item in Mini Cart', () => {
+        cart.editCartItem(cartType);
         cart.updateCartPDP();
 
         results.shouldVerifyPageMessage(UPDATE_MESSAGE);
     })
 
-    it('Should delete item from cart', () => {
-        cart.deleteCartItem('minicart');
+    it('Should delete item from the Mini Cart', () => {
+        cart.deleteCartItem(cartType);
         navigation.shouldConfirmModal();
         cart.shouldBeEmpty();
     })
 
 
-    it('Should increase quantity of product in cart', () => {
+    it('Should increase quantity of product in Mini Cart', () => {
         cart.openMiniCart();
-        cart.verifyItemsCount(1, 'minicart');
+        cart.verifyItemsCount(1, cartType);
 
-        cart.changeCartItemQuantity(2, 'minicart');
+        cart.changeCartItemQuantity(2, cartType);
 
-        cart.verifyItemsCount(2, 'minicart');
+        cart.verifyItemsCount(2, cartType);
     });
 })

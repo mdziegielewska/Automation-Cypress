@@ -2,7 +2,14 @@
   "name": "automationcypress",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": { "e2e:chrome": "cypress run --browser chrome --spec ./cypress/integration/e2e/**/*.cy.ts" },
+  "scripts": { 
+    "e2e:chrome": "cypress run --headed --browser chrome --spec ./cypress/integration/e2e/**/*.cy.ts",
+    "auth:chrome": "cypress run --headed --browser chrome --spec ./cypress/integration/e2e/authorization/*.cy.ts",
+    "categories:chrome": "cypress run --headed --browser chrome --spec ./cypress/integration/e2e/categories/*.cy.ts",
+    "main-page:chrome": "cypress run --headed --browser chrome --spec ./cypress/integration/e2e/main-page/*.cy.ts",
+    "pdp:chrome": "cypress run --headed --browser chrome --spec ./cypress/integration/e2e/product-detail-page/*.cy.ts",
+    "transaction-path:chrome": "cypress run --headed --browser chrome --spec ./cypress/integration/e2e/transaction-path/*.cy.ts"
+  },
   "author": "",
   "license": "ISC",
   "description": "",

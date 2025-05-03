@@ -1,8 +1,10 @@
 /// <reference types="cypress"/>
 
+import { round } from "../../../../node_modules/cypress/types/lodash/index";
 import { gallery } from "../../helpers/gallery";
 import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
+import { routes } from "../../helpers/routes";
 import { widgets } from "../../helpers/widgets";
 import { PRODUCT_SELECTORS } from "../../selectors/selectors";
 
@@ -21,51 +23,49 @@ const ADD_TO_CART_MESSAGE = "You added Juno Jacket to your shopping cart.";
 describe('PDP - Product Info', () => {
 
     beforeEach(() => {
-
-        cy.visit('/juno-jacket.html');
-        cy.clearAllCookies();
+        cy.clearAllCookies()
+        routes.visitAndWait('JunoJacketPDP');
     });
 
-    it('Should show PDP elements', () => {
+    describe('PDP - Visual Verification', () => {
+        it('Should show PDP elements', () => {
+            product.shouldVerifyMainPDPElements();
+            product.shouldDisplayProductInfo();
+        });
 
-        product.shouldVerifyMainPDPElements();
-        product.shouldDisplayProductInfo();
-    });
+        it('Gallery should contain images', () => {
+            gallery.getGallery();
 
-    it('Gallery should contain images', () => {
+            widgets.shouldVerifyNumberOfElements(PRODUCT_SELECTORS.thumbnail, 3);
+            gallery.verifyArrowScrolling();
+        });
 
-        gallery.getGallery();
+        it('Should verify details and more information sections', () => {
+            product.shouldVerifyTabSwitching(tabs);
 
-        widgets.shouldVerifyNumberOfElements(PRODUCT_SELECTORS.thumbnail, 3);
-        gallery.verifyArrowScrolling();
-    });
+            product.shouldDisplayDetailsSectionText();
+            product.shouldVerifyMoreInformationSections();
+        });
+    })
 
-    it('Should verify details and more information sections', () => {
+    describe('PDP - Action Verification', () => {
+        it('Should add to Wishlist', () => {
+            product.addToWishlistOrCompare('Wishlist');
+            results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
 
-        product.shouldVerifyTabSwitching(tabs);
+            cy.url()
+                .should('contain', '/customer/account/login/');
+        });
 
-        product.shouldDisplayDetailsSectionText();
-        product.shouldVerifyMoreInformationSections();
-    });
+        it('Should add to Comparision', () => {
+            product.addToWishlistOrCompare('Compare');
+            results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
+        });
 
-    it('Should add to Wishlist', () => {
+        it.only('Should add to Cart', () => {
+            product.addToCart('PDP');
 
-        product.addToWishlistOrCompare("wishlist");
-        results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
-
-        cy.url()
-            .should('contain', '/customer/account/login/');
-    });
-
-    it('Should add to Comparision', () => {
-
-        product.addToWishlistOrCompare("compare");
-        results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
-    });
-
-    it('Should add to Cart', () => {
-
-        product.addToCart('PDP');
-        results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
-    });
+            results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
+        });
+    })
 });

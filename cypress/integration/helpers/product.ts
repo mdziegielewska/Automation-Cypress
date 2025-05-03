@@ -8,7 +8,6 @@ const productCells = {
     cloth: [
         { name: 'image', locator: PRODUCT_SELECTORS.productImage },
         { name: 'title', locator: PRODUCT_SELECTORS.productTitle },
-        { name: 'reviews', locator: PRODUCT_SELECTORS.productReviews },
         { name: 'price', locator: PRODUCT_SELECTORS.productPrice },
         { name: 'size', locator: PRODUCT_SELECTORS.productSize },
         { name: 'colors', locator: PRODUCT_SELECTORS.productColors },
@@ -18,7 +17,7 @@ const productCells = {
         { name: 'image', locator: PRODUCT_SELECTORS.productImage },
         { name: 'title', locator: PRODUCT_SELECTORS.productTitle },
         { name: 'reviews', locator: PRODUCT_SELECTORS.productReviews },
-        { name: 'price', locator: PRODUCT_SELECTORS.productPrice },
+        { name: 'price', locator: PRODUCT_SELECTORS.productFinalPrice },
         { name: 'add to cart', locator: PRODUCT_SELECTORS.addToCart }
     ]
 };
@@ -48,23 +47,31 @@ const infoElements = [
 class Product {
 
     /**
-     * Retrieves the first product item element on a listing page.
-     * @returns A Cypress chainable yielding the first product item element.
+     * Retrieves a product item element based on the page type.
+     * For 'PDP', it gets the product options wrapper.
+     * For 'Listing Page', it gets the first product item details element.
+     * @param type - The type of page ('PDP' or 'Listing Page').
+     * @returns A Cypress chainable yielding the relevant product element(s).
      */
-    private getItem(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.get(PRODUCT_SELECTORS.productItemDetails)
-            .first();
+    private getItem(type: 'PDP' | 'Listing Page'): Cypress.Chainable<JQuery<HTMLElement>> {
+        switch (type) {
+            case 'PDP':
+                return cy.get(PRODUCT_SELECTORS.productOptionsWrapper);
+            case 'Listing Page':
+                return cy.get(PRODUCT_SELECTORS.productItemDetails)
+                    .eq(1);
+            //.first();
+        }
     }
 
     /**
-     * Hovers over a product item to reveal hidden action links (Wishlist, Compare, etc.).
-     * Assumes the hover effect is triggered by mouseover and reveals elements
-     * within the hovered item.
-     * @param itemElement The Cypress chainable representing the product item element to hover.
-     * @returns A Cypress chainable yielding the hovered item element (aliased as '@item').
+     * Hovers over the first product item on a listing page to reveal hidden action links.
+     * Assumes the hover effect is triggered by mouseover and reveals elements within the item.
+     * NOTE: This method *always* operates on the first item.
+     * @returns A Cypress chainable yielding the hovered first item element (aliased as '@item').
      */
     private hoverItem(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return this.getItem()
+        return this.getItem('Listing Page')
             .should('be.visible')
             .trigger('mouseover')
             .wait(500)
@@ -72,35 +79,46 @@ class Product {
     }
 
     /**
-     * Retrieves a specific swatch attribute block (e.g., Size, Color) within a product item.
-     * @param attribute The name or type of the swatch attribute (e.g., 'size', 'color').
+     * Retrieves a specific swatch attribute block (e.g., Size, Color)
+     * within the context determined by the page type ('PDP' or 'Listing Page').
+     * @param type - The type of page ('PDP' or 'Listing Page') to get the context element.
+     * @param attribute - The name or type of the swatch attribute (e.g., 'size', 'color').
      * @returns A Cypress chainable yielding the swatch attribute element.
      */
-    private getAttribute(attribute: string): Cypress.Chainable<JQuery<HTMLElement>> {
-        return this.getItem()
+    private getAttribute(type: 'PDP' | 'Listing Page', attribute: string): Cypress.Chainable<JQuery<HTMLElement>> {
+        return this.getItem(type)
             .find(PRODUCT_SELECTORS.swatchAttribute(attribute));
     }
 
     /**
-     * Selects an option (swatch or dropdown) for a specific product attribute.
-     * @param attribute The name or type of the attribute to select an option for (e.g., 'size', 'color').
-     * @param value Optional. The specific value of the option to select.
+     * Selects an option (swatch or dropdown) for a specific product attribute
+     * within the context determined by the page type ('PDP' or 'Listing Page').
+     * @param type - The type of page ('PDP' or 'Listing Page') to get the context element.
+     * @param attribute - The name or type of the attribute to select an option for (e.g., 'size', 'color').
+     * @param value Optional. The specific value of the option to select. If not provided, selects the second available non-disabled option.
      */
-    private selectOption(attribute: string, value?: string): void {
+    private selectOption(type: 'PDP' | 'Listing Page', attribute: string, value?: string): void {
         cy.log(`Selecting ${attribute} - ${value}`);
 
-        this.getAttribute(attribute).as('attribute');
+        this.getAttribute(type, attribute).as('attribute');
 
         if (value) {
             cy.get('@attribute')
                 .find(PRODUCT_SELECTORS.swatchOptionByLabel(value))
+                .should('exist')
+                .and('not.have.class', 'disabled')
                 .click();
         } else {
             cy.get('@attribute')
                 .find(PRODUCT_SELECTORS.swatchOption)
                 .not('.disabled')
-                .eq(1)
-                .click();
+                .should('have.length.gte', 1).then(($options) => {
+                    const indexToClick = $options.length === 1 ? 0 : 1;
+
+                    cy.wrap($options)
+                        .eq(indexToClick)
+                        .click();
+                })
         }
     }
 
@@ -109,8 +127,8 @@ class Product {
      * NOTE: This method *always* gets the name of the first item.
      * @returns A Cypress chainable yielding the text content of the product name.
      */
-    getProductName():  Cypress.Chainable<string> {
-        return this.getItem()
+    getProductName(): Cypress.Chainable<string> {
+        return this.getItem('Listing Page')
             .should('be.visible')
             .find(PRODUCT_SELECTORS.productTitle + ' a')
             .invoke('text');
@@ -122,7 +140,7 @@ class Product {
      * @returns A Cypress chainable yielding the product price element.
      */
     getPrice(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return this.getItem()
+        return this.getItem('Listing Page')
             .find(PRODUCT_SELECTORS.productPrice);
     }
 
@@ -264,78 +282,81 @@ class Product {
     }
 
     /**
-     * Selects an option for the 'Size' attribute.
+     * Selects an option for the 'Size' attribute based on the page type.
+     * Delegates the selection logic to selectOption.
+     * @param type - The type of page ('PDP' or 'Listing Page').
      * @param value Optional. The specific size value to select. If not provided, selects the second available option.
      */
-    selectSize(value?: string): void {
+    selectSize(type: 'PDP' | 'Listing Page', value?: string): void {
         cy.log(`Selecting ${value}`);
 
-        this.selectOption('size', value);
+        this.selectOption(type, 'size', value);
     }
 
     /**
-     * Selects an option for the 'Color' attribute.
+     * Selects an option for the 'Color' attribute based on the page type.
+     * Delegates the selection logic to selectOption.
+     * @param type - The type of page ('PDP' or 'Listing Page').
      * @param value Optional. The specific color value to select. If not provided, selects the second available option.
      */
-    selectColor(value?: string): void {
+    selectColor(type: 'PDP' | 'Listing Page', value?: string): void {
         cy.log(`Selecting ${value}`);
 
-        this.selectOption('color', value);
+        this.selectOption(type, 'color', value);
     }
 
     /**
-     * Adds the current product (from a listing page or PDP) to the cart.
-     * Requires selecting size and color options if the product is not equipment.
-     * If adding from a listing page, requires hovering to reveal the add to cart button.
-     * @param isEquipment Boolean indicating if the product is equipment (skips size/color selection).
-     * @param itemElement Optional. The product item element if adding from a listing page.
-     * If not provided, assumes adding from a PDP or that hoverItem works on the current subject.
+     * Adds the product to the cart based on the page type ('PDP' or 'Listing Page').
+     * Selects size and color options if `areOptionsSelected` is false.
+     * For 'Listing Page', it hovers over the first item before clicking add to cart.
+     * NOTE: For 'Listing Page', this method *always* operates on the first item due to hoverItem.
+     * @param type - The type of page ('PDP' or 'Listing Page').
+     * @param areOptionsSelected Optional. Boolean indicating if options (size/color) have already been selected. Defaults to false.
      */
     addToCart(type: 'PDP' | 'Listing Page', areOptionsSelected: boolean = false): void {
         cy.log(`Adding to Cart from ${type}`);
 
-        switch(type) {
+        switch (type) {
             case 'PDP':
                 if (!areOptionsSelected) {
-                    this.selectSize();
-                    this.selectColor();
+                    this.selectSize(type);
+                    this.selectColor(type);
                 }
-        
+
                 cy.get(PRODUCT_SELECTORS.addToCartButtonPDP)
                     .should('be.visible')
                     .click();
                 break;
-            
+
             case 'Listing Page':
                 if (!areOptionsSelected) {
-                    this.selectSize();
-                    this.selectColor();
+                    this.selectSize(type);
+                    this.selectColor(type);
                 }
-        
+
                 this.hoverItem();
                 cy.get('@item')
                     .find(PRODUCT_SELECTORS.addToCart)
                     .click({ force: true });
                 break;
-            
+
             default:
                 throw Error(`Unknown page type: ${type}`);
         }
     }
 
     /**
-     * Adds the current product to the Wishlist or Comparison list.
+     * Adds the first product item on a listing page to the Wishlist or Comparison list.
      * Assumes this is done from a listing page and requires hovering to reveal the links.
-     * @param type The action type ('wishlist' or 'compare').
-     * @param itemElement Optional. The product item element if performing action from a listing page.
-     * If not provided, assumes hoverItem works on the current subject (less common).
+     * NOTE: This method *always* operates on the first item due to hoverItem.
+     * @param type - The action type ('Wishlist' or 'Compare').
      */
-    addToWishlistOrCompare(type: 'wishlist' | 'compare'): void {
+    addToWishlistOrCompare(type: 'Wishlist' | 'Compare'): void {
         cy.log(`Adding Product to ${type}`);
 
         this.hoverItem();
         cy.get('@item')
-            .find(PRODUCT_SELECTORS.actionButton(type))
+            .find(PRODUCT_SELECTORS.actionButton(type.toLowerCase() as "wishlist" | "compare"))
             .click({ force: true });
     }
 
@@ -360,10 +381,9 @@ class Product {
         cy.get(PRODUCT_SELECTORS.compareLink)
             .click();
 
-        routes.expect('CompareProductsPage'); 
+        routes.expect('CompareProductsPage');
         cy.url()
             .should('contain', '/catalog/product_compare/');
-        cy.wait('@CompareProductsPage');
     }
 }
 

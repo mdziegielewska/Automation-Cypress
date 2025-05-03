@@ -58,6 +58,7 @@ urls.forEach(({ name, url, items, isEquipment }) => {
 
                 const ADD_TO_CART_MESSAGE = `You added ${productName} to your shopping cart.`;
 
+                routes.expect('AddToCartResult');
                 product.addToCart('Listing Page', isEquipment);
                 results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
             });
@@ -65,7 +66,7 @@ urls.forEach(({ name, url, items, isEquipment }) => {
 
         it('Should add to Wishlist', () => {
             routes.expect('AddToWishlistResult');
-            product.addToWishlistOrCompare("wishlist");
+            product.addToWishlistOrCompare('Wishlist');
             cy.wait('@AddToWishlistResult');
 
             results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
@@ -81,7 +82,7 @@ urls.forEach(({ name, url, items, isEquipment }) => {
                 const ADD_TO_COMPARISION_MESSAGE = `You added product ${productName} to the comparison list.`;
 
                 routes.expect('AddToCompareResult');
-                product.addToWishlistOrCompare("compare");
+                product.addToWishlistOrCompare('Compare');
                 cy.wait('@AddToCompareResult');
 
                 results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);

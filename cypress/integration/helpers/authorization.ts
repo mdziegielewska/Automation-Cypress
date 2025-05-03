@@ -29,7 +29,7 @@ class Authorization {
      * Assumes the test is already on the sign-up page.
      * @param fieldData An array of objects with 'field' and 'value' properties.
      */
-    fillSignUpForm(fieldData: { field: string, value: string }[]) {
+    fillSignUpForm(fieldData: { field: string, value: string }[]): void {
         cy.log('Filling Sign Up Form Fields');
 
         for (const data of fieldData) {

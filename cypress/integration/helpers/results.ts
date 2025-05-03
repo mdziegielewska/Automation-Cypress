@@ -16,7 +16,7 @@ class Results {
 
         cy.get(locator)
             .should('be.visible')
-            .and('contain.text', text);
+            .and('contain', text);
     }
 
     /**

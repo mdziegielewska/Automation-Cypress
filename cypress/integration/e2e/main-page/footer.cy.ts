@@ -31,7 +31,7 @@ describe('Main Page - Footer', () => {
 
     describe('Footer Links Verification', () => {
         beforeEach(() => {
-            routes.visitAndWait('LoadPage');
+            cy.visit('/');
             widgets.shouldVerifyNumberOfElements(NAVIGATION_SELECTORS.footerPanel, 4);
         })
 

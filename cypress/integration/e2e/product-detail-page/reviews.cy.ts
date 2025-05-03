@@ -2,6 +2,7 @@
 
 import { results } from '../../helpers/results';
 import { reviews } from '../../helpers/reviews';
+import { routes } from '../../helpers/routes';
 import { PRODUCT_SELECTORS } from '../../selectors/selectors';
 
 
@@ -17,18 +18,15 @@ const REVIEW_SUBMISSION_MESSAGE = 'You submitted your review for moderation.';
 describe('PDP - Reviews', () => {
 
     beforeEach(() => {
-
-        cy.visit('/juno-jacket.html');
-        cy.clearAllCookies();
-    })
+        cy.clearAllCookies()
+        routes.visitAndWait('JunoJacketPDP');
+    });
 
     it('Should verify review summary elements', () => {
-
         reviews.verifyReviewsSummaryElements();
     });
 
     it('Should redirect to reviews tab', () => {
-
         reviews.clickAddYourReview();
 
         reviews.verifyRedirectedToReviewsTab();
@@ -36,7 +34,6 @@ describe('PDP - Reviews', () => {
     });
 
     it('Should add a new review', () => {
-
         reviews.clickAddYourReview();
 
         reviews.fillReviewForm(5, reviewForm);

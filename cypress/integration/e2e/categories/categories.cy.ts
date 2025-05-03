@@ -71,7 +71,7 @@ categories.forEach(({ category, url, widget, grid, expectedGridCount }) => {
                 widgets.shouldVerifyWidgetInfo(index, info);
 
                 if (url !== null) {
-                    widgets.shouldVerifyUrl(LISTING_SELECTORS.widgetBlocks, index, url);
+                    widgets.shouldVerifyUrlOnClick(LISTING_SELECTORS.widgetBlocks, index, url);
                 }
             })
         })
@@ -80,7 +80,7 @@ categories.forEach(({ category, url, widget, grid, expectedGridCount }) => {
             it('Should show Grid Widget', () => {
                 results.shouldVerifyTextInSection(LISTING_SELECTORS.gridBlocksHeading, grid);
 
-                widgets.getGridWidget().as('products');
+                widgets.getGridWidgetItems().as('products');
                 widgets.shouldVerifyNumberOfElements('@products', expectedGridCount);
             })
         }

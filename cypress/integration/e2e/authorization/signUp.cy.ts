@@ -26,7 +26,9 @@ const signUpParams = [
  * Helper function to visit the sign-up page and verify its title.
  */
 const goToSignUpPageAndVerify = () => {
-    routes.visitAndWait('/customer/account/create/', 'SignUpPage');
+    cy.clearAllCookies();
+
+    routes.visitAndWait('SignUpPage');
     results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.authotizationPanel, 'Create New Customer Account');
 };
 

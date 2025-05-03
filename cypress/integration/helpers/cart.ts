@@ -47,7 +47,7 @@ class Cart {
     }
 
     /**
-     * Verifies if the cart (mini cart) is empty.
+     * Verifies if the  mini cart is empty.
      */
     shouldBeEmpty(): void {
         cy.log('Verifying if the Cart is empty');
@@ -59,7 +59,7 @@ class Cart {
     /**
     * Verifies the number of items in the cart or mini cart.
     * @param count The expected number of items.
-    * @param type The type of cart ('minicart' or 'cart').
+    * @param type The type of cart ('Mini Cart' or 'Cart').
     */
     verifyItemsCount(count: number, type: 'Mini Cart' | 'Cart'): void {
         cy.log(`Verifying if ${type} has ${count} Items`);
@@ -159,7 +159,7 @@ class Cart {
 
     /**
      * Clicks the edit button for a cart item in either the mini cart or main cart.
-     * @param type The type of cart ('minicart' or 'cart').
+     * @param type The type of cart ('Mini Cart' or 'Cart').
      */
     editCartItem(type: 'Mini Cart' | 'Cart'): void {
         cy.log(`Editing Item in ${type}`);
@@ -212,7 +212,7 @@ class Cart {
 
     /**
      * Deletes a cart item from either the mini cart or main cart.
-     * @param type The type of cart ('minicart' or 'cart').
+     * @param type The type of cart ('Mini Cart' or 'Cart').
      */
     deleteCartItem(type: 'Mini Cart' | 'Cart'): void {
         cy.log(`Deleting cart item - ${type}`);
@@ -241,7 +241,7 @@ class Cart {
     /**
      * Changes the quantity of a cart item in either the mini cart or main cart.
      * @param quantity The new quantity for the item.
-     * @param type The type of cart ('minicart' or 'cart').
+     * @param type The type of cart ('Mini Cart' or 'Cart').
      */
     changeCartItemQuantity(quantity: number, type: 'Mini Cart' | 'Cart'): void {
         cy.log(`Changing cart item quantity to ${quantity} - ${type}`);
@@ -292,9 +292,11 @@ class Cart {
                 break;
 
             case 'Cart':
-                cy.get(CART_SELECTORS.proceedToCheckoutButton)
-                    .should('have.attr', 'title', 'Proceed to Checkout')
-                    .click();
+                cy.get(CART_SELECTORS.checkoutSection).within(() => {
+                    cy.get(CART_SELECTORS.proceedToCheckoutButton)
+                        .should('have.attr', 'title', 'Proceed to Checkout')
+                        .click();
+                })
                 break;
 
             default:
