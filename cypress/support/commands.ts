@@ -32,7 +32,7 @@ declare global {
     namespace Cypress {
         interface Chainable {
             formRequest(url: string, formData: string): Chainable;
-            preserveCookies(): Chainable;
+            preserveCookies(cookieName: string): Chainable;
         }
     }
 }
@@ -51,8 +51,10 @@ Cypress.Commands.add('formRequest', (url: string, formData: string) => {
         .wait('@formRequest');
 });
 
-Cypress.Commands.add('preserveCookies', () => {
-    cy.session('preserveCookiesSession', () => {
-      // No actions needed here, just create the session
+Cypress.Commands.add('preserveCookies', (cookieName: string) => {
+    return cy.getCookie(cookieName).then(cookie => {
+        if (cookie) {
+            cy.setCookie(cookie.name, cookie.value);
+        }
     });
 });

@@ -2,7 +2,7 @@
 
 import { results } from "../../helpers/results";
 import { listing } from "../../helpers/listings";
-import { product } from "../../helpers/product";
+import { product } from '../../helpers/product';
 import { routes } from "../../helpers/routes";
 
 
@@ -34,59 +34,53 @@ const urls = [
 urls.forEach(({ name, url, items, isEquipment }) => {
     describe(`Categories - Listing - ${name}`, () => {
 
-        beforeEach(() => {
-            cy.clearAllCookies();
-            cy.visit(url);
+        describe('Visual Verification', () => {
+            beforeEach(() => {
+                cy.clearAllCookies();
+                cy.visit(url);
+            })
+
+            it('Should contain Listing Elements', () => {
+                listing.shouldVerifyListingElements();
+                listing.shouldVerifyProductsNumber(items);
+                listing.shouldContainFilterBlock();
+                listing.shouldContainAdditionalSidebar();
+                listing.shouldChangeLimiter(36);
+            })
+
+            it('Product Item should contain Elements', () => {
+                product.shouldVerifyProductCellElements(isEquipment);
+                product.shouldVerifyActionElements();
+            })
         })
 
-        it('Should contain Listing Elements', () => {
-            listing.shouldVerifyListingElements();
-            listing.shouldVerifyProductsNumber(items);
-            listing.shouldContainFilterBlock();
-            listing.shouldContainAdditionalSidebar();
-            listing.shouldChangeLimiter(36);
-        })
+        describe('Listing Action Verification', () => {
+            let productName: string;
 
-        it('Product Item should contain Elements', () => {
-            product.shouldVerifyProductCellElements(isEquipment);
-            product.shouldVerifyActionElements();
-        })
+            beforeEach(() => {
+                cy.visit(url);
 
-        it('Should add to Cart', () => {
-            product.getProductName().then(name => {
-                const productName = name.trim();
+                product.getProductName().then(name => {
+                    productName = name.trim();
+                });
+            })
 
+            it('Should add to Cart', () => {
                 const ADD_TO_CART_MESSAGE = `You added ${productName} to your shopping cart.`;
 
                 routes.expect('AddToCartResult');
                 product.addToCart('Listing Page', isEquipment);
                 results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
-            });
-        })
+            })
 
-        it('Should add to Wishlist', () => {
-            routes.expect('AddToWishlistResult');
-            product.addToWishlistOrCompare('Wishlist');
-            cy.wait('@AddToWishlistResult');
+            it('Should add to Wishlist', () => {
+                product.attemptAddToWishlistOrCompare('Wishlist', ADD_TO_WISHLIST_MESSAGE);
+            })
 
-            results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
-
-            cy.url()
-                .should('contain', '/customer/account/login/');
-        })
-
-        it('Should add to Comparision', () => {
-            product.getProductName().then(name => {
-                const productName = name.trim();
-
+            it('Should add to Comparision', () => {
                 const ADD_TO_COMPARISION_MESSAGE = `You added product ${productName} to the comparison list.`;
-
-                routes.expect('AddToCompareResult');
-                product.addToWishlistOrCompare('Compare');
-                cy.wait('@AddToCompareResult');
-
-                results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
-            });
+                product.attemptAddToWishlistOrCompare('Compare', ADD_TO_COMPARISION_MESSAGE);
+            })
         })
     })
 })

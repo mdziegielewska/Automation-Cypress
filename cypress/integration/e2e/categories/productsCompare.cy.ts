@@ -9,7 +9,6 @@ let compareTable = ['SKU', 'Description'];
 
 /**
  * Helper function to add a product to the comparison list and verify the message.
- * @param productIndex The index of the product on the listing page to add (default is 0).
  */
 const addProductToCompareAndVerifyMessage = () => {
     product.getProductName().then(name => {

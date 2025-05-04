@@ -2,6 +2,7 @@
 
 import { AUTHORIZATION_SELECTORS, NAVIGATION_SELECTORS } from '../selectors/selectors';
 import { forms } from './forms';
+import { results } from './results';
 import { routes } from "./routes";
 
 
@@ -53,6 +54,17 @@ class Authorization {
 
         cy.wait('@LogInResult');
     };
+
+    /**
+     * Logs in with the default user credentials and preserves the session cookie.
+     */
+    logInAndSetCookie(): void {
+        cy.log('Logging In with default User');
+
+        authorization.performLogInAttempt(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_USER_PASSWORD"));
+       
+        cy.preserveCookies("PHPSESSID");
+    }
 
     /**
      * Clicks the customer welcome name element to open the user actions dropdown.

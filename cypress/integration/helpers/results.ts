@@ -6,6 +6,16 @@ import { RESULTS_SELECTORS } from "../selectors/selectors";
 class Results {
 
     /**
+     * Retrieves the text content of the second page message element.
+     * @returns {Cypress.Chainable<string>} - A Cypress Chainable that resolves to the text content of the page message.
+     */
+    getPageMessage(): Cypress.Chainable<string> {
+        return cy.get(RESULTS_SELECTORS.pageMessage)
+            .eq(1)
+            .invoke('text');
+    }
+
+    /**
      * Internal helper method to get an element by locator, ensure visibility,
      * and verify that its text content contains the expected text substring.
      * @param locator The CSS selector for the element to verify.
