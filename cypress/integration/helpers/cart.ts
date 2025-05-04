@@ -57,6 +57,34 @@ class Cart {
     }
 
     /**
+     * Checks if the shopping cart is empty by visiting the Cart Page and counting the number of cart items.
+     * @returns {Cypress.Chainable<boolean>} A Cypress chainable that resolves to `true` if the cart is empty, `false` otherwise.
+     */
+    isEmpty(): Cypress.Chainable<boolean> {
+        cy.log('Counting Elements in Cart');
+
+        routes.visitAndWait('CartPage');
+        
+        return cy.get('body').then($body => {
+            let isCartEmpty: boolean;
+
+            const $itemsCount = $body.find(CART_SELECTORS.cartItem);
+
+            if ($itemsCount.length > 0) {
+                isCartEmpty = false;
+
+                cy.log('Cart is not empty');
+            } else {
+                isCartEmpty = true;
+
+                cy.log('Cart is empty');
+            }
+
+            return isCartEmpty;
+        })
+    }
+
+    /**
     * Verifies the number of items in the cart or mini cart.
     * @param count The expected number of items.
     * @param type The type of cart ('Mini Cart' or 'Cart').

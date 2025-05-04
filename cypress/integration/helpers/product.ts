@@ -394,6 +394,8 @@ class Product {
      * adds it to the cart, and verifies the success message.
      */
     addDefaultProductToCart() {
+        cy.log('Adding default Product to Cart');
+
         routes.visitAndWait('ListingPage');
 
         this.getProductName().then(name => {
@@ -407,30 +409,49 @@ class Product {
     }
 
     /**
+     * Navigates to the equipment listing page, retrieves the name of the first product,
+     * adds it to the cart, and verifies the success message.
+     */
+    addDefaultEquipmentProductToCart() {
+        cy.log('Adding default Equipment Product to Cart');
+
+        routes.visitAndWait('WaterBottlePDP');
+
+        product.addToCart('PDP', true);
+
+        ADD_TO_CART_MESSAGE = 'You added Affirm Water Bottle  to your shopping cart.';
+        results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
+
+        routes.visitAndWait('CartPage');
+    }
+
+    /**
      * Attempts to add a product to either the Wishlist or Comparison list and verifies the success message.
      * Includes retry logic for handling 'Invalid Form Key' errors.
      * @param {('Wishlist' | 'Compare')} type - The type of action to perform ('Wishlist' or 'Compare').
      * @param {string} expectedMessage - The expected success message after adding the product.
      */
     attemptAddToWishlistOrCompare(type: 'Wishlist' | 'Compare', expectedMessage: string) {
+        cy.log(`Attempting adding to ${type}`);
+
         const INVALID_KEY_MESSAGE = 'Invalid Form Key. Please refresh the page.';
-    
+
         let retries = 0;
         const maxRetries = 2;
-    
+
         routes.expect(`AddTo${type}Result`);
         this.addToWishlistOrCompare(type);
         cy.wait(`@AddTo${type}Result`);
-    
+
         results.getPageMessage().then(message => {
             if (message.includes(INVALID_KEY_MESSAGE) && retries < maxRetries) {
                 cy.log(`Page message contains "${INVALID_KEY_MESSAGE}". Retrying (${retries + 1}/${maxRetries})...`);
                 retries++;
-    
+
                 this.attemptAddToWishlistOrCompare(type, expectedMessage);
             } else {
                 results.shouldVerifyPageMessage(expectedMessage);
-    
+
                 if (type === 'Wishlist') {
                     cy.url()
                         .should('contain', '/customer/account/login/');

@@ -35,15 +35,15 @@ const addDefaultProductAndGoToCart = () => {
 };
 
 
-describe('Transaction Path - Cart', () => {
-    it('Should display all Cart Item elements', () => {
+describe(`Transaction Path - ${cartType}`, () => {
+    it(`Should display all ${cartType} Item elements`, () => {
         addDefaultProductAndGoToCart();
 
         results.shouldVerifyPageTitle('Shopping Cart');
         cart.verifyProductDetailsInCart();
     });
 
-    describe('Cart Actions Verification', () => {
+    describe(`${cartType} Actions Verification`, () => {
 
         beforeEach(() => {
             addDefaultProductAndGoToCart();
@@ -54,14 +54,14 @@ describe('Transaction Path - Cart', () => {
             routes.expect('HoodiePDP');
         });
 
-        it('Should edit Product from Cart', () => {
+        it(`Should edit Product from ${cartType}`, () => {
             cart.editCartItem(cartType);
             cart.updateCartPDP();
 
             results.shouldVerifyPageMessage(UPDATE_MESSAGE);
         });
 
-        it('Should delete Product from cart', () => {
+        it(`Should delete Product from ${cartType}`, () => {
             cart.deleteCartItem(cartType);
             cart.shouldBeEmpty();
         });

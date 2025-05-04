@@ -12,13 +12,13 @@ let UPDATE_MESSAGE: string;
 
 const cartType = 'Mini Cart';
 
-describe('Transaction path - Mini Cart', () => {
+describe(`Transaction path - ${cartType}`, () => {
 
     beforeEach(() => {
         cy.visit('/women/tops-women/hoodies-and-sweatshirts-women.html');
 
         switch (Cypress.currentTest.title) {
-            case 'Should show empty Mini Cart':
+            case `Should show empty ${cartType}`:
                 break;
 
             default:
@@ -35,7 +35,7 @@ describe('Transaction path - Mini Cart', () => {
         }
     })
 
-    it('Should show empty Mini Cart', () => {
+    it(`Should show empty ${cartType}`, () => {
         cart.shouldBeEmpty();
     })
 
@@ -50,21 +50,21 @@ describe('Transaction path - Mini Cart', () => {
             .should('include', '/checkout/#shipping');
     })
 
-    it('Should edit item in Mini Cart', () => {
+    it(`Should edit item in ${cartType}`, () => {
         cart.editCartItem(cartType);
         cart.updateCartPDP();
 
         results.shouldVerifyPageMessage(UPDATE_MESSAGE);
     })
 
-    it('Should delete item from the Mini Cart', () => {
+    it(`Should delete item from the ${cartType}`, () => {
         cart.deleteCartItem(cartType);
         navigation.shouldConfirmModal();
         cart.shouldBeEmpty();
     })
 
 
-    it('Should increase quantity of product in Mini Cart', () => {
+    it(`Should increase quantity of product in ${cartType}`, () => {
         cart.openMiniCart();
         cart.verifyItemsCount(1, cartType);
 

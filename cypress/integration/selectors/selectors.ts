@@ -186,3 +186,22 @@ export const CART_SELECTORS = {
     updateShoppingCartButton: '[title="Update Shopping Cart"]',
     zipInput: '[name="postcode"]'
 };
+
+
+export const CHECKOUT_SELECTORS = {
+    discountSection: '.discount-code',
+    itemsInCartSection: '.items-in-cart',
+    paymentMethodSection: '.payment-methods',
+    productDetails: '.product-item-details',
+    productOptions: '.product .options',
+    productPhoto: '.product-image-wrapper',
+    productPrice: '.cart-price',
+    productQty: '.details-qty',
+    productTitle: '.product-item-name',
+    progressBar: 'ul.opc-progress-bar',
+    progressBarItem: '.opc-progress-bar-item',
+    shippingAddressSection: '.checkout-shipping-address',
+    shippingInfoSection: '.shipping-information',
+    shippingMethodSection: '.checkout-shipping-method',
+    summarySection: '.opc-block-summary'
+};

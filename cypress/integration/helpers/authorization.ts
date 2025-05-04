@@ -61,6 +61,7 @@ class Authorization {
     logInAndSetCookie(): void {
         cy.log('Logging In with default User');
 
+        routes.visitAndWait('LogInPage');
         authorization.performLogInAttempt(Cypress.env("TEST_USER_EMAIL"), Cypress.env("TEST_USER_PASSWORD"));
        
         cy.preserveCookies("PHPSESSID");
