@@ -8,17 +8,17 @@ import { generate } from "../../helpers/generate";
 import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
 import { routes } from "../../helpers/routes";
-import { CHECKOUT_SELECTORS } from "../../selectors/selectors";
+import { widgets } from "../../helpers/widgets";
+import { CHECKOUT_SELECTORS } from '../../selectors/selectors';
 
 
 let isLogged: boolean = false;
 
+const checkoutType = 'Checkout';
 const CANCEL_COUPON_MESSAGE = 'You canceled the coupon code.';
-
 const generatedEmail = `${generate.generateString()}@gmail.com`;
 
 const shippingAddressParams = [
-    { field: CHECKOUT_SELECTORS.emailAddressField, value: generatedEmail },
     { field: CHECKOUT_SELECTORS.firstNameField, value: Cypress.env("TEST_FIRST_NAME") },
     { field: CHECKOUT_SELECTORS.lastNameField, value: Cypress.env("TEST_LAST_NAME") },
     { field: CHECKOUT_SELECTORS.streetAddressField, value: Cypress.env("SHIPPING_ADDRESS") },
@@ -30,12 +30,11 @@ const countryParams = [
     { field: CHECKOUT_SELECTORS.countryField, value: "United States" },
     { field: CHECKOUT_SELECTORS.stateProvinceField, value: "Alaska" }
 ]
-
-const checkoutType = 'Checkout';
 const couponList = [
     { couponCode: 'test123', type: 'Invalid' },
     { couponCode: 'h20', type: 'Valid' },
 ]
+const shippingInfoBlock = ['Ship To', 'Shipping Method'];
 
 /**
  * Helper function to add a default product to the cart if it's empty and navigate to the checkout page.
@@ -52,10 +51,10 @@ const addDefaultProductIfNeeded = () => {
 describe(`Transaction Path - ${checkoutType}`, () => {
 
     beforeEach(() => {
-
-        switch(Cypress.currentTest.title) {
+        switch (Cypress.currentTest.title) {
             case 'Should place an Order as a New User':
                 cy.clearAllCookies();
+                isLogged = false;
                 break;
 
             default:
@@ -69,7 +68,8 @@ describe(`Transaction Path - ${checkoutType}`, () => {
                                 .should('exist');
                         }
                     });
-                } 
+                }
+                break;
         }
 
         addDefaultProductIfNeeded();
@@ -105,7 +105,9 @@ describe(`Transaction Path - ${checkoutType}`, () => {
         })
 
         it('Should place an Order as a New User', () => {
+            forms.fillField(CHECKOUT_SELECTORS.emailAddressField, generatedEmail);
             forms.fillShippingData(shippingAddressParams, countryParams);
+
             checkout.shouldCheckShippingMethod(1);
             checkout.shouldClickOnButton(CHECKOUT_SELECTORS.nextButton, 'Next');
             checkout.shouldVerifyBillingSection();
@@ -142,15 +144,38 @@ describe(`Transaction Path - ${checkoutType}`, () => {
 
     describe(`${checkoutType} Action Verification`, () => {
         it('Should add New Shipping Address at Checkout', () => {
-            // to do
+            widgets.shouldVerifyNumberOfElements(CHECKOUT_SELECTORS.shippingAddressItem, 1);
+
+            checkout.shouldClickOnButton(CHECKOUT_SELECTORS.addNewAddressButton, 'New Address');
+
+            cy.get(CHECKOUT_SELECTORS.modalAddress)
+                .should('be.visible');
+
+            forms.fillShippingData(shippingAddressParams, countryParams);
+            checkout.shouldClickOnButton(CHECKOUT_SELECTORS.saveInAddressBookButton, 'Save in address book');
+            checkout.shouldClickOnButton(CHECKOUT_SELECTORS.shipHereButton, 'Ship here');
+
+            widgets.shouldVerifyNumberOfElements(CHECKOUT_SELECTORS.shippingAddressItem, 2);
         })
 
         it('Should choose different Billing Address', () => {
-            // to do
+            checkout.shouldClickOnButton(CHECKOUT_SELECTORS.nextButton, 'Next');
+            checkout.shouldClickOnButton(CHECKOUT_SELECTORS.billingInfoSection, 'My billing and shipping address are the same');
+
+            checkout.verifyOptions(CHECKOUT_SELECTORS.billingAddressId, 2);
         })
 
-        it('Should edit Ship To & Shipping Method', () => {
-            // to do
-        })
+        shippingInfoBlock.forEach((shippingInfo, index) => {
+            it(`Should edit ${shippingInfo}`, () => {
+                checkout.shouldClickOnButton(CHECKOUT_SELECTORS.nextButton, 'Next');
+                checkout.clickOnEditButtons(index);
+                checkout.shouldShowProgress('Shipping');
+
+                cy.url()
+                    .should('contain', 'checkout/#shipping');
+
+                checkout.shouldVerifyShippingSection();
+            });
+        });
     })
 })

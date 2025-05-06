@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
 
-import { CHECKOUT_SELECTORS } from "../selectors/selectors";
+import { CART_SELECTORS, CHECKOUT_SELECTORS } from "../selectors/selectors";
 import { results } from "./results";
 import { routes } from "./routes";
 
@@ -158,7 +158,7 @@ class Checkout {
     /**
      * Validates that the Thank You page is displayed with the correct title and confirmation message.
      */
-    shouldVerifyThankYouPage() {
+    shouldVerifyThankYouPage(): void {
         cy.log('Verifying correctness of Thank You Page');
 
         cy.expect('SuccessPage');
@@ -167,9 +167,37 @@ class Checkout {
     }
 
     /**
+     * Verifies that a select dropdown identified by the given selector contains the expected number of options.
+     *
+     * @param selector - The CSS selector for the dropdown element.
+     * @param numberOfOptions - The expected number of option elements within the dropdown.
+     */
+    verifyOptions(selector: string, numberOfOptions: number): void {
+        cy.log(`Verifying that the dropdown at ${selector} contains ${numberOfOptions} options`);
+
+        cy.get(selector)
+            .should('have.class', 'select')
+            .find(CHECKOUT_SELECTORS.option)
+            .should('have.length', numberOfOptions);
+    }
+
+    /**
+     * Clicks on the edit button within the shipping information section based on the provided index.
+     * @param index - The index of the edit button to click (0 for "Ship To", 1 for "Shipping Method")
+     */
+    clickOnEditButtons(index: number): void {
+        cy.get(CHECKOUT_SELECTORS.shippingInfoSection).within(() => {
+            cy.get(CHECKOUT_SELECTORS.shippingInfoTitle)
+                .find(CART_SELECTORS.editButtonCart)
+                .eq(index)
+                .click();
+        });
+    }
+
+    /**
      * Clicks the "Place Order" button and waits for the success page to load.
      */
-    placeOrder() {
+    placeOrder(): void {
         cy.log('Placing Order');
 
         routes.expect('SuccessPage');

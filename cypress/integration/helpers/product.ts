@@ -77,7 +77,7 @@ class Product {
         return this.getItem('Listing Page')
             .should('be.visible')
             .trigger('mouseover')
-            .wait(500)
+            .wait(300)
             .as('item');
     }
 
