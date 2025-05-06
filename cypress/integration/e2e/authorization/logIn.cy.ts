@@ -83,7 +83,7 @@ describe('Authorization', () => {
 
             routes.expect('ResetPasswordResult');
 
-            forms.fillField('email_address', `${Cypress.env("TEST_USER_EMAIL")}`);
+            forms.fillField(AUTHORIZATION_SELECTORS.emailAddressField, `${Cypress.env("TEST_USER_EMAIL")}`);
             forms.submit('submit');
 
             cy.wait('@ResetPasswordResult');

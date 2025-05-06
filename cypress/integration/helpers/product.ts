@@ -431,7 +431,7 @@ class Product {
      * @param {('Wishlist' | 'Compare')} type - The type of action to perform ('Wishlist' or 'Compare').
      * @param {string} expectedMessage - The expected success message after adding the product.
      */
-    attemptAddToWishlistOrCompare(type: 'Wishlist' | 'Compare', expectedMessage: string) {
+    attemptAddToWishlistOrCompare(type: 'Wishlist' | 'Compare', expectedMessage: string): void {
         cy.log(`Attempting adding to ${type}`);
 
         const INVALID_KEY_MESSAGE = 'Invalid Form Key. Please refresh the page.';

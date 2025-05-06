@@ -13,13 +13,13 @@ const EXISTING_EMAIL_MESSAGE = 'There is already an account with this email addr
 const PASSWORD_ERROR_MESSAGE = 'Minimum length of this field must be equal or greater than 8 symbols. Leading and trailing spaces will be ignored.';
 const CONFIRM_PASSWORD_ERROR_MESSAGE = 'Please enter the same value again.';
 
-const generateEmail = `${generate.generateString()}@gmail.com`;
+const generatedEmail = `${generate.generateString()}@gmail.com`;
 const signUpParams = [
-    { field: 'firstname', value: Cypress.env("TEST_FIRST_NAME") },
-    { field: 'lastname', value: Cypress.env("TEST_LAST_NAME") },
-    { field: 'email_address', value: generateEmail },
-    { field: 'password', value: Cypress.env("TEST_USER_PASSWORD") },
-    { field: 'password-confirmation', value: Cypress.env("TEST_USER_PASSWORD") }
+    { field: AUTHORIZATION_SELECTORS.firstNameField, value: Cypress.env("TEST_FIRST_NAME") },
+    { field: AUTHORIZATION_SELECTORS.lastNameField, value: Cypress.env("TEST_LAST_NAME") },
+    { field: AUTHORIZATION_SELECTORS.emailAddressField, value: generatedEmail },
+    { field: AUTHORIZATION_SELECTORS.passwordField, value: Cypress.env("TEST_USER_PASSWORD") },
+    { field: AUTHORIZATION_SELECTORS.passwordConfirmationField, value: Cypress.env("TEST_USER_PASSWORD") }
 ];
 
 /**
@@ -47,13 +47,13 @@ describe('Authorization - Sign Up', () => {
         cy.wait('@SignUpResult');
 
         results.shouldVerifyPageMessage(REGISTER_MESSAGE);
-        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.dashboardInfoBlock, `${generateEmail}`);
+        results.shouldVerifyTextInSection(AUTHORIZATION_SELECTORS.dashboardInfoBlock, `${generatedEmail}`);
     })
 
     it('Should sign up with existing email address', () => {
         const existingEmailSignUpParams = signUpParams.map(param => ({ ...param }));
 
-        const emailParam = existingEmailSignUpParams.find(param => param.field === 'email_address');
+        const emailParam = existingEmailSignUpParams.find(param => param.field === AUTHORIZATION_SELECTORS.emailAddressField);
         if (emailParam) {
             emailParam.value = Cypress.env("TEST_USER_EMAIL");
         }
@@ -68,8 +68,8 @@ describe('Authorization - Sign Up', () => {
     })
 
     it('Should sign up with incorrect password', () => {
-        forms.fillField('password', 'test');
-        forms.fillField('password-confirmation', '123');
+        forms.fillField(AUTHORIZATION_SELECTORS.passwordField, 'test');
+        forms.fillField(AUTHORIZATION_SELECTORS.passwordConfirmationField, '123');
 
         forms.submit('submit');
 

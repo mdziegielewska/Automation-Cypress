@@ -73,6 +73,7 @@ class Routes {
             case 'SignUpPage': return ['GET', '/customer/account/create/'];
             case 'SignUpResult': return ['POST', '/customer/account/createpost/'];
             case 'Sorter': return ['GET', '/women/tops-women.html?product_list_order='];
+            case 'SuccessPage': return ['GET', '/checkout/onepage/success/'];
             case 'UpdateResult': return ['POST', '/checkout/cart/updateItemOptions/'];
             case 'WaterBottlePDP': return ['GET', '/affirm-water-bottle.html'];
 

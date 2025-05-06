@@ -7,7 +7,7 @@ import { results } from "../../helpers/results";
 import { routes } from "../../helpers/routes";
 import { search } from "../../helpers/search";
 import { widgets } from '../../helpers/widgets';
-import { NAVIGATION_SELECTORS } from "../../selectors/selectors";
+import { NAVIGATION_SELECTORS, SEARCH_SELECTORS } from "../../selectors/selectors";
 
 
 const footerLinksData = [
@@ -64,7 +64,7 @@ describe('Main Page - Footer', () => {
         routes.visitAndWait('AdvancedSearchPage');
         results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, 'Advanced Search');
 
-        forms.fillField('sku', 'WT09');
+        forms.fillField(SEARCH_SELECTORS.skuSearchField, 'WT09');
         search.advancedSearch();
 
         results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, 'Catalog Advanced Search');

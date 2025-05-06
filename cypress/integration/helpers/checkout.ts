@@ -1,9 +1,12 @@
 /// <reference types="cypress"/>
 
 import { CHECKOUT_SELECTORS } from "../selectors/selectors";
+import { results } from "./results";
+import { routes } from "./routes";
 
 
-let checkoutElements: { name: string; selector: string; }[];
+const THANK_YOU_PAGE_TITLE = 'Thank you for your purchase!';
+const THANK_YOU_PAGE_MESSAGE = 'We\'ll email you an order confirmation with details and tracking info';
 
 const checkoutShippingElements = [
     { name: 'Progress Bar', selector: CHECKOUT_SELECTORS.progressBar },
@@ -28,6 +31,11 @@ const orderItemElements = [
     { name: 'photo', selector: CHECKOUT_SELECTORS.productPhoto }
 ];
 
+const billingSelectors = [
+    CHECKOUT_SELECTORS.billingInfoSection,
+    CHECKOUT_SELECTORS.billingAddressDetails
+];
+
 
 class Checkout {
 
@@ -37,6 +45,8 @@ class Checkout {
      */
     verifyCheckoutElements(type: 'Shipping' | 'Payments' | 'Order Item'): void {
         cy.log(`Verifying ${type} Elements`);
+
+        let checkoutElements: { name: string; selector: string; }[];
 
         switch (type) {
             case 'Shipping':
@@ -49,12 +59,16 @@ class Checkout {
 
             case 'Payments':
                 checkoutElements = checkoutRPElements;
+                break;
+
+            default:
+                throw new Error(`Unsupported checkout element type: ${type}`);
         }
 
         this.expandItemsSection();
 
         checkoutElements.forEach(({ name, selector }) => {
-            cy.log(`Verifying if ${name} is visible`);
+            cy.log(`Checking visibility of ${name}`);
 
             cy.get(selector)
                 .should('be.visible')
@@ -86,6 +100,81 @@ class Checkout {
                 .click()
                 .should('have.class', 'active');
         })
+    }
+
+    /** 
+     * Clicks a button that matches the given selector and text.
+     * @param {string} selector - The CSS selector of the button container.
+     * @param {string} text - The visible text on the button.
+    */
+    shouldClickOnButton(selector: string, text: any): void {
+        cy.log(`Clicking on a button with text: ${text}`);
+
+        cy.get(selector)
+            .contains(text)
+            .should('exist')
+            .click();
+    }
+
+    /**
+     * Verifies that the shipping address and method sections are properly selected.
+     */
+    shouldVerifyShippingSection(): void {
+        cy.log('Verifying selected Shipping Address and Method');
+
+        cy.get(CHECKOUT_SELECTORS.shippingAddressItem)
+            .should('exist')
+            .and('have.class', 'selected-item');
+
+        cy.get(CHECKOUT_SELECTORS.shippingMethodTable)
+            .find(CHECKOUT_SELECTORS.shippingMethodButton)
+            .should('have.attr', 'checked');
+    }
+
+    /**
+     * Verifies that the billing section is visible and contains address details.
+     */
+    shouldVerifyBillingSection(): void {
+        cy.log('Verifying selected Shipping Address');
+
+        billingSelectors.forEach(selector => {
+            cy.get(selector).should('be.visible');
+        });
+    }
+
+    /**
+     * Selects a shipping method option by index (0-based).
+     * @param {number} index - Index of the shipping method to select.
+     */
+    shouldCheckShippingMethod(index: number): void {
+        cy.log(`Checking Shipping Method with index ${index}`);
+
+        cy.get(CHECKOUT_SELECTORS.shippingMethodTable)
+            .find(CHECKOUT_SELECTORS.shippingMethodButton)
+            .eq(index)
+            .click();
+    }
+
+    /**
+     * Validates that the Thank You page is displayed with the correct title and confirmation message.
+     */
+    shouldVerifyThankYouPage() {
+        cy.log('Verifying correctness of Thank You Page');
+
+        cy.expect('SuccessPage');
+        results.shouldVerifyPageTitle(THANK_YOU_PAGE_TITLE);
+        results.shouldVerifyTextInSection(CHECKOUT_SELECTORS.successPage, THANK_YOU_PAGE_MESSAGE);
+    }
+
+    /**
+     * Clicks the "Place Order" button and waits for the success page to load.
+     */
+    placeOrder() {
+        cy.log('Placing Order');
+
+        routes.expect('SuccessPage');
+        checkout.shouldClickOnButton(CHECKOUT_SELECTORS.placeOrderButton, 'Place Order');
+        cy.wait('@SuccessPage');
     }
 }
 

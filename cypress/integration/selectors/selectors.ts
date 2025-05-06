@@ -2,9 +2,14 @@ export const AUTHORIZATION_SELECTORS = {
     authotizationPanel: '[data-ui-id="page-title-wrapper"]',
     createAccountLink: 'a.create',
     dashboardInfoBlock: '.block-dashboard-info',
+    emailAddressField: '#email_address',
+    firstNameField: '#firstname',
     greetMessage: 'li.greet.welcome',
+    lastNameField: '#lastname',
     logInInput: 'input[title="Email"]',
     newCustomer: '.block-new-customer',
+    passwordConfirmationField: '#password-confirmation',
+    passwordField: '#password',
     passwordInput: 'input[title="Password"]',
     resetPanel: '.action.remind',
     signOut: '.authorization-link a'
@@ -29,7 +34,7 @@ export const NAVIGATION_SELECTORS = {
     subMenu: 'ul.submenu',
     tab: (tab: string) => `li.category-item:contains(${tab})`,
     title: '.page-title',
-    welcomeUserTab: '.customer-welcome .customer-name'
+    welcomeUserTab: '.customer-welcome .customer-name',
 };
  
 
@@ -38,7 +43,9 @@ export const SEARCH_SELECTORS = {
     popularSearchTerms: '.search-terms li.item',
     relatedSearchTerms: '.block dd.item',
     searchButton: '.actions-toolbar .search',
-    searchResults: '.search.results'
+    searchField: '#search',
+    searchResults: '.search.results',
+    skuSearchField: '#sku'
 };
 
 
@@ -94,7 +101,7 @@ export const PRODUCT_SELECTORS = {
     descriptionTab: '#description',
     descriptionText: '#description',
     galleryPlaceholder: '.gallery-placeholder',
-    nicknameField: 'nickname_field',
+    nicknameField: '#nickname_field',
     pageTitle: 'h1.page-title span',
     productColors: '.swatch-attribute.color',
     productColorOption: '.swatch-attribute.color .swatch-option',
@@ -118,14 +125,14 @@ export const PRODUCT_SELECTORS = {
     ratingSummary: '.rating-summary',
     relatedProductsBlock: '.block.related',
     relatedProductsWrapper: '.products-related',
-    reviewField: 'review_field',
+    reviewField: '#review_field',
     reviewItems: '.review-items .review-item',
     reviewsSummary: '.product-reviews-summary',
     reviewsTab: '#reviews',
     reviewsTabActive: '.product.data.items .title.active',
     submitButton: 'button.submit',
     successMessage: '.message-success',
-    summaryField: 'summary_field',
+    summaryField: '#summary_field',
     swatchAttribute: (attribute: string) => `.swatch-attribute.${attribute}`,
     swatchOption: '.swatch-option',
     swatchOptionByLabel: (label: string) => `[role="option"][aria-label="${label}"]`,
@@ -143,6 +150,7 @@ export const RESULTS_SELECTORS = {
 
 export const CART_SELECTORS = {
     applyCouponButton: '#discount-coupon-form .actions-toolbar button.action.apply',
+    cancelCouponButton: '.cart-discount .actions-toolbar button.action.cancel',
     cartEmptyMessage: '.cart-empty',
     cartItem: '.cart.item',
     cartPageProductName: '.product-item-name a',
@@ -189,9 +197,20 @@ export const CART_SELECTORS = {
 
 
 export const CHECKOUT_SELECTORS = {
+    billingAddressDetails: '.billing-address-details',
+    billingInfoSection: '[name="billing-address-same-as-shipping"]',
+    cityField: '[name="city"]',
+    continueButton: '.action.primary.continue',
+    countryField: '[name="country_id"]',
+    createAccountButton: 'a.action.primary',
     discountSection: '.discount-code',
+    emailAddressField: '#customer-email-fieldset [type="email"]',
+    firstNameField: '[name="firstname"]',
     itemsInCartSection: '.items-in-cart',
+    lastNameField: '[name="lastname"]',
+    nextButton: '[data-role="opc-continue"]',
     paymentMethodSection: '.payment-methods',
+    placeOrderButton: '.action.primary.checkout',
     productDetails: '.product-item-details',
     productOptions: '.product .options',
     productPhoto: '.product-image-wrapper',
@@ -200,8 +219,16 @@ export const CHECKOUT_SELECTORS = {
     productTitle: '.product-item-name',
     progressBar: 'ul.opc-progress-bar',
     progressBarItem: '.opc-progress-bar-item',
+    shippingAddressItem: '.shipping-address-items .shipping-address-item',
     shippingAddressSection: '.checkout-shipping-address',
     shippingInfoSection: '.shipping-information',
+    shippingMethodButton: 'input.radio',
     shippingMethodSection: '.checkout-shipping-method',
-    summarySection: '.opc-block-summary'
+    shippingMethodTable: '.table-checkout-shipping-method',
+    stateProvinceField: '[name="region_id"]',
+    streetAddressField: '[name="shippingAddress.street.0"]',
+    successPage: '.checkout-success p',
+    summarySection: '.opc-block-summary',
+    zipPostalCodeField: '[name="postcode"]',
+    phoneNumberField: '[name="telephone"]'
 };

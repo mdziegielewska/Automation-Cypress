@@ -61,26 +61,16 @@ class Cart {
      * @returns {Cypress.Chainable<boolean>} A Cypress chainable that resolves to `true` if the cart is empty, `false` otherwise.
      */
     isEmpty(): Cypress.Chainable<boolean> {
-        cy.log('Counting Elements in Cart');
+        cy.log('Checking if cart is empty');
 
         routes.visitAndWait('CartPage');
-        
+
         return cy.get('body').then($body => {
-            let isCartEmpty: boolean;
+            const hasItems = $body.find(CART_SELECTORS.cartItem).length > 0;
 
-            const $itemsCount = $body.find(CART_SELECTORS.cartItem);
+            cy.log(hasItems ? 'Cart is not empty' : 'Cart is empty');
 
-            if ($itemsCount.length > 0) {
-                isCartEmpty = false;
-
-                cy.log('Cart is not empty');
-            } else {
-                isCartEmpty = true;
-
-                cy.log('Cart is empty');
-            }
-
-            return isCartEmpty;
+            return cy.wrap(!hasItems);
         })
     }
 
@@ -365,9 +355,19 @@ class Cart {
     }
 
     /**
+     * Cancels Coupon in Apply Discount Code section
+     */
+    cancelCoupon(): void {
+        cy.log('Cancelling coupon');
+
+        cy.get(CART_SELECTORS.cancelCouponButton)
+            .click();
+    }
+
+    /**
      * Opens Estimate Shipping and Tax section.
      */
-    openTaxSection() {
+    openTaxSection(): void {
         cy.log('Opening Tax section');
 
         cy.get(CART_SELECTORS.shippingBlockTitle)

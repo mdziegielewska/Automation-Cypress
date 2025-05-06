@@ -6,7 +6,7 @@ import { routes } from "../../helpers/routes";
 import { listing } from "../../helpers/listings";
 import { search } from '../../helpers/search';
 import { widgets } from "../../helpers/widgets";
-import { RESULTS_SELECTORS } from "../../selectors/selectors";
+import { RESULTS_SELECTORS, SEARCH_SELECTORS } from "../../selectors/selectors";
 
 
 describe('Main page - Search', () => {
@@ -14,7 +14,7 @@ describe('Main page - Search', () => {
     it('Should Search', () => {
         routes.visitAndWait('LoadPage');
 
-        forms.fillField('search', 'jacket');
+        forms.fillField(SEARCH_SELECTORS.searchField, 'jacket');
         search.shouldShowAutocomplete();
 
         routes.expect('SearchResult');
