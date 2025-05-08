@@ -409,7 +409,7 @@ class Cart {
     verifyingShippingRates(): void {
         cy.log('Getting shipping rates');
 
-        cy.get(CART_SELECTORS.getMethodButton)
+        cy.get(CART_SELECTORS.updateActionButton)
             .should('be.visible')
             .click();
 

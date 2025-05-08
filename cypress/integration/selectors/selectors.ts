@@ -17,16 +17,16 @@ export const AUTHORIZATION_SELECTORS = {
 
 
 export const NAVIGATION_SELECTORS = {
-    billingLastnameField: 'oar-billing-lastname', 
+    billingLastnameField: 'oar-billing-lastname',
     confirmButton: '.modal-inner-wrap button',
-    emailField: 'oar_email', 
+    emailField: 'oar_email',
     expandableIcon: (tab: string) => `${NAVIGATION_SELECTORS.tab(tab)} span.ui-menu-icon`,
     footerLinks: 'ul.footer.links a',
     footerPanel: '.footer.links li',
     headerLinks: 'ul.header.links a',
     menuItem: '[role="menuitem"]',
     navigationMenu: '[class="navigation"]',
-    navPanel: (nav: string) => nav, 
+    navPanel: (nav: string) => nav,
     orderIdField: 'oar-order-id',
     pageTitleHeading: '#page-title-heading',
     privacyPolicyContent: '.privacy-policy-content',
@@ -36,7 +36,7 @@ export const NAVIGATION_SELECTORS = {
     title: '.page-title',
     welcomeUserTab: '.customer-welcome .customer-name',
 };
- 
+
 
 export const SEARCH_SELECTORS = {
     autocomplete: '#search_autocomplete',
@@ -165,7 +165,7 @@ export const CART_SELECTORS = {
     deleteButtonCart: '.action.action-delete',
     editButton: '.action.edit',
     editButtonCart: '.action.action-edit',
-    getMethodButton: 'button.action.update',
+    updateActionButton: 'button.action.update',
     itemsTotal: '.items-total .count',
     miniCartItemsWrapper: '#minicart-items-wrapper',
     miniCartToggle: '[data-block="minicart"] .showcart',
@@ -198,6 +198,8 @@ export const CART_SELECTORS = {
 
 export const CHECKOUT_SELECTORS = {
     addNewAddressButton: 'button.action.action-show-popup',
+    addActionButton: '.action.add',
+    backActionButton: '.action.back',
     billingAddressDetails: '.billing-address-details',
     billingAddressId: '[name="billing_address_id"]',
     billingInfoSection: '.billing-address-same-as-shipping-block',
@@ -211,6 +213,8 @@ export const CHECKOUT_SELECTORS = {
     itemsInCartSection: '.items-in-cart',
     lastNameField: '[name="lastname"]',
     modalAddress: '.modal-inner-wrap',
+    multiCheckoutButton: '.action.multicheckout',
+    multiShipTable: '.multiship-addresses-table',
     nextButton: '[data-role="opc-continue"]',
     option: 'option',
     paymentMethodSection: '.payment-methods',

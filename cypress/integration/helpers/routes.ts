@@ -61,9 +61,11 @@ class Routes {
             case 'ListingPantsPage': return ['GET', '/women/bottoms-women/pants-women.html'];
             case 'LoadPage': return ['GET', '/'];
             case 'LogInPage': return ['GET', '/customer/account/login/'];
+            case 'LogInRedirectPage': return ['GET', '/multishipping/checkout/login/'];
             case 'LogInResult': return ['POST', '/customer/account/loginPost/'];
             case 'LogOut': return ['POST', '/customer/account/logout/'];
             case 'Mode': return ['GET', '/women/tops-women.html?product_list_mode='];
+            case 'MultiShippingPage': ['GET', '/multishipping/checkout/addresses/'];
             case 'OrdersReturnsPage': return ['GET', '/sales/guest/form/'];
             case 'OrdersReturnsResult': return ['GET', '/sales/guest/view/'];
             case 'PrivacyPolicyPage': return ['GET', '/privacy-policy-cookie-restriction-mode'];

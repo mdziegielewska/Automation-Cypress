@@ -48,6 +48,7 @@ const addDefaultProductIfNeeded = () => {
     })
 };
 
+
 describe(`Transaction Path - ${checkoutType}`, () => {
 
     beforeEach(() => {

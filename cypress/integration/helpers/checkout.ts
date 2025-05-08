@@ -31,6 +31,16 @@ const orderItemElements = [
     { name: 'photo', selector: CHECKOUT_SELECTORS.productPhoto }
 ];
 
+const shipMultipleElements = [
+    { name: 'Table', selector: CHECKOUT_SELECTORS.multiShipTable },
+    { name: 'Go to Shipping Information', selector: CHECKOUT_SELECTORS.continueButton },
+    { name: 'Back to Shopping Cart', selector: CHECKOUT_SELECTORS.backActionButton },
+    { name: 'Update Qty & Addresses', selector: CART_SELECTORS.updateActionButton },
+    { name: 'Enter a New Address', selector: CHECKOUT_SELECTORS.addActionButton }
+];
+
+const multipleAddressTableElements = ['Product', 'Qty', 'Send To', 'Actions'];
+
 const billingSelectors = [
     CHECKOUT_SELECTORS.billingInfoSection,
     CHECKOUT_SELECTORS.billingAddressDetails
@@ -73,6 +83,61 @@ class Checkout {
             cy.get(selector)
                 .should('be.visible')
                 .and('not.be.empty');
+        })
+    }
+
+    /**
+     * Verifies the visibility of UI elements for the specified section of the multiple addresses checkout process.
+     * Currently implemented for the 'Shipping' step, and logs each checked element.
+     * 
+     * @param type - The section of the checkout to verify ('Addresses', 'Shipping', 'Payments', or 'Review').
+     */
+    verifyMultipleAddressesCheckoutElements(type: 'Addresses' | 'Shipping' | 'Payments' | 'Review'): void {
+        cy.log(`Verifying ${type} Elements`);
+
+        let checkoutElements: { name: string; selector: string; }[];
+
+        switch (type) {
+            case 'Addresses':
+                break;
+
+            case 'Shipping':
+                checkoutElements = shipMultipleElements;
+                break;
+
+            case 'Payments':
+                break;
+
+            case 'Review':
+                break;
+
+            default:
+                throw new Error(`Unsupported checkout element type: ${type}`);
+        }
+
+        this.expandItemsSection();
+
+        checkoutElements.forEach(({ name, selector }) => {
+            cy.log(`Checking visibility of ${name}`);
+
+            cy.get(selector)
+                .should('be.visible')
+                .and('not.be.empty');
+        })
+    }
+
+    /**
+     * Verifies the presence and visibility of key columns in the multiple addresses table during checkout.
+     * Logs each column name as it is verified.
+     */
+    verifyMultipleAddressesTable(): void {
+        cy.get(CHECKOUT_SELECTORS.multiShipTable).within(() => {
+            multipleAddressTableElements.forEach((column) => {
+                cy.log(`Verifying ${column} column`);
+
+                cy.get(`[data-th="${column}"]`)
+                    .should('be.visible');
+            })
         })
     }
 
