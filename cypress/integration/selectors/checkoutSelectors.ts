@@ -68,5 +68,10 @@ export const CHECKOUT_SELECTORS = {
     defaultAddressInfo: '.message.info',
     addressesBlock: '.block.block-billing',
     addressesToChoose: '.box-billing-address',
-    actionButton: '.action'
+    actionButton: '.action',
+    couponBlock: '.payment-option-title',
+    discountCodeInput: 'input#discount-code',
+    applyCouponButton: '.action.action-apply',
+    cancelAction: '.action.action-cancel',
+    validationMessage: '[data-role="checkout-messages"]'
 };

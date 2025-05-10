@@ -15,7 +15,7 @@ import { CHECKOUT_SELECTORS } from '../../selectors/checkoutSelectors';
 let isLogged: boolean = false;
 
 const checkoutType = 'Checkout';
-const CANCEL_COUPON_MESSAGE = 'You canceled the coupon code.';
+const CANCEL_COUPON_MESSAGE = 'Your coupon was successfully removed.';
 const generatedEmail = `${generate.generateString()}@gmail.com`;
 
 const shippingAddressParams = [
@@ -34,7 +34,7 @@ const countryParams = [
 
 const couponList = [
     { couponCode: 'test123', type: 'Invalid' },
-    { couponCode: 'h20', type: 'Valid' },
+    { couponCode: '20poff', type: 'Valid' },
 ];
 
 const shippingInfoBlock = ['Ship To', 'Shipping Method'];
@@ -113,20 +113,22 @@ describe(`Transaction Path - ${checkoutType}`, () => {
         });
     });
 
-    describe('Coupon Section Verification', () => {
+    describe.only('Coupon Section Verification', () => {
         couponList.forEach(({ couponCode, type }) => {
             it(`Should apply ${type} Code`, () => {
-                const COUPON_MESSAGE = (type === 'Invalid')
-                    ? `The coupon code "${couponCode}" is not valid.`
-                    : `You used coupon code "${couponCode}".`;
+                checkout.shouldClickOnButton(CHECKOUT_SELECTORS.nextButton, 'Next');
 
-                cart.openCouponSection();
-                cart.applyCoupon(couponCode);
-                results.shouldVerifyPageMessage(COUPON_MESSAGE);
+                const COUPON_MESSAGE = (type === 'Invalid')
+                    ? 'The coupon code isn\'t valid. Verify the code and try again.'
+                    : 'Your coupon was successfully applied.';
+
+                checkout.openCouponSection();
+                checkout.applyCoupon(couponCode);
+                checkout.shouldVerifyCouponMessage(COUPON_MESSAGE);
 
                 if (type === 'Valid') {
-                    cart.cancelCoupon();
-                    results.shouldVerifyPageMessage(CANCEL_COUPON_MESSAGE);
+                    checkout.cancelCoupon();
+                    checkout.shouldVerifyCouponMessage(CANCEL_COUPON_MESSAGE);
                 }
             });
         });

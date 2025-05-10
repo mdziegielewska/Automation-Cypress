@@ -545,6 +545,64 @@ class Checkout {
             cy.url().should('contain', '/');
         }
     };
+
+    /**
+    * Opens Apply Discount Code section.
+    */
+   openCouponSection(): void {
+       cy.log('Opening Coupon section');
+
+       cy.get(CHECKOUT_SELECTORS.couponBlock)
+           .should('have.attr', 'aria-expanded', 'false')
+           .click()
+           .should('have.attr', 'aria-expanded', 'true');
+   }
+
+
+    /**
+     * Applies a coupon code to the cart.
+     * @param couponCode The coupon code to apply.
+     */
+    applyCoupon(couponCode: string): void {
+        cy.log(`Applying coupon code - ${couponCode}`);
+
+        cy.get(CHECKOUT_SELECTORS.discountCodeInput)
+            .should('be.visible')
+            .clear()
+            .type(couponCode);
+
+        cy.get(CHECKOUT_SELECTORS.applyCouponButton).click();
+
+        routes.expect('CouponResult');
+    }
+
+    /**
+     * Cancels Coupon in Apply Discount Code section
+     */
+    cancelCoupon(): void {
+        cy.log('Cancelling coupon');
+    
+        cy.get(CHECKOUT_SELECTORS.cancelAction)
+            .contains('Cancel coupon')
+            .click();
+    }
+
+    /**
+     * Verifies if a specific coupon message is displayed on the page.
+     * It waits for a few seconds to ensure the message has time to appear
+     * before asserting its content.
+     * @param message - The exact text or a part of the text expected in the coupon message.
+     */
+    shouldVerifyCouponMessage(message: string): void {
+        cy.log('Verifying coupon message');
+
+        cy.wait(5000);
+        cy.get(CHECKOUT_SELECTORS.validationMessage, { timeout: 6000 })
+        .should(($el) => {
+            const text = $el.text();
+            expect(text).to.contain(message);
+        });
+    }
 }
 
 export const checkout = new Checkout();
