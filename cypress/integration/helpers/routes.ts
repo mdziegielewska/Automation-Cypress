@@ -65,7 +65,13 @@ class Routes {
             case 'LogInResult': return ['POST', '/customer/account/loginPost/'];
             case 'LogOut': return ['POST', '/customer/account/logout/'];
             case 'Mode': return ['GET', '/women/tops-women.html?product_list_mode='];
-            case 'MultiShippingPage': ['GET', '/multishipping/checkout/addresses/'];
+            case 'MultiShippingPage': return ['GET', '/multishipping/checkout/addresses/'];
+            case 'MultiShipNewAddressPage': return ['GET', '/multishipping/checkout_address/newShipping/'];
+            case 'MultiShippingMethodPage': return ['GET', '/multishipping/checkout/shipping/'];
+            case 'MultiShippingMethodResult': return ['POST', '/multishipping/checkout/shippingPost/'];
+            case 'MultiShippingBillingPage': return ['GET', '/multishipping/checkout/billing/'];
+            case 'MultiShippingOverviewPage': return ['GET', '/multishipping/checkout/overview/'];
+            case 'MultiShippingOverviewResult': return ['POST', '/multishipping/checkout/overviewPost/'];
             case 'OrdersReturnsPage': return ['GET', '/sales/guest/form/'];
             case 'OrdersReturnsResult': return ['GET', '/sales/guest/view/'];
             case 'PrivacyPolicyPage': return ['GET', '/privacy-policy-cookie-restriction-mode'];
@@ -76,6 +82,7 @@ class Routes {
             case 'SignUpResult': return ['POST', '/customer/account/createpost/'];
             case 'Sorter': return ['GET', '/women/tops-women.html?product_list_order='];
             case 'SuccessPage': return ['GET', '/checkout/onepage/success/'];
+            case 'SuccessMultiPage': return ['GET', '/multishipping/checkout/success/'];
             case 'UpdateResult': return ['POST', '/checkout/cart/updateItemOptions/'];
             case 'WaterBottlePDP': return ['GET', '/affirm-water-bottle.html'];
 

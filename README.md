@@ -43,7 +43,8 @@ This repository contains Cypress automation tests written in TypeScript to autom
 - Transaction path
     - [x] Mini Cart 
     - [x] Cart
-    - [ ] Checkout
+    - [x] Checkout
+        - [x] Checkout with Multiple Addresses
 - My Account
     - [ ] Orders
     - [ ] Address book
