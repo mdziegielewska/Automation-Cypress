@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
 
-import { RESULTS_SELECTORS } from "../selectors/selectors";
+import { PAGE_SELECTORS } from "../selectors/pageSelectors";
 
 
 class Results {
@@ -10,7 +10,7 @@ class Results {
      * @returns {Cypress.Chainable<string>} - A Cypress Chainable that resolves to the text content of the page message.
      */
     getPageMessage(): Cypress.Chainable<string> {
-        return cy.get(RESULTS_SELECTORS.pageMessage)
+        return cy.get(PAGE_SELECTORS.pageMessage)
             .eq(1)
             .invoke('text');
     }
@@ -47,7 +47,7 @@ class Results {
     shouldVerifyPageTitle(title: string): void {
         cy.log('Verifying page title');
 
-        this.verifyText(RESULTS_SELECTORS.pageTitle, title);
+        this.verifyText(PAGE_SELECTORS.pageTitle, title);
     }
 
     /**
@@ -57,7 +57,7 @@ class Results {
     shouldVerifyPageMessage(text: string): void {
         cy.log('Verifying page message');
 
-        this.verifyText(RESULTS_SELECTORS.pageMessage, text);
+        this.verifyText(PAGE_SELECTORS.pageMessage, text);
     }
 
     /**
@@ -67,7 +67,7 @@ class Results {
     shouldVerifyMageErrorMessage(text: string): void {
         cy.log('Verifying mage error');
 
-        this.verifyText(RESULTS_SELECTORS.mageErrorMessage, text);
+        this.verifyText(PAGE_SELECTORS.mageErrorMessage, text);
     }
 }
 

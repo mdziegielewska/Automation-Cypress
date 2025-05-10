@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
 
-import { LISTING_SELECTORS } from "../selectors/selectors";
+import { LISTING_SELECTORS } from "../selectors/listingSelectors";
 
 
 class Widgets {
@@ -26,7 +26,8 @@ class Widgets {
     shouldVerifyNumberOfElements(section: string, expectedNumber: number): void {
         cy.log(`Verifying number of elements for selector ${section}`);
 
-        cy.get(section).should('have.length', expectedNumber);
+        cy.get(section)
+            .should('have.length', expectedNumber);
     }
 
     /**

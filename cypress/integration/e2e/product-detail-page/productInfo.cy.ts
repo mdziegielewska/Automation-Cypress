@@ -1,12 +1,11 @@
 /// <reference types="cypress"/>
 
-import { round } from "../../../../node_modules/cypress/types/lodash/index";
 import { gallery } from "../../helpers/gallery";
 import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
 import { routes } from "../../helpers/routes";
 import { widgets } from "../../helpers/widgets";
-import { PRODUCT_SELECTORS } from "../../selectors/selectors";
+import { PRODUCT_SELECTORS } from "../../selectors/productSelectors";
 
 
 const tabs = [

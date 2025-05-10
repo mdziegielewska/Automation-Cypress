@@ -1,8 +1,8 @@
 /// <reference types="cypress"/>
 
-import { AUTHORIZATION_SELECTORS, NAVIGATION_SELECTORS } from '../selectors/selectors';
+import { AUTHORIZATION_SELECTORS } from '../selectors/authorizationSelectors';
+import { NAVIGATION_SELECTORS } from '../selectors/navigationSelectors';
 import { forms } from './forms';
-import { results } from './results';
 import { routes } from "./routes";
 
 

@@ -5,7 +5,7 @@ import { forms } from '../../helpers/forms';
 import { generate } from '../../helpers/generate';
 import { results } from '../../helpers/results';
 import { routes } from '../../helpers/routes';
-import { AUTHORIZATION_SELECTORS } from '../../selectors/selectors';
+import { AUTHORIZATION_SELECTORS } from '../../selectors/authorizationSelectors';
 
 
 const REGISTER_MESSAGE = `Thank you for registering with Main Website Store.`;

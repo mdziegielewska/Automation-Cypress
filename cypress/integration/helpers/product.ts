@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
 
-import { PRODUCT_SELECTORS } from "../selectors/selectors";
+import { PRODUCT_SELECTORS } from "../selectors/productSelectors";
 import { results } from "./results";
 import { routes } from "./routes";
 
@@ -61,9 +61,7 @@ class Product {
             case 'PDP':
                 return cy.get(PRODUCT_SELECTORS.productOptionsWrapper);
             case 'Listing Page':
-                return cy.get(PRODUCT_SELECTORS.productItemDetails)
-                    .eq(1);
-            //.first();
+                return cy.get(PRODUCT_SELECTORS.productItemDetails).eq(1);
         }
     }
 
@@ -89,8 +87,7 @@ class Product {
      * @returns A Cypress chainable yielding the swatch attribute element.
      */
     private getAttribute(type: 'PDP' | 'Listing Page', attribute: string): Cypress.Chainable<JQuery<HTMLElement>> {
-        return this.getItem(type)
-            .find(PRODUCT_SELECTORS.swatchAttribute(attribute));
+        return this.getItem(type).find(PRODUCT_SELECTORS.swatchAttribute(attribute));
     }
 
     /**
@@ -143,8 +140,7 @@ class Product {
      * @returns A Cypress chainable yielding the product price element.
      */
     getPrice(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return this.getItem('Listing Page')
-            .find(PRODUCT_SELECTORS.productPrice);
+        return this.getItem('Listing Page').find(PRODUCT_SELECTORS.productPrice);
     }
 
     /**
@@ -152,8 +148,7 @@ class Product {
      * @returns A Cypress chainable yielding the product item elements within the related products block.
      */
     getRelated(): Cypress.Chainable<JQuery<HTMLElement>> {
-        return cy.get(PRODUCT_SELECTORS.relatedProductsWrapper)
-            .find(PRODUCT_SELECTORS.productItemDetails);
+        return cy.get(PRODUCT_SELECTORS.relatedProductsWrapper).find(PRODUCT_SELECTORS.productItemDetails);
     }
 
     /**
@@ -164,8 +159,7 @@ class Product {
      */
     getTab(name: string): Cypress.Chainable<JQuery<HTMLElement>> {
         return cy.get(PRODUCT_SELECTORS.productDetails).within(() => {
-            cy.contains(name)
-                .click();
+            cy.contains(name).click();
         });
     }
 
@@ -179,8 +173,7 @@ class Product {
 
         cells.forEach(({ name, locator }) => {
             cy.log(`Verifying Product Info Element: ${name}`);
-            cy.get(locator)
-                .should('be.visible');
+            cy.get(locator).should('be.visible');
         });
     }
 
@@ -232,8 +225,7 @@ class Product {
         for (const pdpElement of pdpElements) {
             cy.log(`Verifying visibility of ${pdpElement.name}`)
 
-            cy.get(pdpElement.locator)
-                .should('be.visible');
+            cy.get(pdpElement.locator).should('be.visible');
         }
     }
 
@@ -247,8 +239,7 @@ class Product {
             cy.log(`Switching to Tab: ${name}`);
 
             this.getTab(name);
-            cy.get(locator)
-                .should('be.visible');
+            cy.get(locator).should('be.visible');
         });
     }
 
@@ -370,8 +361,7 @@ class Product {
     getCompareTable(): Cypress.Chainable<JQuery<HTMLElement>> {
         cy.log('Getting Compare Table');
 
-        return cy.get(PRODUCT_SELECTORS.productComparisonTable)
-            .should('be.visible');
+        return cy.get(PRODUCT_SELECTORS.productComparisonTable).should('be.visible');
     }
 
     /**
@@ -381,12 +371,10 @@ class Product {
     compareProducts(): void {
         cy.log('Comparing Products');
 
-        cy.get(PRODUCT_SELECTORS.compareLink)
-            .click();
+        cy.get(PRODUCT_SELECTORS.compareLink).click();
 
         routes.expect('CompareProductsPage');
-        cy.url()
-            .should('contain', '/catalog/product_compare/');
+        cy.url().should('contain', '/catalog/product_compare/');
     }
 
     /**
@@ -453,8 +441,7 @@ class Product {
                 results.shouldVerifyPageMessage(expectedMessage);
 
                 if (type === 'Wishlist') {
-                    cy.url()
-                        .should('contain', '/customer/account/login/');
+                    cy.url().should('contain', '/customer/account/login/');
                 }
             }
         });

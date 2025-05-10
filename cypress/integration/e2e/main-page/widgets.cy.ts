@@ -2,7 +2,7 @@
 
 import { routes } from "../../helpers/routes";
 import { widgets } from "../../helpers/widgets";
-import { LISTING_SELECTORS } from "../../selectors/selectors";
+import { LISTING_SELECTORS } from "../../selectors/listingSelectors";
 
 
 const widget = [

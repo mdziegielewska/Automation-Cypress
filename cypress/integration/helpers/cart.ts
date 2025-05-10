@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
 
-import { CART_SELECTORS } from "../selectors/selectors";
+import { CART_SELECTORS } from "../selectors/cartSelectors";
 import { forms } from "./forms";
 import { routes } from "./routes";
 
@@ -39,11 +39,8 @@ class Cart {
     closeMiniCart(): void {
         cy.log('Closing Mini Cart');
 
-        cy.get(CART_SELECTORS.closeMiniCartButton)
-            .click();
-
-        cy.get(CART_SELECTORS.miniCartToggle)
-            .should('not.have.class', 'active');
+        cy.get(CART_SELECTORS.closeMiniCartButton).click();
+        cy.get(CART_SELECTORS.miniCartToggle).should('not.have.class', 'active');
     }
 
     /**
@@ -52,8 +49,7 @@ class Cart {
     shouldBeEmpty(): void {
         cy.log('Verifying if the Cart is empty');
 
-        cy.get(CART_SELECTORS.miniCartWrapper)
-            .should('contain.text', 'You have no items in your shopping cart.');
+        cy.get(CART_SELECTORS.miniCartWrapper).should('contain.text', 'You have no items in your shopping cart.');
     }
 
     /**
@@ -85,20 +81,14 @@ class Cart {
         switch (type) {
             case 'Mini Cart':
                 cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
-                    cy.get(CART_SELECTORS.itemsTotal)
-                        .should('contain', count.toString());
-
-                    cy.get(CART_SELECTORS.priceWrapper)
-                        .should('contain', '$');
+                    cy.get(CART_SELECTORS.itemsTotal).should('contain', count.toString());
+                    cy.get(CART_SELECTORS.priceWrapper).should('contain', '$');
                 });
                 break;
 
             case 'Cart':
-                cy.get(CART_SELECTORS.itemsTotal)
-                    .should('contain', count.toString());
-
-                cy.get(CART_SELECTORS.priceWrapper)
-                    .should('contain', '$');
+                cy.get(CART_SELECTORS.itemsTotal).should('contain', count.toString());
+                cy.get(CART_SELECTORS.priceWrapper).should('contain', '$');
                 break;
 
             default:
@@ -115,9 +105,7 @@ class Cart {
 
         cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
             cy.get(CART_SELECTORS.productDetails).within(() => {
-
-                cy.contains(productName)
-                    .should('be.visible');
+                cy.contains(productName).should('be.visible');
 
                 cy.contains('See Details')
                     .should('be.visible')
@@ -147,15 +135,13 @@ class Cart {
             cartItemElements.forEach(({ name, selector }) => {
                 cy.log(`Verifying Product Details for ${name} in Cart`);
 
-                cy.get(selector)
-                    .should('be.visible');
+                cy.get(selector).should('be.visible');
             })
         });
 
         cy.get(CART_SELECTORS.cartSummary).within(() => {
             for (const element of summaryItemsElements) {
-                cy.contains(element)
-                    .should('be.visible');
+                cy.contains(element).should('be.visible');
             }
         })
     }
@@ -171,8 +157,7 @@ class Cart {
             .first()
             .click();
 
-        cy.url()
-            .should('contain', url);
+        cy.url().should('contain', url);
     }
 
     /**
@@ -193,8 +178,7 @@ class Cart {
                 break;
 
             case 'Cart':
-                cy.get(CART_SELECTORS.editButtonCart)
-                    .click();
+                cy.get(CART_SELECTORS.editButtonCart).click();
                 break;
 
             default:
@@ -202,9 +186,7 @@ class Cart {
         }
 
         routes.expect('EditPage');
-
-        cy.url()
-            .should('include', '/checkout/cart/configure/');
+        cy.url().should('include', '/checkout/cart/configure/');
     }
 
     /**
@@ -239,14 +221,12 @@ class Cart {
             case 'Mini Cart':
                 this.openMiniCart();
                 cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
-                    cy.get(CART_SELECTORS.deleteButton)
-                        .click();
+                    cy.get(CART_SELECTORS.deleteButton).click();
                 });
                 break;
 
             case 'Cart':
-                cy.get(CART_SELECTORS.deleteButtonCart)
-                    .click();
+                cy.get(CART_SELECTORS.deleteButtonCart).click();
                 break;
 
             default:
@@ -272,8 +252,7 @@ class Cart {
                         .type(quantity.toString())
                         .blur();
 
-                    cy.get(CART_SELECTORS.updateMiniCartButton)
-                        .click();
+                    cy.get(CART_SELECTORS.updateMiniCartButton).click();
                 });
                 break;
 
@@ -283,8 +262,7 @@ class Cart {
                     .type(quantity.toString())
                     .blur();
 
-                cy.get(CART_SELECTORS.updateShoppingCartButton)
-                    .click();
+                cy.get(CART_SELECTORS.updateShoppingCartButton).click();
                 break;
 
             default:
@@ -348,8 +326,7 @@ class Cart {
             .clear()
             .type(couponCode);
 
-        cy.get(CART_SELECTORS.applyCouponButton)
-            .click();
+        cy.get(CART_SELECTORS.applyCouponButton).click();
 
         routes.expect('CouponResult');
     }
@@ -360,8 +337,7 @@ class Cart {
     cancelCoupon(): void {
         cy.log('Cancelling coupon');
 
-        cy.get(CART_SELECTORS.cancelCouponButton)
-            .click();
+        cy.get(CART_SELECTORS.cancelCouponButton).click();
     }
 
     /**

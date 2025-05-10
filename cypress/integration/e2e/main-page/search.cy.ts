@@ -6,7 +6,8 @@ import { routes } from "../../helpers/routes";
 import { listing } from "../../helpers/listings";
 import { search } from '../../helpers/search';
 import { widgets } from "../../helpers/widgets";
-import { RESULTS_SELECTORS, SEARCH_SELECTORS } from "../../selectors/selectors";
+import { SEARCH_SELECTORS } from "../../selectors/searchSelectors";
+import { PAGE_SELECTORS } from "../../selectors/pageSelectors";
 
 
 describe('Main page - Search', () => {
@@ -21,7 +22,7 @@ describe('Main page - Search', () => {
         forms.submit('search');
 
         search.shouldDisplaySearchResults();
-        results.shouldVerifyTextInSection(RESULTS_SELECTORS.pageTitle, 'Search results');
+        results.shouldVerifyTextInSection(PAGE_SELECTORS.pageTitle, 'Search results');
         listing.shouldVerifyListingElements();
     })
 
@@ -32,6 +33,6 @@ describe('Main page - Search', () => {
         widgets.shouldVerifyNumberOfElements('@related', 5);
         search.shouldClickInSearchTerms('related');
 
-        results.shouldVerifyTextInSection(RESULTS_SELECTORS.pageTitle, 'Search results');
+        results.shouldVerifyTextInSection(PAGE_SELECTORS.pageTitle, 'Search results');
     })
 })

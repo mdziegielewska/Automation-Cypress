@@ -10,8 +10,7 @@ class Forms {
     fillField(field: string, value: string): void {
         cy.log('Filling form field');
 
-        cy.get(`${field}`)
-            .type(value);
+        cy.get(`${field}`).type(value);
     }
 
     /**
@@ -24,8 +23,8 @@ class Forms {
         cy.log(`Selecting ${value}`);
 
         cy.get(field)
-            .should('have.class', 'select')
-            .select(value)
+            .should('not.be.empty')
+            .select(value);
     }
 
     /**

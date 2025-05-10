@@ -3,7 +3,7 @@
 import { listing } from '../../helpers/listings';
 import { results } from '../../helpers/results';
 import { widgets } from '../../helpers/widgets';
-import { LISTING_SELECTORS } from '../../selectors/selectors';
+import { LISTING_SELECTORS } from '../../selectors/listingSelectors';
 
 
 const whatsNew = [

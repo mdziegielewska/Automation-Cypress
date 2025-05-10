@@ -4,7 +4,7 @@ import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
 import { routes } from "../../helpers/routes";
 import { widgets } from "../../helpers/widgets";
-import { LISTING_SELECTORS } from "../../selectors/selectors";
+import { LISTING_SELECTORS } from "../../selectors/listingSelectors";
 
 
 const ADD_TO_CART_MESSAGE = "You added Breathe-Easy Tank to your shopping cart.";

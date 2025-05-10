@@ -3,7 +3,7 @@
 import { results } from '../../helpers/results';
 import { reviews } from '../../helpers/reviews';
 import { routes } from '../../helpers/routes';
-import { PRODUCT_SELECTORS } from '../../selectors/selectors';
+import { PRODUCT_SELECTORS } from '../../selectors/productSelectors';
 
 
 const reviewForm = [

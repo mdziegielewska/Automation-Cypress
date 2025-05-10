@@ -4,7 +4,7 @@ import { product } from "../../helpers/product";
 import { results } from "../../helpers/results";
 import { routes } from "../../helpers/routes";
 import { widgets } from "../../helpers/widgets";
-import { PRODUCT_SELECTORS } from "../../selectors/selectors";
+import { PRODUCT_SELECTORS } from "../../selectors/productSelectors";
 
 
 const ADD_TO_WISHLIST_MESSAGE = "You must login or register to add items to your wishlist.";

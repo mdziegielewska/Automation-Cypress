@@ -1,7 +1,7 @@
 /// <reference types="cypress"/>
 
 import { routes } from "./routes";
-import { SEARCH_SELECTORS } from "../selectors/selectors";
+import { SEARCH_SELECTORS } from "../selectors/searchSelectors";
 
 
 class Search {
@@ -24,8 +24,7 @@ class Search {
     shouldShowAutocomplete(): void {
         cy.log('Verifying autocomplete Search');
 
-        cy.get(SEARCH_SELECTORS.autocomplete)
-            .should('be.visible');
+        cy.get(SEARCH_SELECTORS.autocomplete).should('be.visible');
     }
 
     /**
@@ -34,8 +33,7 @@ class Search {
     shouldDisplaySearchResults(): void {
         cy.log('Verifying display Search Results visibility');
 
-        cy.get(SEARCH_SELECTORS.searchResults)
-            .should('be.visible');
+        cy.get(SEARCH_SELECTORS.searchResults).should('be.visible');
     }
 
     /**

@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
 
-import { PRODUCT_SELECTORS } from '../selectors/selectors'; // dopasuj ścieżkę!
+import { PRODUCT_SELECTORS } from '../selectors/productSelectors';
 
 const arrows = ['prev', 'next'] as const;
 
@@ -27,8 +27,7 @@ class Gallery {
             cy.log(`Verifying ${arrow} Arrow scrolling`);
 
             cy.get(PRODUCT_SELECTORS.arrow(arrow)).click();
-            cy.get(PRODUCT_SELECTORS.activeImage)
-                .should('be.visible');
+            cy.get(PRODUCT_SELECTORS.activeImage).should('be.visible');
         }
     }
 }

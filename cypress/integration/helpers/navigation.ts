@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
 
-import { NAVIGATION_SELECTORS } from "../selectors/selectors";
+import { NAVIGATION_SELECTORS } from "../selectors/navigationSelectors";
 
 
 class Navigation {
@@ -39,8 +39,7 @@ class Navigation {
             .should('be.visible')
             .click();
 
-        cy.url()
-            .should('contain', url);
+        cy.url().should('contain', url);
     }
 
     /**
@@ -62,8 +61,7 @@ class Navigation {
     shouldBeExpandable(tab: string): void {
         cy.log(`Verifying if Tab ${tab} is expandable`);
 
-        this.getExpandableIcon(tab)
-            .should('exist');
+        this.getExpandableIcon(tab).should('exist');
     }
 
     /**
@@ -114,14 +112,10 @@ class Navigation {
     shouldVerifyTabRedirection(tab: string, url: string): void {
         cy.log('Verifying Redirection Url');
 
-        this.getTab(tab)
-            .click();
+        this.getTab(tab).click();
 
-        cy.url()
-            .should('contain', url);
-
-        cy.get(NAVIGATION_SELECTORS.pageTitleHeading)
-            .should('contain.text', tab);
+        cy.url().should('contain', url);
+        cy.get(NAVIGATION_SELECTORS.pageTitleHeading).should('contain.text', tab);
     }
 
     /**
@@ -155,8 +149,7 @@ class Navigation {
     shouldContainNavPanel(nav: string): void {
         cy.log(`Verifying Nav Panel ${nav} visibility`);
 
-        cy.get(NAVIGATION_SELECTORS.navPanel(nav))
-            .should('be.visible');
+        cy.get(NAVIGATION_SELECTORS.navPanel(nav)).should('be.visible');
     }
 
     /**

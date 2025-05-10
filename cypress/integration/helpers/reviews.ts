@@ -1,6 +1,6 @@
 /// <reference types="cypress"/>
 
-import { PRODUCT_SELECTORS } from '../selectors/selectors';
+import { PRODUCT_SELECTORS } from '../selectors/productSelectors';
 import { forms } from './forms';
 
 
@@ -43,8 +43,7 @@ class Reviews {
     clickAddYourReview(): void {
         cy.log('Clicking on add your review');
 
-        cy.get(PRODUCT_SELECTORS.addReviewButton)
-            .click();
+        cy.get(PRODUCT_SELECTORS.addReviewButton).click();
     }
 
     /**
@@ -53,8 +52,7 @@ class Reviews {
     verifyRedirectedToReviewsTab(): void {
         cy.log('Redirecting to reviews tab');
 
-        cy.get(PRODUCT_SELECTORS.reviewsTabActive)
-            .should('have.id', 'tab-label-reviews');
+        cy.get(PRODUCT_SELECTORS.reviewsTabActive).should('have.id', 'tab-label-reviews');
     }
 
     /**
@@ -66,8 +64,7 @@ class Reviews {
         this.getReviewCount()
             .then(expectedReviewsCount => {
                 this.clickAddYourReview();
-                cy.get(PRODUCT_SELECTORS.reviewItems)
-                    .should('have.length', expectedReviewsCount);
+                cy.get(PRODUCT_SELECTORS.reviewItems).should('have.length', expectedReviewsCount);
             });
     }
 
@@ -94,8 +91,7 @@ class Reviews {
     submitReview(): void {
         cy.log('Submitting review');
 
-        cy.get(PRODUCT_SELECTORS.submitButton)
-            .click();
+        cy.get(PRODUCT_SELECTORS.submitButton).click();
     }
 }
 

@@ -1,7 +1,7 @@
 /// <reference types="cypress"/>
 
 import { product } from "./product";
-import { LISTING_SELECTORS } from "../selectors/selectors";
+import { LISTING_SELECTORS } from "../selectors/listingSelectors";
 
 
 const listingElements = [
@@ -37,8 +37,7 @@ class Listing {
     private selectOption(selector: string, option: string): void {
         cy.log(`Selecting ${option} from ${selector}`);
 
-        cy.get(selector)
-            .select(option);
+        cy.get(selector).select(option);
     }
 
     /**
@@ -47,8 +46,7 @@ class Listing {
     shouldContainFilterBlock(): void {
         cy.log('Verifying filters block');
 
-        cy.get(LISTING_SELECTORS.sidebarMain)
-            .should('be.visible');
+        cy.get(LISTING_SELECTORS.sidebarMain).should('be.visible');
     }
 
     /**
@@ -72,8 +70,7 @@ class Listing {
     shouldVerifyListingElements(): void {
         listingElements.forEach(element => {
             cy.log(`Verifying ${element.name}`);
-            cy.get(element.locator)
-                .should('be.visible');
+            cy.get(element.locator).should('be.visible');
         });
     }
 
@@ -120,7 +117,9 @@ class Listing {
         cy.log('Changing modes');
 
         if (mode === 'list') {
-            cy.get(LISTING_SELECTORS.modeButton(mode)).eq(0).click({ force: true });
+            cy.get(LISTING_SELECTORS.modeButton(mode))
+                .eq(0)
+                .click({ force: true });
         }
     }
 
@@ -131,8 +130,7 @@ class Listing {
     shouldVerifyCurrentMode(mode: string): void {
         cy.log(`Verifying ${mode} mode`);
 
-        cy.get(LISTING_SELECTORS.productsWrapperMode(mode))
-            .should('be.visible');
+        cy.get(LISTING_SELECTORS.productsWrapperMode(mode)).should('be.visible');
     }
 
     /**

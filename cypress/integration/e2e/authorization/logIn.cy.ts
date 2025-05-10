@@ -4,7 +4,7 @@ import { authorization } from '../../helpers/authorization';
 import { forms } from '../../helpers/forms';
 import { results } from '../../helpers/results';
 import { routes } from '../../helpers/routes';
-import { AUTHORIZATION_SELECTORS } from '../../selectors/selectors';
+import { AUTHORIZATION_SELECTORS } from '../../selectors/authorizationSelectors';
 
 
 const LOGIN_SUCCESS_MESSAGE = `Welcome, ${Cypress.env("TEST_FIRST_NAME")} ${Cypress.env("TEST_LAST_NAME")}!`;
