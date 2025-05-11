@@ -55,19 +55,20 @@ class Forms {
 
     /**
      * Fills out the shipping address form by entering values into input fields and selecting dropdown values.
-     * @param {Array} shippingData - An array of objects representing input fields and their values (e.g. name, street).
-     * @param {Array} countryData - An array of objects representing dropdown fields and selected values (e.g. country, region).
+     * @param {Object} addressData - An object containing two properties: shippingAddressParams and countryParams.
      */
-    fillShippingData(shippingData: { field: string, value: string }[], countryData: { field: string, value: string }[]): void {
+    fillShippingData(addressData: { shippingAddressParams: { field: string, value: string }[], countryParams: { field: string, value: string }[] }): void {
         cy.log('Filling Shipping Data');
 
-        shippingData.forEach(({ field, value }) => {
+        const { shippingAddressParams, countryParams } = addressData;
+
+        shippingAddressParams.forEach(({ field, value }) => {
             this.fillField(field, value);
         });
 
-        countryData.forEach(({ field, value }) => {
+        countryParams.forEach(({ field, value }) => {
             this.selectValue(field, value);
-        })
+        });
     }
 }
 

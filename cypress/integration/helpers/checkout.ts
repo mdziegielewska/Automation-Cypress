@@ -2,10 +2,15 @@
 
 import { CART_SELECTORS } from "../selectors/cartSelectors";
 import { CHECKOUT_SELECTORS } from "../selectors/checkoutSelectors";
+import { cart } from "./cart";
+import { forms } from "./forms";
+import { product } from "./product";
 import { results } from "./results";
 import { routes } from "./routes";
+import { widgets } from "./widgets";
 
 
+const SAVE_NEW_ADDRESS_MESSAGE = "You saved the address.";
 const THANK_YOU_PAGE_TITLE = 'Thank you for your purchase!';
 const THANK_YOU_PAGE_MESSAGE = 'We\'ll email you an order confirmation with details and tracking info';
 const THANK_YOU_MULTI_MESSAGE = 'For successfully order items, you\'ll receive a confirmation email including order numbers, tracking information and more details.';
@@ -15,13 +20,13 @@ const regularShippingElements = {
         { name: 'Progress Bar', selector: CHECKOUT_SELECTORS.progressBar },
         { name: 'Shipping Address', selector: CHECKOUT_SELECTORS.shippingAddressSection },
         { name: 'Shipping Methods', selector: CHECKOUT_SELECTORS.shippingMethodSection },
-        { name: 'Order Summary', selector: CHECKOUT_SELECTORS.summarySection }
+        { name: 'Order Summary', selector: CHECKOUT_SELECTORS.summarySidebarSection }
     ],
     checkoutRPElements: [
         { name: 'Progress Bar', selector: CHECKOUT_SELECTORS.progressBar },
-        { name: 'Payment Method', selector: CHECKOUT_SELECTORS.paymentMethodSection },
+        { name: 'Payment Method', selector: CHECKOUT_SELECTORS.paymentMethodsSection },
         { name: 'Discount Section', selector: CHECKOUT_SELECTORS.discountSection },
-        { name: 'Order Summary', selector: CHECKOUT_SELECTORS.summarySection },
+        { name: 'Order Summary', selector: CHECKOUT_SELECTORS.summarySidebarSection },
         { name: 'Shipping Information', selector: CHECKOUT_SELECTORS.shippingInfoSection }
     ],
     orderItemElements: [
@@ -29,53 +34,66 @@ const regularShippingElements = {
         { name: 'qty', selector: CHECKOUT_SELECTORS.productQty },
         { name: 'price', selector: CHECKOUT_SELECTORS.productPrice },
         { name: 'options', selector: CHECKOUT_SELECTORS.productOptions },
-        { name: 'photo', selector: CHECKOUT_SELECTORS.productPhoto }
+        { name: 'photo', selector: CHECKOUT_SELECTORS.productImage }
     ]
 };
 
 const multiShippingCheckoutElements = {
     shipMultipleElements: [
-        { name: 'Table', selector: CHECKOUT_SELECTORS.multiShipTable },
+        { name: 'Table', selector: CHECKOUT_SELECTORS.multiShippingTable },
         { name: 'Go to Shipping Information', selector: CHECKOUT_SELECTORS.continueButton },
-        { name: 'Back to Shopping Cart', selector: CHECKOUT_SELECTORS.backActionButton },
+        { name: 'Back to Shopping Cart', selector: CHECKOUT_SELECTORS.backButton },
         { name: 'Update Qty & Addresses', selector: CART_SELECTORS.updateActionButton },
-        { name: 'Enter a New Address', selector: CHECKOUT_SELECTORS.addActionButton }
+        { name: 'Enter a New Address', selector: CHECKOUT_SELECTORS.addItemButton }
     ],
     shippingMethodPageElements: [
-        { name: 'Shipping Information', selector: CHECKOUT_SELECTORS.shippingBlockTable },
+        { name: 'Shipping Information', selector: CHECKOUT_SELECTORS.shippingBlock },
         { name: 'Shipping To', selector: CHECKOUT_SELECTORS.shippingToSection },
-        { name: 'Items', selector: CHECKOUT_SELECTORS.boxItems },
+        { name: 'Items', selector: CHECKOUT_SELECTORS.cartItemsSection },
         { name: 'Go to Billing Information', selector: CHECKOUT_SELECTORS.continueButton },
-        { name: 'Back to Select Addresses', selector: CHECKOUT_SELECTORS.backActionButton }
+        { name: 'Back to Select Addresses', selector: CHECKOUT_SELECTORS.backButton }
     ],
     billingInformationPageElements: [
-        { name: 'Billing Information', selector: CHECKOUT_SELECTORS.billingBlockTable },
-        { name: 'Payment Method', selector: CHECKOUT_SELECTORS.paymentMethodBoxSection },
+        { name: 'Billing Information', selector: CHECKOUT_SELECTORS.billingBlock },
+        { name: 'Payment Method', selector: CHECKOUT_SELECTORS.paymentBox },
         { name: 'Go to Review Your Order', selector: CHECKOUT_SELECTORS.continueButton },
-        { name: 'Back to Shipping Information', selector: CHECKOUT_SELECTORS.backActionButton }
+        { name: 'Back to Shipping Information', selector: CHECKOUT_SELECTORS.backButton }
     ],
     reviewOrderPageElements: [
-        { name: 'Billing Information', selector: CHECKOUT_SELECTORS.billingBlockTable },
-        { name: 'Shipping Information', selector: CHECKOUT_SELECTORS.paymentMethodBoxSection },
+        { name: 'Billing Information', selector: CHECKOUT_SELECTORS.billingBlock },
+        { name: 'Shipping Information', selector: CHECKOUT_SELECTORS.paymentBox },
         { name: 'Items', selector: CHECKOUT_SELECTORS.orderReviewTable },
-        { name: 'Back to Shipping Information', selector: CHECKOUT_SELECTORS.backActionButton },
-        { name: 'Place Order', selector: CHECKOUT_SELECTORS.placeOrderMultiShipping },
-        { name: 'Back to Billing Information', selector: CHECKOUT_SELECTORS.backActionButton }
+        { name: 'Back to Shipping Information', selector: CHECKOUT_SELECTORS.backButton },
+        { name: 'Place Order', selector: CHECKOUT_SELECTORS.placeOrderMultiShippingButton },
+        { name: 'Back to Billing Information', selector: CHECKOUT_SELECTORS.backButton }
     ]
 };
 
 const multipleAddressTableElements = ['Product', 'Qty', 'Send To', 'Actions'];
 
 const billingSelectors = [
-    CHECKOUT_SELECTORS.billingInfoSection,
-    CHECKOUT_SELECTORS.billingAddressDetails
+    CHECKOUT_SELECTORS.billingSameAsShippingSection,
+    CHECKOUT_SELECTORS.billingAddressDetailsSection
 ];
+
+const newAddressParams = {
+    shippingAddressParams: [
+        { field: CHECKOUT_SELECTORS.newStreetAddressField, value: Cypress.env("SHIPPING_ADDRESS") },
+        { field: CHECKOUT_SELECTORS.cityField, value: Cypress.env("CITY") },
+        { field: CHECKOUT_SELECTORS.zipPostalCodeField, value: '12345-6789' },
+        { field: CHECKOUT_SELECTORS.phoneNumberField, value: Cypress.env("PHONE_NUMBER") }
+    ],
+    countryParams: [
+        { field: CHECKOUT_SELECTORS.countrySelect, value: "United States" },
+        { field: CHECKOUT_SELECTORS.stateProvinceSelect, value: "Alaska" }
+    ]
+};
 
 
 class Checkout {
 
     /**
-     * Private helper to click a button with specific text within a given selector.
+     * Clicks a button with specific text within a given selector.
      * Used for common 'Change' or 'Edit' button actions.
      * @param selector - The CSS selector to find the button.
      * @param buttonText - The text content of the button to click.
@@ -90,9 +108,8 @@ class Checkout {
     }
 
     /**
-     * General-purpose method to verify visibility and non-empty content of UI elements defined in a map.
+     * Verifies visibility and non-empty content of UI elements defined in a map.
      * Optionally expands item sections (e.g., order summary) if specified.
-     * 
      * @param type - The key indicating which set of elements to verify.
      * @param map - A mapping of types to arrays of element metadata (name + selector).
      * @param expandItems - Whether to expand additional UI (e.g., order items) before verifying elements.
@@ -135,8 +152,6 @@ class Checkout {
 
     /**
      * Verifies the visibility of UI elements for the specified section of the multiple addresses checkout process.
-     * Currently implemented for the 'Shipping' step, and logs each checked element.
-     * 
      * @param type - The section of the checkout to verify ('Addresses', 'Shipping', 'Payments', or 'Review').
      */
     verifyMultipleAddressesCheckoutElements(type: 'Addresses' | 'Shipping' | 'Payments' | 'Review'): void {
@@ -154,12 +169,11 @@ class Checkout {
 
     /**
      * Verifies the presence and visibility of key columns in the multiple addresses table during checkout.
-     * Logs each column name as it is verified.
      */
     verifyMultipleAddressesTable(): void {
         cy.log('Verifying Multiple Addresses Table');
 
-        cy.get(CHECKOUT_SELECTORS.multiShipTable).within(() => {
+        cy.get(CHECKOUT_SELECTORS.multiShippingTable).within(() => {
             multipleAddressTableElements.forEach((column) => {
                 cy.log(`Verifying ${column} column`);
 
@@ -176,19 +190,18 @@ class Checkout {
         cy.log(`Verifying if ${activeSection} is active`);
 
         cy.get(CHECKOUT_SELECTORS.progressBar)
-            .find(CHECKOUT_SELECTORS.progressBarItem)
+            .find(CHECKOUT_SELECTORS.progressBarStepItem)
             .should('contain', activeSection)
             .and('have.class', '_active');
     }
 
     /**
      * Expands the collapsible order items section in the order summary (if not already expanded).
-     * Useful before checking item details in the summary.
      */
     expandItemsSection(): void {
         cy.log('Expanding Items in Cart Section');
 
-        cy.get(CHECKOUT_SELECTORS.summarySection).within(() => {
+        cy.get(CHECKOUT_SELECTORS.summarySidebarSection).within(() => {
             cy.get(CHECKOUT_SELECTORS.itemsInCartSection)
                 .click()
                 .should('have.class', 'active');
@@ -212,8 +225,6 @@ class Checkout {
 
     /**
      * Clicks the 'Continue Button' to proceed to the next section in the checkout flow.
-     * This function assumes the button's text is 'Continue'.
-     * It's recommended to replace `cy.wait(500)` with an explicit wait for a network request or element visibility.
      */
     goToNextSection(type: 'Addresses' | 'Shipping' | 'Add New Address', retries: number = 0): void {
         let button: string;
@@ -227,7 +238,7 @@ class Checkout {
             case 'Addresses':
                 button = 'Go to Shipping Information';
                 route = 'MultiShippingMethodPage';
-                selector = CHECKOUT_SELECTORS.continueButtonShipping;
+                selector = CHECKOUT_SELECTORS.continueButton;
                 currentUrl = '/multishipping/checkout/addresses/';
                 break;
 
@@ -241,9 +252,12 @@ class Checkout {
             case 'Add New Address':
                 button = 'Enter a New Address';
                 route = 'MultiShipNewAddressPage';
-                selector = CHECKOUT_SELECTORS.addActionButton;
+                selector = CHECKOUT_SELECTORS.addItemButton;
                 currentUrl = '/multishipping/checkout/addresses/';
                 break;
+
+            default:
+                throw Error(`Unknown section type: ${type}`);
         }
 
         cy.log(`Attempting clicking on ${button} button`);
@@ -276,7 +290,7 @@ class Checkout {
             .and('have.class', 'selected-item');
 
         cy.get(CHECKOUT_SELECTORS.shippingMethodTable)
-            .find(CHECKOUT_SELECTORS.shippingMethodButton)
+            .find(CHECKOUT_SELECTORS.shippingMethodRadio)
             .should('have.attr', 'checked');
     }
 
@@ -299,19 +313,30 @@ class Checkout {
         cy.log(`Checking Shipping Method with index ${index}`);
 
         cy.get(CHECKOUT_SELECTORS.shippingMethodTable)
-            .find(CHECKOUT_SELECTORS.shippingMethodButton)
+            .find(CHECKOUT_SELECTORS.shippingMethodRadio)
             .eq(index)
             .click();
     }
     /**
-     * Expands the 'Send To Address' dropdown/section, typically used in multi-shipping to reveal address options.
+     * Expands the 'Send To Address' dropdown.
      */
     expandSentToAddress(): void {
         cy.log('Expanding "Send To Address" dropdown.');
 
-        cy.get(CHECKOUT_SELECTORS.sendToList)
+        cy.get(CHECKOUT_SELECTORS.sendToListControl)
             .first()
             .click();
+    }
+
+    /**
+     * Clicks the 'New Address' button and verifies modal visibility
+     */
+    shouldModalAppear(): void {
+        cy.log('Verifying modal visibility');
+
+        this.shouldClickOnButton(CHECKOUT_SELECTORS.addAddressButton, 'New Address');
+
+        cy.get(CHECKOUT_SELECTORS.modalAddressWrap).should('be.visible');
     }
 
     /**
@@ -320,21 +345,27 @@ class Checkout {
     saveNewAddress(): void {
         cy.log('Attempting to save new address.');
 
-        cy.get(CHECKOUT_SELECTORS.saveActionButton)
+        cy.get(CHECKOUT_SELECTORS.saveButton)
             .should('contain', 'Save Address')
             .click();
     }
 
     /**
-     * Gets the list of options within the 'Send To Address' dropdown.
-     * @returns {Cypress.Chainable<JQuery<HTMLElement>>} A Cypress chainable representing the option elements.
+     * Retrieves the list of address options from either the Shipping or Billing address dropdown.
+     * @param {('Shipping' | 'Billing')} type - The type of address dropdown to target.
+     * @returns {Cypress.Chainable<JQuery<HTMLElement>>} A chainable containing the option elements.
      */
-    getOptionList(): Cypress.Chainable<JQuery<HTMLElement>> {
-        cy.log('Getting the list of options from "Send To Address" dropdown.');
+    getOptionList(type: 'Shipping' | 'Billing'): Cypress.Chainable<JQuery<HTMLElement>> {
+        const dropdownSelectorMap = {
+            Shipping: CHECKOUT_SELECTORS.selectShippingAddressDropdown,
+            Billing: CHECKOUT_SELECTORS.selectBillingAddressDropdown,
+        };
 
-        return cy.get(CHECKOUT_SELECTORS.sendToListOption)
-            .first()
-            .find(CHECKOUT_SELECTORS.option);
+        const selector = dropdownSelectorMap[type];
+
+        cy.log(`Retrieving address options from the ${type} address dropdown.`);
+
+        return cy.get(selector).first().find(CHECKOUT_SELECTORS.optionElements);
     }
 
     /**
@@ -348,13 +379,30 @@ class Checkout {
     }
 
     /**
+     * Gets the addresses displayed in a block.
+     * @returns {Cypress.Chainable<JQuery<HTMLElement>>} A Cypress chainable representing the address item.
+     */
+    getAddresses(): Cypress.Chainable<JQuery<HTMLElement>> {
+        cy.log('Getting address items from the table');
+    
+        return cy.get(CHECKOUT_SELECTORS.shippingAddressItem);
+    }
+
+    /**
      * Selects an address from a dropdown by its 0-based index.
      * @param {number} index - The index of the address to select in the dropdown.
      */
-    selectAddress(index: number): void {
+    selectAddress(type: 'Shipping' | 'Billing', index: number): void {
         cy.log(`Selecting address at index: ${index}.`);
 
-        cy.get(CHECKOUT_SELECTORS.sendToListOption)
+        const dropdownSelectorMap = {
+            Shipping: CHECKOUT_SELECTORS.selectShippingAddressDropdown,
+            Billing: CHECKOUT_SELECTORS.selectBillingAddressDropdown,
+        };
+
+        const selector = dropdownSelectorMap[type];
+
+        cy.get(selector)
             .first()
             .select(index);
     }
@@ -381,8 +429,20 @@ class Checkout {
         cy.log('Attempting to change shipping address.');
 
         cy.get(CHECKOUT_SELECTORS.shippingToSection).within(() => {
-            this.clickActionLink(CHECKOUT_SELECTORS.editActionButton, 'Change');
+            this.clickActionLink(CHECKOUT_SELECTORS.editItemButton, 'Change');
         });
+    }
+
+    /**
+     * Clicks the "Update" button in the address section and verifies that the "Edit" button becomes visible.
+     */
+    updateAddressAndVerify(): void {
+        cy.log('Clicking the "Update" button and verifying that the address can be edited.');
+
+        cy.get(CHECKOUT_SELECTORS.updateItem).click();
+        cy.get(CHECKOUT_SELECTORS.editAddressButton)
+            .should('be.visible')
+            .and('contain', 'Edit');
     }
 
     /**
@@ -391,7 +451,7 @@ class Checkout {
     changeBilling(): void {
         cy.log('Attempting to change billing address.');
 
-        this.clickActionLink(CHECKOUT_SELECTORS.actionButton, 'Change');
+        this.clickActionLink(CHECKOUT_SELECTORS.actionGenericButton, 'Change');
     }
 
     /**
@@ -400,7 +460,7 @@ class Checkout {
     editItems(): void {
         cy.log('Attempting to edit items.');
 
-        this.clickActionLink(CHECKOUT_SELECTORS.editActionButton, 'Edit');
+        this.clickActionLink(CHECKOUT_SELECTORS.editItemButton, 'Edit');
     }
 
     /**
@@ -410,9 +470,9 @@ class Checkout {
     updateQty(qtyToChange: number): void {
         cy.log(`Updating quantity to: ${qtyToChange}.`);
 
-        cy.get(CHECKOUT_SELECTORS.qtyMulti)
+        cy.get(CHECKOUT_SELECTORS.qtyFieldMultiShipping)
             .eq(1)
-            .find(CHECKOUT_SELECTORS.inputQty)
+            .find(CHECKOUT_SELECTORS.inputQtyField)
             .clear()
             .type(qtyToChange.toString());
     }
@@ -455,15 +515,18 @@ class Checkout {
 
         switch (type) {
             case 'Checkout':
-                successPageSelector = CHECKOUT_SELECTORS.successPage;
+                successPageSelector = CHECKOUT_SELECTORS.successTYPage;
                 thankYouPage = THANK_YOU_PAGE_MESSAGE;
 
                 break;
 
             case 'Multicheckout':
-                successPageSelector = CHECKOUT_SELECTORS.successMultiPage;
+                successPageSelector = CHECKOUT_SELECTORS.multiShippingSuccessTYPage;
                 thankYouPage = THANK_YOU_MULTI_MESSAGE;
                 break;
+
+            default:
+                throw Error(`Unknown checkout type: ${type}`);
         }
 
         results.shouldVerifyPageTitle(THANK_YOU_PAGE_TITLE);
@@ -472,7 +535,6 @@ class Checkout {
 
     /**
      * Verifies that a select dropdown identified by the given selector contains the expected number of options.
-     *
      * @param selector - The CSS selector for the dropdown element.
      * @param numberOfOptions - The expected number of option elements within the dropdown.
      */
@@ -481,7 +543,7 @@ class Checkout {
 
         cy.get(selector)
             .first()
-            .find(CHECKOUT_SELECTORS.option)
+            .find(CHECKOUT_SELECTORS.optionElements)
             .should('have.length', numberOfOptions);
     }
 
@@ -502,7 +564,6 @@ class Checkout {
 
     /**
      * Places an order based on the specified checkout type.
-     * 
      * @param type - Specifies the type of checkout: 'Checkout' for regular checkout or 'Multicheckout' for multi-shipping checkout.
      */
     placeOrder(type: 'Checkout' | 'Multicheckout'): void {
@@ -510,7 +571,7 @@ class Checkout {
 
         const placeOrderButton = type === 'Checkout'
             ? CHECKOUT_SELECTORS.placeOrderButton
-            : CHECKOUT_SELECTORS.submitActionButton;
+            : CHECKOUT_SELECTORS.submitButton;
 
         const successRouteKey = type === 'Checkout'
             ? 'SuccessPage'
@@ -523,7 +584,6 @@ class Checkout {
 
     /**
      * Completes the order flow for either a regular checkout or multicheckout.
-     * 
      * @param type - Specifies the type of checkout: 'Checkout' for regular checkout or 'Multicheckout' for the multi-shipping checkout.
      * @param afterThankYouCallback - An optional callback function to execute after verifying the thank you page.
      */
@@ -535,7 +595,7 @@ class Checkout {
 
         const continueButtonSelector = type === 'Checkout'
             ? CHECKOUT_SELECTORS.continueButton
-            : CHECKOUT_SELECTORS.submitActionButton;
+            : CHECKOUT_SELECTORS.submitButton;
 
         if (afterThankYouCallback) {
             afterThankYouCallback();
@@ -544,7 +604,7 @@ class Checkout {
             cy.expect('LoadPage');
             cy.url().should('contain', '/');
         }
-    };
+    }
 
     /**
     * Opens Apply Discount Code section.
@@ -557,7 +617,6 @@ class Checkout {
            .click()
            .should('have.attr', 'aria-expanded', 'true');
    }
-
 
     /**
      * Applies a coupon code to the cart.
@@ -597,11 +656,108 @@ class Checkout {
         cy.log('Verifying coupon message');
 
         cy.wait(5000);
-        cy.get(CHECKOUT_SELECTORS.validationMessage, { timeout: 6000 })
+        cy.get(CHECKOUT_SELECTORS.validationMessageSection)
         .should(($el) => {
             const text = $el.text();
             expect(text).to.contain(message);
         });
+    }
+
+    /**
+     * Applies a coupon code and verifies the corresponding message based on whether the coupon is valid or invalid.
+     * If the coupon is valid, it also cancels the coupon and verifies the cancellation message.
+     * @param {string} couponCode - The coupon code to be applied.
+     * @param {string} type - The type of the coupon, either 'Valid' or 'Invalid'.
+     */
+    applyCouponAndVerify(couponCode: string, type: string) {
+        const COUPON_MESSAGE = type === 'Invalid'
+            ? 'The coupon code isn\'t valid. Verify the code and try again.'
+            : 'Your coupon was successfully applied.';
+
+        const CANCEL_COUPON_MESSAGE = 'Your coupon was successfully removed.';
+    
+        checkout.openCouponSection();
+        checkout.applyCoupon(couponCode);
+        checkout.shouldVerifyCouponMessage(COUPON_MESSAGE);
+    
+        if (type === 'Valid') {
+            checkout.cancelCoupon();
+            checkout.shouldVerifyCouponMessage(CANCEL_COUPON_MESSAGE);
+        }
+    }
+
+    /**
+     * Fills in the new shipping address form with default test data and saves it.
+     * Verifies the confirmation message after saving.
+     */
+    fillFullShippingAddress(): void {
+        cy.log('Filling out full shipping address form.');
+
+        forms.fillShippingData(newAddressParams);
+        checkout.saveNewAddress();
+        results.shouldVerifyPageMessage(SAVE_NEW_ADDRESS_MESSAGE);
+    }
+
+    /**
+     * Verifies that the number of items in a specified element has changed by a given amount.
+     * @param {string} selector - The CSS selector of the element whose count is being verified.
+     * @param {number} initialCount - The original number of items.
+     * @param {number} expectedChange - The expected change in item count (positive or negative).
+     */
+    verifyCountChange(selector: string, initialCount: number, expectedChange: number): void {
+        cy.log(`Verifying change in item count from ${initialCount} to ${expectedChange}.`);
+
+        widgets.shouldVerifyNumberOfElements(
+            selector,
+            initialCount + expectedChange
+        );
+    }
+
+    /**
+     * Adds a default product to the cart if it's empty and navigates to the checkout page.
+     */
+    addDefaultProductIfNeeded(): void {
+        cy.log("Checking if cart is empty and adding default products if needed.");
+
+        cart.isEmpty().then((isEmpty) => {
+            if (isEmpty) {
+                product.addDefaultProductToCart();
+                product.addDefaultEquipmentProductToCart();
+            }
+        })
+
+        routes.visitAndWait('CheckoutPage');
+    }
+
+    /**
+     * Executes the step action during the checkout process.
+     * It checks whether a button exists and navigates to the appropriate step
+     * based on the element type.
+     * @param {Object} step - The current checkout step containing information like buttonText, elementType, and expectedRouteAlias.
+     */
+    performStepAction(step: { pageTitle: any; buttonText: any; elementType: string; expectedRouteAlias: string; }): void {
+        cy.log(`Executing step action for: ${step.pageTitle}`);
+
+        if (step.buttonText) {
+            if (step.elementType === 'Addresses' || step.elementType === 'Shipping') {
+                this.goToNextSection(step.elementType);
+            } else {
+                routes.expect(step.expectedRouteAlias);
+                this.shouldClickOnButton(CHECKOUT_SELECTORS.continueButton, step.buttonText);
+            }
+        }
+    }
+
+    /**
+     * Navigates to the multi-shipping checkout page from the cart.
+     * It handles visiting the cart and clicking the multi-checkout button, then waits for the destination page.
+     */
+    redirectToMultiCheckout(): void {
+        cy.log("Redirecting to Multi-Shipping Checkout page.");
+        
+        routes.visitAndWait('CartPage');
+        routes.expect('MultiShippingPage');
+        this.shouldClickOnButton(CHECKOUT_SELECTORS.multiShippingButton, 'Check Out with Multiple Addresses');
     }
 }
 

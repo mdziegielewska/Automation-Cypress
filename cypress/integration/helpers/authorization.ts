@@ -36,7 +36,7 @@ class Authorization {
         for (const data of fieldData) {
             forms.fillField(data.field, data.value);
         }
-    };
+    }
 
     /**
      * Performs a login attempt.
@@ -53,7 +53,7 @@ class Authorization {
         forms.submit('login');
 
         cy.wait('@LogInResult');
-    };
+    }
 
     /**
      * Logs in with the default user credentials and preserves the session cookie.
@@ -94,6 +94,28 @@ class Authorization {
             .click();
 
         routes.expect('LogOut');
+    }
+
+    /**
+     * Logs in an existing user using a session and sets a cookie for authentication.
+     * This function ensures that the user is logged in by utilizing Cypress's session handling. It validates 
+     * the session by checking the existence of the 'PHPSESSID' cookie. Once the login is successful, 
+     * the `isLogged` variable is set to true.
+     * @returns {boolean} - Returns `true` if the user is successfully logged in, otherwise `false`.
+     */
+    loginAsExistingUser(): boolean {
+        let isLogged: boolean;
+
+        cy.session('login', () => {
+            this.logInAndSetCookie();
+            isLogged = true;
+        }, {
+            validate() {
+                cy.getCookie('PHPSESSID').should('exist');
+            }
+        });
+
+        return isLogged;
     }
 }
 
