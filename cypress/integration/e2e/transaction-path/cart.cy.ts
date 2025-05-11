@@ -6,48 +6,34 @@ import { results } from '../../helpers/results';
 import { routes } from '../../helpers/routes';
 
 
-let ADD_TO_CART_MESSAGE: string;
-let UPDATE_MESSAGE: string;
-
 const cartType = 'Cart';
 const couponList = [
     { couponCode: 'test123', type: 'Invalid' },
     { couponCode: 'h20', type: 'Valid' },
-]
-
-/**
- * Helper function to add a default product to the cart and navigate to the cart page.
- */
-const addDefaultProductAndGoToCart = () => {
-    routes.visitAndWait('ListingPage');
-
-    product.getProductName().then(name => {
-        const productName = name.trim();
-
-        ADD_TO_CART_MESSAGE = `You added ${productName} to your shopping cart.`;
-        UPDATE_MESSAGE = `${productName} was updated in your shopping cart.`;
-
-        product.addToCart('Listing Page');
-        results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
-
-        routes.visitAndWait('CartPage');
-    });
-};
+];
 
 
 describe(`Transaction Path - ${cartType}`, () => {
     it(`Should display all ${cartType} Item elements`, () => {
-        addDefaultProductAndGoToCart();
+        cart.addAndRememberCart('Default');
+        routes.visitAndWait('CartPage');
 
         results.shouldVerifyPageTitle('Shopping Cart');
         cart.verifyProductDetailsInCart();
     });
 
     describe(`${cartType} Actions Verification`, () => {
+        let UPDATE_MESSAGE: string;
 
         beforeEach(() => {
-            addDefaultProductAndGoToCart();
-        })
+            cart.addAndRememberCart('Default');
+
+            cy.window().then(win => {
+                UPDATE_MESSAGE = win.sessionStorage.getItem('updateMessage');
+            });
+
+            routes.visitAndWait('CartPage');
+        });
 
         it('Should redirect to Product Page after clicking Thumbnail', () => {
             cart.redirectToPDP('/eos-v-neck-hoodie.html');
@@ -62,6 +48,10 @@ describe(`Transaction Path - ${cartType}`, () => {
         });
 
         it(`Should delete Product from ${cartType}`, () => {
+            cy.clearAllCookies();
+            product.addDefaultProductToCart();
+            routes.visitAndWait('CartPage');
+
             cart.deleteCartItem(cartType);
             cart.shouldBeEmpty();
         });
@@ -79,27 +69,20 @@ describe(`Transaction Path - ${cartType}`, () => {
         });
 
         it('Should proceed to Checkout', () => {
-            routes.expect('CheckoutPage');
             cart.shouldClickCheckoutButton(cartType);
-            cy.wait('@CheckoutPage');
 
-            cy.url()
-                .should('include', '/checkout/#shipping');
+            cy.url().should('include', '/checkout/#shipping');
         });
-    })
+    });
 
     describe('Coupon Section Verification', () => {
 
         beforeEach(() => {
-            routes.visitAndWait('WaterBottlePDP');
+            cy.clearAllCookies();
 
-            product.addToCart('PDP', true);
-
-            ADD_TO_CART_MESSAGE = 'You added Affirm Water Bottle  to your shopping cart.';
-            results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
-
+            cart.addAndRememberCart('Equipment');
             routes.visitAndWait('CartPage');
-        })
+        });
 
         couponList.forEach(({ couponCode, type }) => {
             it(`Should apply ${type} Code`, () => {
@@ -110,7 +93,7 @@ describe(`Transaction Path - ${cartType}`, () => {
                 cart.openCouponSection();
                 cart.applyCoupon(couponCode);
                 results.shouldVerifyPageMessage(COUPON_MESSAGE);
-            })
-        })
-    })
+            });
+        });
+    });
 });

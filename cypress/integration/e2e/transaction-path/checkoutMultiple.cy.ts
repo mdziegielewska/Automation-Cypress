@@ -9,8 +9,6 @@ import { CART_SELECTORS } from "../../selectors/cartSelectors";
 import { CHECKOUT_SELECTORS } from "../../selectors/checkoutSelectors";
 
 
-let isLogged: boolean = false;
-
 const checkoutType = 'Checkout Multiple';
 
 const checkoutSteps = [
@@ -42,6 +40,7 @@ const checkoutSteps = [
 
 
 describe(`Transaction Path - ${checkoutType}`, () => {
+    let isLogged: boolean = false;
 
     beforeEach(() => {
         let testTitle = Cypress.currentTest.title;
@@ -91,7 +90,7 @@ describe(`Transaction Path - ${checkoutType}`, () => {
 
                     checkout.expandSentToAddress();
                     checkout.verifyOptions(CHECKOUT_SELECTORS.selectShippingAddressDropdown, initialOptionCount);
-            
+
                     checkout.goToNextSection('Add New Address');
                     checkout.fillFullShippingAddress();
 
@@ -108,7 +107,7 @@ describe(`Transaction Path - ${checkoutType}`, () => {
 
                     checkout.updateQty(2);
                     checkout.shouldClickOnButton(CART_SELECTORS.updateActionButton, 'Update Qty & Addresses');
-                    checkout.verifyCountChange(CHECKOUT_SELECTORS.productItemsInTable, initialOptionCount, 1);
+                    widgets.verifyCountChange(CHECKOUT_SELECTORS.productItemsInTable, initialOptionCount, 1);
                 });
             });
 
@@ -116,15 +115,15 @@ describe(`Transaction Path - ${checkoutType}`, () => {
                 checkout.getProducts().then($products => {
                     const initialCount = $products.length;
                     checkout.removeItem(1);
-                    checkout.verifyCountChange(CHECKOUT_SELECTORS.productItemsInTable, initialCount, -1);
+                    widgets.verifyCountChange(CHECKOUT_SELECTORS.productItemsInTable, initialCount, -1);
                 });
             });
 
             it('Go back to Shopping Cart', () => {
                 checkout.shouldNavigateBackToSection(
-                    CHECKOUT_SELECTORS.backButton, 
-                    'Back to Shopping Cart', 
-                    'CartPage', 
+                    CHECKOUT_SELECTORS.backButton,
+                    'Back to Shopping Cart',
+                    'CartPage',
                     '/checkout/cart/');
             });
         });
@@ -139,9 +138,9 @@ describe(`Transaction Path - ${checkoutType}`, () => {
             it('Should change Shipping Address', () => {
                 checkout.changeAddress();
                 cy.url().should('contain', '/multishipping/checkout_address/editShipping/');
-                
+
                 results.shouldVerifyTextInSection(
-                    CHECKOUT_SELECTORS.defaultAddressMessage, 
+                    CHECKOUT_SELECTORS.defaultAddressMessage,
                     'It\'s a default shipping address.');
             });
 
@@ -196,7 +195,7 @@ describe(`Transaction Path - ${checkoutType}`, () => {
                 results.shouldVerifyTextInSection(
                     CHECKOUT_SELECTORS.defaultAddressMessage,
                     'It\'s a default billing address.');
-                
+
                 cy.url().should('contain', '/multishipping/checkout_address/editBilling/');
             });
 
@@ -205,7 +204,7 @@ describe(`Transaction Path - ${checkoutType}`, () => {
                 results.shouldVerifyTextInSection(
                     CHECKOUT_SELECTORS.defaultAddressMessage,
                     'It\'s a default shipping address.');
-                
+
                 cy.url().should('contain', '/multishipping/checkout_address/editShipping/');
             });
 
