@@ -63,6 +63,7 @@ describe(`Transaction Path - ${checkoutType}`, () => {
     });
 
     describe('Placing Order Verification', () => {
+
         it('Should place an Order as Logged In User', () => {
             checkout.shouldVerifyShippingSection();
             checkout.shouldClickOnButton(CHECKOUT_SELECTORS.nextStepButton, 'Next');
@@ -89,6 +90,7 @@ describe(`Transaction Path - ${checkoutType}`, () => {
     });
 
     describe('Coupon Section Verification', () => {
+
         couponList.forEach(({ couponCode, type }) => {
             it(`Should apply ${type} Code`, () => {
                 checkout.shouldClickOnButton(CHECKOUT_SELECTORS.nextStepButton, 'Next');
@@ -98,6 +100,7 @@ describe(`Transaction Path - ${checkoutType}`, () => {
     });
 
     describe(`${checkoutType} Action Verification`, () => {
+        
         it('Should add New Shipping Address at Checkout', () => {
             checkout.getAddresses().then(($addresses) => {
                 const initialAddressesCount = $addresses.length;

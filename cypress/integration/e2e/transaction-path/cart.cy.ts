@@ -14,6 +14,7 @@ const couponList = [
 
 
 describe(`Transaction Path - ${cartType}`, () => {
+    
     it(`Should display all ${cartType} Item elements`, () => {
         cart.addAndRememberCart('Default');
         routes.visitAndWait('CartPage');
