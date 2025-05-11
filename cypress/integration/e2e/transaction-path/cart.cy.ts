@@ -84,8 +84,6 @@ describe(`Transaction Path - ${cartType}`, () => {
     describe('Coupon Section Verification', () => {
 
         beforeEach(() => {
-            cy.clearAllCookies();
-
             cart.addAndRememberCart('Equipment');
             routes.visitAndWait('CartPage');
         });

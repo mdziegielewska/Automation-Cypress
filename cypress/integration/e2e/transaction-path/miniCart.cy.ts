@@ -44,7 +44,7 @@ describe(`Transaction path - ${cartType}`, () => {
         cy.url().should('include', '/checkout/#shipping');
     });
 
-    describe.only(`${cartType} Actions Verification`, () => {
+    describe(`${cartType} Actions Verification`, () => {
 
         beforeEach(() => {
             cy.clearAllCookies();
