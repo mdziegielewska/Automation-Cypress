@@ -2,7 +2,7 @@
     "compilerOptions": {
         "target": "es6",
         "lib": ["es6", "dom", "esnext"],
-        "types": ["cypress"]
+        "types": ["cypress", "cypress-real-events"]
     },
     "include": [
         "**/*.ts"

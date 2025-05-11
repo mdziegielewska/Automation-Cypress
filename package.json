@@ -22,8 +22,10 @@
     "cypress": "^13.13.2",
     "cypress-file-upload": "^5.0.8",
     "cypress-mochawesome-reporter": "^3.8.2",
-    "cypress-real-events": "^1.13.0",
     "cypress-upload-file-post-form": "^1.1.0",
     "typescript": "^5.5.4"
+  },
+  "devDependencies": {
+    "cypress-real-events": "^1.14.0"
   }
 }
