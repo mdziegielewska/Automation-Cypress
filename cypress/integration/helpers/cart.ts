@@ -18,11 +18,11 @@ const cartItemElements = [
 ];
 
 const summaryItemsElements = [
-    'Estimate Shipping and Tax', 
-    'Subtotal', 
-    'Tax', 
-    'Order Total', 
-    'Proceed to Checkout', 
+    'Estimate Shipping and Tax',
+    'Subtotal',
+    'Tax',
+    'Order Total',
+    'Proceed to Checkout',
     'Check Out with Multiple Addresses'
 ];
 
