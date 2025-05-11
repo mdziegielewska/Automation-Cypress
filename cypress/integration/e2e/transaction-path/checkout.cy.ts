@@ -8,8 +8,6 @@ import { widgets } from "../../helpers/widgets";
 import { CHECKOUT_SELECTORS } from '../../selectors/checkoutSelectors';
 
 
-let isLogged: boolean = false;
-
 const checkoutType = 'Checkout';
 const generatedEmail = `${generate.generateString()}@gmail.com`;
 
@@ -37,6 +35,7 @@ const shippingInfoBlock = ['Ship To', 'Shipping Method'];
 
 
 describe(`Transaction Path - ${checkoutType}`, () => {
+    let isLogged: boolean = false;
 
     beforeEach(() => {
         const testTitle = Cypress.currentTest.title;
@@ -109,8 +108,8 @@ describe(`Transaction Path - ${checkoutType}`, () => {
                 forms.fillShippingData(newAddressParams);
                 checkout.shouldClickOnButton(CHECKOUT_SELECTORS.saveInAddressBookCheckbox, 'Save in address book');
                 checkout.shouldClickOnButton(CHECKOUT_SELECTORS.shipHereButton, 'Ship here');
-    
-                checkout.verifyCountChange(CHECKOUT_SELECTORS.shippingAddressItem, initialAddressesCount, 1);
+
+                widgets.verifyCountChange(CHECKOUT_SELECTORS.shippingAddressItem, initialAddressesCount, 1);
             });
         });
 

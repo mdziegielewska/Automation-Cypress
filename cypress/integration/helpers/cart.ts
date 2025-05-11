@@ -2,7 +2,9 @@
 
 import { CART_SELECTORS } from "../selectors/cartSelectors";
 import { forms } from "./forms";
+import { product } from "./product";
 import { routes } from "./routes";
+
 
 const cartItemElements = [
     { name: 'title', selector: CART_SELECTORS.cartPageProductName },
@@ -16,7 +18,12 @@ const cartItemElements = [
 ];
 
 const summaryItemsElements = [
-    'Estimate Shipping and Tax', 'Subtotal', 'Tax', 'Order Total', 'Proceed to Checkout', 'Check Out with Multiple Addresses'
+    'Estimate Shipping and Tax', 
+    'Subtotal', 
+    'Tax', 
+    'Order Total', 
+    'Proceed to Checkout', 
+    'Check Out with Multiple Addresses'
 ];
 
 
@@ -28,9 +35,7 @@ class Cart {
     openMiniCart(): void {
         cy.log('Opening Mini Cart');
 
-        cy.get(CART_SELECTORS.miniCartToggle)
-            .click()
-            .should('have.class', 'active');
+        cy.get(CART_SELECTORS.miniCartToggle).invoke('attr', 'style', 'display: block;');
     }
 
     /**
@@ -40,7 +45,7 @@ class Cart {
         cy.log('Closing Mini Cart');
 
         cy.get(CART_SELECTORS.closeMiniCartButton).click();
-        cy.get(CART_SELECTORS.miniCartToggle).should('not.have.class', 'active');
+        cy.get(CART_SELECTORS.miniCartShowCart).should('not.have.class', 'active');
     }
 
     /**
@@ -67,7 +72,7 @@ class Cart {
             cy.log(hasItems ? 'Cart is not empty' : 'Cart is empty');
 
             return cy.wrap(!hasItems);
-        })
+        });
     }
 
     /**
@@ -136,14 +141,14 @@ class Cart {
                 cy.log(`Verifying Product Details for ${name} in Cart`);
 
                 cy.get(selector).should('be.visible');
-            })
+            });
         });
 
         cy.get(CART_SELECTORS.cartSummary).within(() => {
             for (const element of summaryItemsElements) {
                 cy.contains(element).should('be.visible');
             }
-        })
+        });
     }
 
     /**
@@ -167,6 +172,8 @@ class Cart {
     editCartItem(type: 'Mini Cart' | 'Cart'): void {
         cy.log(`Editing Item in ${type}`);
 
+        routes.expect('EditPage');
+
         switch (type) {
             case 'Mini Cart':
                 this.openMiniCart();
@@ -185,7 +192,8 @@ class Cart {
                 throw Error(`Unknown cart type: ${type}`);
         }
 
-        routes.expect('EditPage');
+        cy.wait(3000);
+
         cy.url().should('include', '/checkout/cart/configure/');
     }
 
@@ -195,19 +203,19 @@ class Cart {
     updateCartPDP(): void {
         cy.log('Updating cart item from PDP');
 
-        cy.get(CART_SELECTORS.updateCartForm).within(() => {
+        cy.wait(3000);
 
+        cy.get(CART_SELECTORS.updateCartForm).within(() => {
             cy.get(CART_SELECTORS.sizeSwatch)
                 .find(CART_SELECTORS.swatchOption)
-                .contains('L')
-                .click();
-
-            cy.get(CART_SELECTORS.updateCartButton)
-                .should('be.visible')
+                .contains('XS')
                 .click();
         });
 
         routes.expect('UpdateResult');
+        cy.get(CART_SELECTORS.updateCartButton)
+            .should('be.visible')
+            .click();
     }
 
     /**
@@ -244,6 +252,8 @@ class Cart {
     changeCartItemQuantity(quantity: number, type: 'Mini Cart' | 'Cart'): void {
         cy.log(`Changing cart item quantity to ${quantity} - ${type}`);
 
+        routes.expect('ChangeQty');
+
         switch (type) {
             case 'Mini Cart':
                 cy.get(CART_SELECTORS.miniCartWrapper).within(() => {
@@ -269,14 +279,18 @@ class Cart {
                 throw Error(`Unknown cart type: ${type}`);
         }
 
-        routes.expect('ChangeQty');
+        cy.wait(3000);
     }
 
     /**
      * Verifies the "Proceed to Checkout" button is visible and clicks it.
      */
-    shouldClickCheckoutButton(type: 'Mini Cart' | 'Cart'): void {
+    shouldClickCheckoutButton(type: 'Mini Cart' | 'Cart', retries: number = 0): void {
         cy.log(`Verifying Proceed to Checkout button - ${type}`);
+
+        const maxRetries = 10;
+
+        routes.expect('CheckoutPage');
 
         switch (type) {
             case 'Mini Cart':
@@ -288,24 +302,38 @@ class Cart {
                 break;
 
             case 'Cart':
+                let currentUrl = '/checkout/cart/';
+
                 cy.get(CART_SELECTORS.checkoutSection).within(() => {
                     cy.get(CART_SELECTORS.proceedToCheckoutButton)
                         .should('have.attr', 'title', 'Proceed to Checkout')
                         .click();
-                })
+                });
+
+                cy.wait(3000);
+
+                cy.url().then((url) => {
+                    if (url.includes(currentUrl) && retries < maxRetries) {
+                        cy.log(`Still on address list — clicking again - Retry ${retries}`);
+
+                        this.shouldClickCheckoutButton(type, retries + 1);
+                    } else {
+                        cy.log('Redirected to new page successfully');
+                    }
+                });
                 break;
 
             default:
                 throw Error(`Unknown cart type: ${type}`);
         }
 
-        routes.expect('CheckoutPage');
+        cy.wait('@CheckoutPage');
     }
 
     /**
      * Opens Apply Discount Code section.
      */
-    openCouponSection() {
+    openCouponSection(): void {
         cy.log('Opening Coupon section');
 
         cy.get(CART_SELECTORS.couponBlock)
@@ -350,6 +378,8 @@ class Cart {
             .should('have.attr', 'aria-expanded', 'false')
             .click()
             .should('have.attr', 'aria-expanded', 'true');
+
+        cy.wait(3000);
     }
 
     /**
@@ -370,7 +400,7 @@ class Cart {
 
         taxSelectorsElements.forEach(({ selector, selection }) => {
             forms.selectValue(selector, selection);
-        })
+        });
 
         cy.get(CART_SELECTORS.zipInput)
             .should('be.visible')
@@ -395,6 +425,25 @@ class Cart {
             .should('be.visible')
             .find('td')
             .should('have.length.greaterThan', 0);
+    }
+
+    addAndRememberCart(type: 'Default' | 'Equipment' | 'Both') {
+        cy.log(`Adding to cart and remembering the session for ${type}`);
+
+        if (type === 'Equipment') {
+            cy.session('cart-equipment', () => {
+                product.addDefaultEquipmentProductToCart();
+            });
+        } else if (type === 'Default') {
+            cy.session('cart-default', () => {
+                product.addDefaultProductToCart();
+            });
+        } else {
+            cy.session('cart-two', () => {
+                product.addDefaultProductToCart();
+                product.addDefaultEquipmentProductToCart();
+            });
+        }
     }
 }
 

@@ -161,6 +161,8 @@ class Navigation {
         cy.get(NAVIGATION_SELECTORS.confirmButton)
             .contains('OK')
             .click();
+
+        cy.reload();
     }
 }
 

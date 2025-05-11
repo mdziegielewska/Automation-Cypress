@@ -59,6 +59,21 @@ class Widgets {
             .eq(index)
             .and('contain', info);
     }
+
+    /**
+     * Verifies that the number of items in a specified element has changed by a given amount.
+     * @param {string} selector - The CSS selector of the element whose count is being verified.
+     * @param {number} initialCount - The original number of items.
+     * @param {number} expectedChange - The expected change in item count (positive or negative).
+     */
+    verifyCountChange(selector: string, initialCount: number, expectedChange: number): void {
+        cy.log(`Verifying change in item count from ${initialCount} to ${expectedChange}.`);
+
+        this.shouldVerifyNumberOfElements(
+            selector,
+            initialCount + expectedChange
+        );
+    }
 }
 
 export const widgets = new Widgets();

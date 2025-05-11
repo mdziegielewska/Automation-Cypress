@@ -6,6 +6,8 @@ import { routes } from "./routes";
 
 
 let ADD_TO_CART_MESSAGE: string;
+let UPDATE_MESSAGE: string;
+let productName: string;
 
 const productCells = {
     cloth: [
@@ -44,7 +46,7 @@ const infoElements = [
     { name: 'SKU', locator: PRODUCT_SELECTORS.productSku, mustNotBeEmpty: true },
     { name: 'Size', locator: PRODUCT_SELECTORS.productSizeOption, mustNotBeEmpty: false },
     { name: 'Colors', locator: PRODUCT_SELECTORS.productColorOption, mustNotBeEmpty: false },
-]
+];
 
 
 class Product {
@@ -74,7 +76,7 @@ class Product {
     private hoverItem(): Cypress.Chainable<JQuery<HTMLElement>> {
         return this.getItem('Listing Page')
             .should('be.visible')
-            .trigger('mouseover')
+            .realHover()
             .wait(300)
             .as('item');
     }
@@ -118,7 +120,7 @@ class Product {
                     cy.wrap($options)
                         .eq(indexToClick)
                         .click();
-                })
+                });
         }
     }
 
@@ -378,22 +380,31 @@ class Product {
     }
 
     /**
-     * Navigates to the listing page, retrieves the name of the first product,
-     * adds it to the cart, and verifies the success message.
+     * Navigates to the Listing Page, retrieves the name of the first product,
+     * adds it to the cart, verifies the success message,
+     * and returns the update message and product name.
+     * @returns {Cypress.Chainable<{ UPDATE_MESSAGE: string; productName: string }>} 
+     * A Cypress Chainable that resolves to the update message and product name.
      */
-    addDefaultProductToCart() {
-        cy.log('Adding default Product to Cart');
-
+    addDefaultProductToCart(): Cypress.Chainable<{ UPDATE_MESSAGE: string; productName: string }> {
+        cy.log('Adding default product to the cart');
+    
         routes.visitAndWait('ListingPage');
-
-        this.getProductName().then(name => {
-            const productName = name.trim();
+    
+        return this.getProductName().then(name => {
+            productName = name.trim();
 
             ADD_TO_CART_MESSAGE = `You added ${productName} to your shopping cart.`;
+            UPDATE_MESSAGE = `${productName} was updated in your shopping cart.`;
 
+            window.sessionStorage.setItem('updateMessage', UPDATE_MESSAGE);
+            window.sessionStorage.setItem('productName', productName);
+    
             this.addToCart('Listing Page');
             results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
-        })
+    
+            return cy.wrap({ UPDATE_MESSAGE, productName })
+        });
     }
 
     /**
@@ -409,8 +420,6 @@ class Product {
 
         ADD_TO_CART_MESSAGE = 'You added Affirm Water Bottle  to your shopping cart.';
         results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
-
-        routes.visitAndWait('CartPage');
     }
 
     /**

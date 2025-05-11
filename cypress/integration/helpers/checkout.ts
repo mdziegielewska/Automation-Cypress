@@ -266,7 +266,7 @@ class Checkout {
         cy.get(selector)
             .click();
 
-        cy.wait(5000);
+        cy.wait(3000);
 
         cy.url().then((url) => {
             if (url.includes(currentUrl) && retries < maxRetries) {
@@ -655,7 +655,6 @@ class Checkout {
     shouldVerifyCouponMessage(message: string): void {
         cy.log('Verifying coupon message');
 
-        cy.wait(5000);
         cy.get(CHECKOUT_SELECTORS.validationMessageSection)
         .should(($el) => {
             const text = $el.text();
@@ -696,21 +695,6 @@ class Checkout {
         forms.fillShippingData(newAddressParams);
         checkout.saveNewAddress();
         results.shouldVerifyPageMessage(SAVE_NEW_ADDRESS_MESSAGE);
-    }
-
-    /**
-     * Verifies that the number of items in a specified element has changed by a given amount.
-     * @param {string} selector - The CSS selector of the element whose count is being verified.
-     * @param {number} initialCount - The original number of items.
-     * @param {number} expectedChange - The expected change in item count (positive or negative).
-     */
-    verifyCountChange(selector: string, initialCount: number, expectedChange: number): void {
-        cy.log(`Verifying change in item count from ${initialCount} to ${expectedChange}.`);
-
-        widgets.shouldVerifyNumberOfElements(
-            selector,
-            initialCount + expectedChange
-        );
     }
 
     /**
