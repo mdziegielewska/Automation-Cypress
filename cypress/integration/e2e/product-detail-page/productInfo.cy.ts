@@ -15,18 +15,19 @@ const tabs = [
 ];
 
 const ADD_TO_WISHLIST_MESSAGE = "You must login or register to add items to your wishlist.";
-const ADD_TO_COMPARISION_MESSAGE = "You added product Carina Basic Capri to the comparison list.";
+const ADD_TO_COMPARISION_MESSAGE = "You added product Aeon Capri to the comparison list.";
 const ADD_TO_CART_MESSAGE = "You added Juno Jacket to your shopping cart.";
 
 
 describe('PDP - Product Info', () => {
 
-    beforeEach(() => {
-        cy.clearAllCookies()
-        routes.visitAndWait('JunoJacketPDP');
-    });
+    describe('PDP - Visual Verification', { testIsolation: false }, () => {
 
-    describe('PDP - Visual Verification', () => {
+        before(() => {
+            cy.clearAllCookies();
+            routes.visitAndWait('JunoJacketPDP');
+        });
+
         it('Should show PDP elements', () => {
             product.shouldVerifyMainPDPElements();
             product.shouldDisplayProductInfo();
@@ -48,6 +49,12 @@ describe('PDP - Product Info', () => {
     })
 
     describe('PDP - Action Verification', () => {
+
+        beforeEach(() => {
+            cy.clearAllCookies();
+            routes.visitAndWait('JunoJacketPDP');
+        });
+
         it('Should add to Wishlist', () => {
             product.addToWishlistOrCompare('Wishlist');
             results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);
@@ -61,10 +68,10 @@ describe('PDP - Product Info', () => {
             results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
         });
 
-        it.only('Should add to Cart', () => {
+        it('Should add to Cart', () => {
             product.addToCart('PDP');
 
             results.shouldVerifyPageMessage(ADD_TO_CART_MESSAGE);
         });
-    })
+    });
 });

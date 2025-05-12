@@ -10,13 +10,12 @@ import { PRODUCT_SELECTORS } from "../../selectors/productSelectors";
 const ADD_TO_WISHLIST_MESSAGE = "You must login or register to add items to your wishlist.";
 const ADD_TO_COMPARISION_MESSAGE = "You added product Aeon Capri to the comparison list.";
 
-const isEquipment = false;
 
+describe('PDP - Related Products', { testIsolation: false }, () => {
+    const isEquipment = false;
 
-describe('PDP - Related Products', () => {
-
-    beforeEach(() => {
-        cy.clearAllCookies()
+    before(() => {
+        cy.clearAllCookies();
         routes.visitAndWait('JunoJacketPDP');
     });
 
@@ -24,14 +23,14 @@ describe('PDP - Related Products', () => {
         it('Product Item should contain elements', () => {
             product.shouldVerifyProductCellElements(isEquipment);
             product.shouldVerifyActionElements();
-        })
+        });
 
         it('Should show Related Products', () => {
             results.shouldVerifyTextInSection(PRODUCT_SELECTORS.relatedProductsBlock, 'Related Products');
 
             product.getRelated().as('products');
             widgets.shouldVerifyNumberOfElements('@products', 4);
-        })
+        });
     })
 
     describe('Related Products - Action Verification', () => {
@@ -41,11 +40,11 @@ describe('PDP - Related Products', () => {
 
             cy.url()
                 .should('contain', '/customer/account/login/');
-        })
+        });
 
         it('Should add to Comparision', () => {
             product.addToWishlistOrCompare('Compare');
             results.shouldVerifyPageMessage(ADD_TO_COMPARISION_MESSAGE);
-        })
-    })
-})
+        });
+    });
+});
