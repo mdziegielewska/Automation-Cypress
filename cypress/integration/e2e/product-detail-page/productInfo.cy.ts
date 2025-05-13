@@ -24,7 +24,6 @@ describe('PDP - Product Info', () => {
     describe('PDP - Visual Verification', { testIsolation: false }, () => {
 
         before(() => {
-            cy.clearAllCookies();
             routes.visitAndWait('JunoJacketPDP');
         });
 
@@ -46,7 +45,7 @@ describe('PDP - Product Info', () => {
             product.shouldDisplayDetailsSectionText();
             product.shouldVerifyMoreInformationSections();
         });
-    })
+    });
 
     describe('PDP - Action Verification', () => {
 

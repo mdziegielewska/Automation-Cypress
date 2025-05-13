@@ -15,10 +15,9 @@ const reviewForm = [
 const REVIEW_SUBMISSION_MESSAGE = 'You submitted your review for moderation.';
 
 
-describe('PDP - Reviews', { testIsolation: false }, () => {
+describe('PDP - Reviews', () => {
 
-    before(() => {
-        cy.clearAllCookies()
+    beforeEach(() => {
         routes.visitAndWait('JunoJacketPDP');
     });
 

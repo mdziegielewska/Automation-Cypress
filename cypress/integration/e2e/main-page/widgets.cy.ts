@@ -19,7 +19,7 @@ describe('Main page - Widgets', () => {
 
     beforeEach(() => {
         routes.visitAndWait('LoadPage');
-    })
+    });
 
     widget.forEach(({ name, info, url }, index) => {
         it(`Should contain ${name} Widget`, () => {
@@ -27,6 +27,6 @@ describe('Main page - Widgets', () => {
 
             widgets.shouldVerifyWidgetInfo(index, info);
             widgets.shouldVerifyUrlOnClick(LISTING_SELECTORS.widgetBlocks, index, url);
-        })
-    })
-})
+        });
+    });
+});

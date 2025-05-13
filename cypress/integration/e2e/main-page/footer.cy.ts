@@ -25,23 +25,23 @@ const oarFormData = [
 ];
 
 const SEARCH_RESULT_MESSAGE = 'Don\'t see what you\'re looking for?';
-const isEquipment = false;
 
 
 describe('Main Page - Footer', () => {
+    const isEquipment = false;
 
     describe('Footer Links Verification', () => {
         beforeEach(() => {
             cy.visit('/');
             widgets.shouldVerifyNumberOfElements(NAVIGATION_SELECTORS.footerPanel, 4);
-        })
+        });
 
         footerLinksData.forEach(({ footer, url }) => {
             it(`Should verify Footer Links - ${footer}`, () => {
                 navigation.shouldVerifyFooter(footer, url);
-            })
-        })
-    })
+            });
+        });
+    });
 
     it('Should verify Popular Search Terms', () => {
         routes.visitAndWait('SearchTerms');
@@ -51,7 +51,7 @@ describe('Main Page - Footer', () => {
 
         results.shouldVerifyPageTitle('Search results');
         product.shouldVerifyProductCellElements(isEquipment);
-    })
+    });
 
     it('Should verify Privacy Policy', () => {
         routes.visitAndWait('PrivacyPolicyPage');
@@ -59,7 +59,7 @@ describe('Main Page - Footer', () => {
 
         navigation.shouldContainNavPanel(NAVIGATION_SELECTORS.privacyPolicyNavPanel);
         results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.privacyPolicyContent, '.');
-    })
+    });
 
     it('Should verify Advanced Search', () => {
         routes.visitAndWait('AdvancedSearchPage');
@@ -71,7 +71,7 @@ describe('Main Page - Footer', () => {
         results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, 'Catalog Advanced Search');
         product.shouldVerifyProductCellElements(isEquipment);
         results.shouldVerifyPageMessage(SEARCH_RESULT_MESSAGE);
-    })
+    });
 
     it('Should verify Orders and Returns', () => {
         routes.visitAndWait('OrdersReturnsPage');
@@ -83,5 +83,5 @@ describe('Main Page - Footer', () => {
         forms.submit('submit');
 
         results.shouldVerifyTextInSection(NAVIGATION_SELECTORS.title, `Order # ${Cypress.env("ORDER_NUMBER")}`);
-    })
-})
+    });
+});

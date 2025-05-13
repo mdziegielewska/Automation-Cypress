@@ -24,7 +24,7 @@ describe('Main page - Search', () => {
         search.shouldDisplaySearchResults();
         results.shouldVerifyTextInSection(PAGE_SELECTORS.pageTitle, 'Search results');
         listing.shouldVerifyListingElements();
-    })
+    });
 
     it('Should verify Related Search', () => {
         cy.visit('/catalogsearch/result/?q=+Jacket');
@@ -34,5 +34,5 @@ describe('Main page - Search', () => {
         search.shouldClickInSearchTerms('related');
 
         results.shouldVerifyTextInSection(PAGE_SELECTORS.pageTitle, 'Search results');
-    })
-})
+    });
+});

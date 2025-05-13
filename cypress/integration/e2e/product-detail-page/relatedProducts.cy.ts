@@ -11,15 +11,15 @@ const ADD_TO_WISHLIST_MESSAGE = "You must login or register to add items to your
 const ADD_TO_COMPARISION_MESSAGE = "You added product Aeon Capri to the comparison list.";
 
 
-describe('PDP - Related Products', { testIsolation: false }, () => {
+describe('PDP - Related Products', () => {
     const isEquipment = false;
 
-    before(() => {
-        cy.clearAllCookies();
-        routes.visitAndWait('JunoJacketPDP');
-    });
+    describe('Related Products - Visual Verification', { testIsolation: false }, () => {
 
-    describe('Related Products - Visual Verification', () => {
+        before(() => {
+            routes.visitAndWait('JunoJacketPDP');
+        });
+
         it('Product Item should contain elements', () => {
             product.shouldVerifyProductCellElements(isEquipment);
             product.shouldVerifyActionElements();
@@ -31,9 +31,15 @@ describe('PDP - Related Products', { testIsolation: false }, () => {
             product.getRelated().as('products');
             widgets.shouldVerifyNumberOfElements('@products', 4);
         });
-    })
+    });
 
     describe('Related Products - Action Verification', () => {
+
+        beforeEach(() => {
+            cy.clearAllCookies();
+            routes.visitAndWait('JunoJacketPDP');
+        });
+
         it('Should add to Wishlist', () => {
             product.addToWishlistOrCompare('Wishlist');
             results.shouldVerifyPageMessage(ADD_TO_WISHLIST_MESSAGE);

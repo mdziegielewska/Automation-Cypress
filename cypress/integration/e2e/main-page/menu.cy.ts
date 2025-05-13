@@ -11,7 +11,7 @@ const menu = [
     { tab: 'Gear', url: '/gear.html', submenu: ['Bags', 'Fitness Equipment', 'Watches'] },
     { tab: 'Training', url: '/training.html', submenu: ['Video Download'] },
     { tab: 'Sale', url: '/sale.html', submenu: null },
-]
+];
 
 const subMenu = [
     { tab: 'Tops', submenu: ['Jackets', 'Hoodies & Sweatshirts', 'Tees', 'Bras & Tanks'] },
@@ -26,10 +26,9 @@ const actionLinks = [
 
 describe('Main Page - Menu', () => {
 
-    beforeEach(() => {
-        cy.clearAllCookies();
+    before(() => {
         routes.visitAndWait('LoadPage');
-    })
+    });
 
     menu.forEach(({ tab, url, submenu }) => {
         it(`Should contain ${tab} in Menu`, () => {
@@ -48,18 +47,18 @@ describe('Main Page - Menu', () => {
                     } else {
                         navigation.shouldContainSubtabLevel1(tab, subtab);
                     }
-                })
+                });
             }
 
             navigation.shouldVerifyTabRedirection(tab, url);
-        })
-    })
+        });
+    });
 
     describe('Navigation Links Verification', () => {
         actionLinks.forEach(({ action, url }) => {
             it(`Should redirect to Navigation Link - ${action}`, () => {
                 navigation.shouldVerifyNavigationLinks(action, url);
-            })
-        })
-    })
-})
+            });
+        });
+    });
+});
