@@ -43,8 +43,8 @@ You have a few options for running the tests:
 
 ## Technologies Used
 
-* **Cypress:** `^13.13.x` - Fast, easy, and reliable testing for anything that runs in a browser.
-* **TypeScript:** `^5.x.x` - A typed superset of JavaScript that compiles to plain JavaScript.
+- **[Cypress](https://www.cypress.io/)** `^13.13.x` – Fast, easy, and reliable testing for anything that runs in a browser.
+- **[TypeScript](https://www.typescriptlang.org/)** `^5.x.x` – A typed superset of JavaScript that compiles to plain JavaScript.
 
 ## Test Coverages
 
